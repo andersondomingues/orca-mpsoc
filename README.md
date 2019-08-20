@@ -4,7 +4,7 @@ This repository holds the project for the hardware of ORCA MPSoC platform. The s
 
 ## The ORCA Platform
 
-
+![Top-level architecture of ORCA platform](https://raw.githubusercontent.com/andersondomingues/orca-mpsoc/master/docs/orca-mpsoc.png)
 
 ## Repository organization
 

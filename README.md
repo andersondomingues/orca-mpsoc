@@ -1,6 +1,6 @@
 # Welcome to the home of ORCA MPSoC project!
 
-This repository holds the project for the hardware of ORCA MPSoC platform. The software counterpart of this repository can be found [https://github.com/andersondomingues/ursa].
+This repository holds the project for the hardware of ORCA MPSoC platform. The software counterpart of this repository can be found at [https://github.com/andersondomingues/ursa].
 
 ## The ORCA Platform
 

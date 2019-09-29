@@ -119,7 +119,7 @@ begin
         data_w => mem0_data_w    
     );
 
-    mem2: entity work.orca_ram(ram) --send
+    mem2: entity work.ram(generic_ram) --send
     port map(
         clk => clock,
         address => mem2_addr_o,

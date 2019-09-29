@@ -14,7 +14,8 @@ entity ram is
 end ram; --entity ram     
 
 architecture generic_ram of ram is
-   type ram_type is array (0 to (2 ** addr_i'length) -1) of std_logic_vector(data_i'range);
+   --type ram_type is array (0 to (2 ** addr_i'length) -1) of std_logic_vector(data_i'range);
+	type ram_type is array (0 to (2 ** 8) -1) of std_logic_vector(data_i'range);
    signal ram : ram_type;
    signal c_read: std_logic_vector(addr_i'range);
 begin

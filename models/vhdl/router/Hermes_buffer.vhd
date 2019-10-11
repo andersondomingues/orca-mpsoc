@@ -26,22 +26,23 @@
 --                         --------------
 --
 --  Quando o algoritmo de chaveamento resulta no bloqueio dos flits de um pacote,
---  ocorre uma perda de desempenho em toda rede de interconexï¿½o, porque os flits sï¿½o
---  bloqueados nï¿½o somente na chave atual, mas em todas as intermediï¿½rias.
+--  ocorre uma perda de desempenho em toda rede de interconexão, porque os flits são
+--  bloqueados não somente na chave atual, mas em todas as intermediárias.
 --  Para diminuir a perda de desempenho foi adicionada uma fila em cada porta de
 --  entrada da chave, reduzindo as chaves afetadas com o bloqueio dos flits de um
---  pacote. ï¿½ importante observar que quanto maior for o tamanho da fila menor serï¿½ o
---  nï¿½mero de chaves intermediï¿½rias afetadas.
---  As filas usadas contï¿½m dimensï¿½o e largura de flit parametrizï¿½veis, para alterï¿½-las
+--  pacote. É importante observar que quanto maior for o tamanho da fila menor será o
+--  número de chaves intermediárias afetadas.
+--  As filas usadas contêm dimensão e largura de flit parametrizáveis, para alterá-las
 --  modifique as constantes TAM_BUFFER e TAM_FLIT no arquivo "packet.vhd".
 --  As filas funcionam como FIFOs circulares. Cada fila possui dois ponteiros: first e
---  last. First aponta para a posiï¿½ï¿½o da fila onde se encontra o flit a ser consumido.
---  Last aponta para a posiï¿½ï¿½o onde deve ser inserido o prï¿½ximo flit.
+--  last. First aponta para a posição da fila onde se encontra o flit a ser consumido.
+--  Last aponta para a posição onde deve ser inserido o próximo flit.
 ---------------------------------------------------------------------------------------
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.std_logic_unsigned.all;
-use work.standards.all;
+use work.HeMPS_defaults.all;
+--use work.HemPS_PKG.all;
 
 -- interface da Hermes_buffer
 entity Hermes_buffer is
@@ -76,8 +77,8 @@ begin
         -- ENTRADA DE DADOS NA FILA
         -------------------------------------------------------------------------------------------
 
-        -- Verifica se existe espaï¿½o na fila para armazenamento de flits.
-        -- Se existe espaï¿½o na fila o sinal tem_espaco_na_fila ï¿½ igual 1.
+        -- Verifica se existe espaço na fila para armazenamento de flits.
+        -- Se existe espaço na fila o sinal tem_espaco_na_fila é igual 1.
         process(reset, clock_rx)
         begin
                 if reset='1' then
@@ -94,10 +95,10 @@ begin
 
         credit_o <= tem_espaco;
 
-        -- O ponteiro last ï¿½ inicializado com o valor zero quando o reset ï¿½ ativado.
-        -- Quando o sinal rx ï¿½ ativado indicando que existe um flit na porta de entrada ï¿½
-        -- verificado se existe espaï¿½o na fila para armazenï¿½-lo. Se existir espaï¿½o na fila o
-        -- flit recebido ï¿½ armazenado na posiï¿½ï¿½o apontada pelo ponteiro last e o mesmo ï¿½
+        -- O ponteiro last é inicializado com o valor zero quando o reset é ativado.
+        -- Quando o sinal rx é ativado indicando que existe um flit na porta de entrada é
+        -- verificado se existe espaço na fila para armazená-lo. Se existir espaço na fila o
+        -- flit recebido é armazenado na posição apontada pelo ponteiro last e o mesmo é
         -- incrementado. Quando last atingir o tamanho da fila, ele recebe zero.
         process(reset, clock_rx)
         begin
@@ -115,32 +116,32 @@ begin
         end process;
 
         -------------------------------------------------------------------------------------------
-        -- SAï¿½DA DE DADOS NA FILA
+        -- SAÍDA DE DADOS NA FILA
         -------------------------------------------------------------------------------------------
 
-        -- disponibiliza o dado para transmissï¿½o.
+        -- disponibiliza o dado para transmissão.
         data <= buf(CONV_INTEGER(first));
 
-        -- Quando sinal reset ï¿½ ativado a mï¿½quina de estados avanï¿½a para o estado S_INIT.
+        -- Quando sinal reset é ativado a máquina de estados avança para o estado S_INIT.
         -- No estado S_INIT os sinais counter_flit (contador de flits do corpo do pacote), h (que
-        -- indica requisiï¿½ï¿½o de chaveamento) e data_av (que indica a existï¿½ncia de flit a ser
-        -- transmitido) sï¿½o inicializados com zero. Se existir algum flit na fila, ou seja, os
-        -- ponteiros first e last apontarem para posiï¿½ï¿½es diferentes, a mï¿½quina de estados avanï¿½a
+        -- indica requisição de chaveamento) e data_av (que indica a existência de flit a ser
+        -- transmitido) são inicializados com zero. Se existir algum flit na fila, ou seja, os
+        -- ponteiros first e last apontarem para posições diferentes, a máquina de estados avança
         -- para o estado S_HEADER.
-        -- No estado S_HEADER ï¿½ requisitado o chaveamento (h='1'), porque o flit na posiï¿½ï¿½o
-        -- apontada pelo ponteiro first, quando a mï¿½quina encontra-se nesse estado, ï¿½ sempre o
-        -- header do pacote. A mï¿½quina permanece neste estado atï¿½ que receba a confirmaï¿½ï¿½o do
-        -- chaveamento (ack_h='1') entï¿½o o sinal h recebe o valor zero e a mï¿½quina avanï¿½a para
+        -- No estado S_HEADER é requisitado o chaveamento (h='1'), porque o flit na posição
+        -- apontada pelo ponteiro first, quando a máquina encontra-se nesse estado, é sempre o
+        -- header do pacote. A máquina permanece neste estado até que receba a confirmação do
+        -- chaveamento (ack_h='1') então o sinal h recebe o valor zero e a máquina avança para
         -- S_SENDHEADER.
-        -- Em S_SENDHEADER ï¿½ indicado que existe um flit a ser transmitido (data_av='1'). A mï¿½quina de
-        -- estados permanece em S_SENDHEADER atï¿½ receber a confirmaï¿½ï¿½o da transmissï¿½o (data_ack='1')
-        -- entï¿½o o ponteiro first aponta para o segundo flit do pacote e avanï¿½a para o estado S_PAYLOAD.
-        -- No estado S_PAYLOAD ï¿½ indicado que existe um flit a ser transmitido (data_av='1') quando
-        -- ï¿½ recebida a confirmaï¿½ï¿½o da transmissï¿½o (data_ack='1') ï¿½ verificado qual o valor do sinal
-        -- counter_flit. Se counter_flit ï¿½ igual a um, a mï¿½quina avanï¿½a para o estado S_INIT. Caso
-        -- counter_flit seja igual a zero, o sinal counter_flit ï¿½ inicializado com o valor do flit, pois
-        -- este ao nï¿½mero de flits do corpo do pacote. Caso counter_flit seja diferente de um e de zero
-        -- o mesmo ï¿½ decrementado e a mï¿½quina de estados permanece em S_PAYLOAD enviando o prï¿½ximo flit
+        -- Em S_SENDHEADER é indicado que existe um flit a ser transmitido (data_av='1'). A máquina de
+        -- estados permanece em S_SENDHEADER até receber a confirmação da transmissão (data_ack='1')
+        -- então o ponteiro first aponta para o segundo flit do pacote e avança para o estado S_PAYLOAD.
+        -- No estado S_PAYLOAD é indicado que existe um flit a ser transmitido (data_av='1') quando
+        -- é recebida a confirmação da transmissão (data_ack='1') é verificado qual o valor do sinal
+        -- counter_flit. Se counter_flit é igual a um, a máquina avança para o estado S_INIT. Caso
+        -- counter_flit seja igual a zero, o sinal counter_flit é inicializado com o valor do flit, pois
+        -- este ao número de flits do corpo do pacote. Caso counter_flit seja diferente de um e de zero
+        -- o mesmo é decrementado e a máquina de estados permanece em S_PAYLOAD enviando o próximo flit
         -- do pacote.
         process(reset, clock)
         begin
@@ -164,7 +165,7 @@ begin
                                                 EA<= S_INIT;
                                         end if;
                                 when S_HEADER =>
-                                        if ack_h='1' then -- confirmaï¿½ï¿½o de roteamento
+                                        if ack_h='1' then -- confirmação de roteamento
                                                 EA <= S_SENDHEADER ;
                                                 h<='0';
                                                 data_av <= '1';
@@ -173,7 +174,7 @@ begin
                                                 EA <= S_HEADER;
                                         end if;
                                 when S_SENDHEADER  =>
-                                        if data_ack = '1' then  -- confirmaï¿½ï¿½o do envio do header
+                                        if data_ack = '1' then  -- confirmação do envio do header
                                                 -- retira o header do buffer e se tem dado no buffer pede envio do mesmo
                                                 if (first = TAM_BUFFER -1) then
                                                         first <= (others=>'0');
@@ -191,8 +192,8 @@ begin
                                                 EA <= S_SENDHEADER;
                                         end if;
                                 when S_PAYLOAD =>
-                                        if data_ack = '1' and counter_flit /= x"1" then -- confirmaï¿½ï¿½o do envio de um dado que nï¿½o ï¿½ o tail
-                                                -- se counter_flit ï¿½ zero indica recepï¿½ï¿½o do size do payload
+                                        if data_ack = '1' and counter_flit /= x"1" then -- confirmação do envio de um dado que não é o tail
+                                                -- se counter_flit é zero indica recepção do size do payload
                                                 if counter_flit = x"0" then    counter_flit <=  buf(CONV_INTEGER(first));
                                                 else counter_flit <= counter_flit - 1;
                                                 end if;
@@ -210,7 +211,7 @@ begin
                                                         end if;
                                                 end if;
                                                 EA <= S_PAYLOAD;
-                                        elsif data_ack = '1' and counter_flit = x"1" then -- confirmaï¿½ï¿½o do envio do tail
+                                        elsif data_ack = '1' and counter_flit = x"1" then -- confirmação do envio do tail
                                                 -- retira um dado do buffer
                                                 if (first = TAM_BUFFER -1) then    first <= (others=>'0');
                                                 else first <= first+1;
@@ -218,7 +219,7 @@ begin
                                                 data_av <= '0';
                                                 sender <=  '0';
                                                 EA <= S_END;
-                                        elsif first /= last then -- se tem dado a ser enviado faz a requisiï¿½ï¿½o
+                                        elsif first /= last then -- se tem dado a ser enviado faz a requisição
                                                 data_av <= '1';
                                                 EA <= S_PAYLOAD;
                                         else
@@ -227,7 +228,7 @@ begin
                                 when S_END =>
                                         data_av <= '0';
                                         EA <= S_END2;
-                                when S_END2 => -- estado necessario para permitir a liberaï¿½ï¿½o da porta antes da solicitaï¿½ï¿½o de novo envio
+                                when S_END2 => -- estado necessario para permitir a liberação da porta antes da solicitação de novo envio
                                         data_av <= '0';
                                         EA <= S_INIT;
                         end case;

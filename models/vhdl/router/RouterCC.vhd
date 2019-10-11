@@ -1,34 +1,6 @@
-
-
---++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
--- Nesse arquivo vhdl existem dois hardware!!!!
--- 
--- traffic_monitor <=== Linha 28.
--- RouterCC <========== Linha 271.
---
--- O traffic_monitor serve para fazer o monitoramento das portas de entrada do 
--- router. Quando o sinal rx for igual a '1', esse hardware vai copia tudo que 
--- tiver em data_in para o arquivo traffic_router.txt, que se encontra na pasta 
--- debug do seu testcases.
--- Dependendo do nome de seu teste, sera necessÃ¡rio alterar a linha 135 com o 
--- caminho determinado para salvar o arquivo.
---
--- Caso seu objetivo seja realizar uma synthesis Ã© aconselhÃ¡vel deletar esse 
--- hardware, e remover o mesmo da architecture RouterCC, que se encontra mais 
--- abaixo nesse arquivo.
---++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-library IEEE;
-use IEEE.std_logic_1164.all;
-use IEEE.std_logic_unsigned.all;
-use work.standards.all;
-use ieee.std_logic_arith;
-use IEEE.std_logic_textio.all;
-use std.textio.all;
-use IEEE.NUMERIC_STD.all;
-
 ------------------------------------------------------------------------------------------------
 --
---  DISTRIBUTED HEMPS  - version 5.0
+--  DISTRIBUTED HEMPS  - version 5.0 
 --
 --  Research group: GAPH-PUCRS    -    contact   fernando.moraes@pucrs.br
 --
@@ -59,36 +31,33 @@ use IEEE.NUMERIC_STD.all;
 --                      -----------------------------------------------
 --                                              SOUTH
 --
---  As chaves realizam a transferï¿½ncia de mensagens entre nï¿½cleos. 
---  A chave possui uma lï¿½gica de controle de chaveamento e 5 portas bidirecionais:
+--  As chaves realizam a transferência de mensagens entre núcleos. 
+--  A chave possui uma lógica de controle de chaveamento e 5 portas bidirecionais:
 --  East, West, North, South e Local. Cada porta possui uma fila para o armazenamento 
---  temporï¿½rio de flits. A porta Local estabelece a comunicaï¿½ï¿½o entre a chave e seu 
---  nï¿½cleo. As demais portas ligam a chave ï¿½s chaves vizinhas.
---  Os endereï¿½os das chaves sï¿½o compostos pelas coordenadas XY da rede de interconexï¿½o, 
---  onde X ï¿½ a posiï¿½ï¿½o horizontal e Y a posiï¿½ï¿½o vertical. A atribuiï¿½ï¿½o de endereï¿½os ï¿½s 
---  chaves ï¿½ necessï¿½ria para a execuï¿½ï¿½o do algoritmo de chaveamento.
---  Os mï¿½dulos principais que compï¿½em a chave sï¿½o: fila, ï¿½rbitro e lï¿½gica de 
+--  temporário de flits. A porta Local estabelece a comunicação entre a chave e seu 
+--  núcleo. As demais portas ligam a chave às chaves vizinhas.
+--  Os endereços das chaves são compostos pelas coordenadas XY da rede de interconexão, 
+--  onde X é a posição horizontal e Y a posição vertical. A atribuição de endereços às 
+--  chaves é necessária para a execução do algoritmo de chaveamento.
+--  Os módulos principais que compõem a chave são: fila, árbitro e lógica de 
 --  chaveamento implementada pelo controle_mux. Cada uma das filas da chave (E, W, N, 
---  S e L), ao receber um novo pacote requisita chaveamento ao ï¿½rbitro. O ï¿½rbitro 
---  seleciona a requisiï¿½ï¿½o de maior prioridade, quando existem requisiï¿½ï¿½es simultï¿½neas, 
---  e encaminha o pedido de chaveamento ï¿½ lï¿½gica de chaveamento. A lï¿½gica de 
---  chaveamento verifica se ï¿½ possï¿½vel atender ï¿½ solicitaï¿½ï¿½o. Sendo possï¿½vel, a conexï¿½o
---  ï¿½ estabelecida e o ï¿½rbitro ï¿½ informado. Por sua vez, o ï¿½rbitro informa a fila que 
---  comeï¿½a a enviar os flits armazenados. Quando todos os flits do pacote foram 
---  enviados, a conexï¿½o ï¿½ concluï¿½da pela sinalizaï¿½ï¿½o, por parte da fila, atravï¿½s do 
+--  S e L), ao receber um novo pacote requisita chaveamento ao árbitro. O árbitro 
+--  seleciona a requisição de maior prioridade, quando existem requisições simultâneas, 
+--  e encaminha o pedido de chaveamento à lógica de chaveamento. A lógica de 
+--  chaveamento verifica se é possível atender à solicitação. Sendo possível, a conexão
+--  é estabelecida e o árbitro é informado. Por sua vez, o árbitro informa a fila que 
+--  começa a enviar os flits armazenados. Quando todos os flits do pacote foram 
+--  enviados, a conexão é concluída pela sinalização, por parte da fila, através do 
 --  sinal sender.
 ---------------------------------------------------------------------------------------
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.std_logic_unsigned.all;
-use work.standards.all;
-use ieee.std_logic_arith;
-use IEEE.std_logic_textio.all;
-use std.textio.all;
-use IEEE.NUMERIC_STD.all;
+use work.HeMPS_defaults.all;
+--use work.HemPS_PKG.all;
 
-entity hermes_router is
-generic( address: regmetadeflit := "0");
+entity RouterCC is
+generic( address: regmetadeflit := "00010001");
 port(
         clock:     in  std_logic;
         reset:     in  std_logic;
@@ -100,17 +69,17 @@ port(
         tx:        out regNport;
         data_out:  out arrayNport_regflit;
         credit_i:  in  regNport);
-end hermes_router;
+end RouterCC;
 
-architecture hermes_router of hermes_router is
+architecture RouterCC of RouterCC is
 
 signal h, ack_h, data_av, sender, data_ack: regNport := (others=>'0');
 signal data: arrayNport_regflit := (others=>(others=>'0'));
 signal mux_in, mux_out: arrayNport_reg3 := (others=>(others=>'0'));
 signal free: regNport := (others=>'0');
 
---++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 begin
+
         FEast : Entity work.Hermes_buffer
         port map(
                 clock => clock,
@@ -212,9 +181,8 @@ begin
                 data_out => data_out,
                 credit_i => credit_i);
 
-        CLK_TX : for i in 0 to(NPORT-1) 
-        generate
+        CLK_TX : for i in 0 to(NPORT-1) generate
                 clock_tx(i) <= clock;
         end generate CLK_TX;  
 
-end hermes_router;
+end RouterCC;

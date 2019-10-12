@@ -1,22 +1,22 @@
 clear -all
 
 # analyze the design
-analyze -vhdl ../../models/vhdl/router/RouterCC.vhd ;
+analyze -vhdl ../../models/vhdl/router/HeMPS_defaults.vhd ;
 analyze -vhdl ../../models/vhdl/router/Hermes_buffer.vhd ;
 analyze -vhdl ../../models/vhdl/router/Hermes_crossbar.vhd ;
 analyze -vhdl ../../models/vhdl/router/Hermes_switchcontrol.vhd ;
-analyze -vhdl ../../models/vhdl/router/HeMPS_defaults.vhd ;
+analyze -vhdl ../../models/vhdl/router/RouterCC.vhd ;
 
-# Analyze property files
-analyze -sva bindings.sv properties.sv ;
+# analyze property and binding files
+analyze -sva properties.sv bindings.sv 
 
-#set_evaluate_properties_on_formal_reset off
+# set_evaluate_properties_on_formal_reset off
 
 # elaborate the design, point to the design top level
 elaborate -vhdl -top {RouterCC}
 
-# Set up Clocks and Resets
-clock clock -factor 1 -phase 1
+# set up clock and reset signals
+clock clock -factor 1 -phase 1 -both_edges
 reset -expression {reset = '1'};
 
 # get designs statistics
@@ -27,6 +27,6 @@ get_design_info
 
 prove -all
 
-# Report proof results
+# report proof results
 report
 

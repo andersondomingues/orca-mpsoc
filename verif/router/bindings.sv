@@ -1,19 +1,26 @@
-module sanduba_bind_top;
+module RouterCC_bind_top #(parameter address = "00010001");
 
-	bind sanduba sanduba_prop sanduba_bind(
-	  .clock(clock),       .reset(reset),
-	  .r_green(r_green),   .green(green),
-	  .r_atum(r_atum),     .atum(atum),
-	  .r_bacon(r_bacon),   .bacon(bacon),
-	  .dev(dev),           .busy(busy),
-	  .m100(m100),         .d100(d100),
+	bind RouterCC RouterCC_prop RouterCC_bind(
 
-	  //outs >> d100, green, atum, bacon, busy;
+		.clock(clock), .reset(reset),
+		
+		//from generics
+		.address(address),
+		
+		//transmit (tx, send) ports
+		.clock_rx(clock_rx),    .rx(rx),
+		.data_in(data_in),      .credit_o(credit_o),
 
-	  //internals
-	  .count(count),
-	  .pe(pe),
-	  .ea(ea)
+		//receive (rx) ports
+		.clock_tx(clock_tx),    .tx(tx),
+		.data_out(data_out),    .credit_i(credit_i),
+
+		//internals
+		.h(h), .ack_h(ack_h), .data_av(data_av), 
+		.sender(sender), .data_ack(data_ack),
+		.data(data), .mux_in(mux_in), .mux_out(mux_out),
+		.free(free)
 	);
 
-endmodule
+endmodule //RouterCC_bind_top
+

@@ -1,57 +1,61 @@
-module RouterCC (
-generic( address: regmetadeflit := "00010001");
-port(
-        clock:     in  std_logic;
-        reset:     in  std_logic;
-        clock_rx:  in  regNport;
-        rx:        in  regNport;
+import HeMPS_defaults::*;
 
-        data_in:   in  arrayNport_regflit;
-        credit_o:  out regNport;    
-        clock_tx:  out regNport;
-        tx:        out regNport;
+module RouterCC_prop (
+	
+    clock, reset,
+	address, //<< from generics, see WTF this has to do with internal signals
+    
+	//transmit (tx, send) ports
+	clock_rx, //in  regNport
+    rx,       //in  regNport
+    data_in,  //in  arrayNport_regflit
+    credit_o, //out regNport
 
-        data_out:  out arrayNport_regflit;
-        credit_i:  in  regNport);
+	//receive (rx) ports
+    clock_tx, //out regNport
+    tx,       //out regNport
+    data_out, //out arrayNport_regflit
+    credit_i, //in  regNport
 
+	//internals
+	h, ack_h, data_av, sender, data_ack, //: regNport := (others=>'0');
+	data, //: arrayNport_regflit := (others=>(others=>'0'));
+	mux_in, mux_out, //: arrayNport_reg3 := (others=>(others=>'0'));
+	free //: regNport := (others=>'0');
 );
 
-endmodule //RouterCC;
+//all interface signals must be marked as input 
+input clock, reset;
+input clock_rx, rx,  credit_i;  //rx
+input arrayNport_regflit data_in;
+input clock_tx, tx;
+input arrayNport_regflit data_out;
+input credit_o; //tx
 
+//internals must be marked as input as well
+input h, ack_h, data_av, sender, data_ack;
+input data;
+input mux_in, mux_out;
+input free;
 
-module sanduba_prop(
+//from generics
+input address;
 
-  //interface
-  clock,   reset,
-  r_green, green,
-  r_atum,  atum,
-  r_bacon, bacon,
-  dev,     busy,
-  m100,    d100,
+//commented out due to we have both-edge enabled
+//default clocking @(posedge clock); endclocking 
 
-  //internals
-  count, //<<-- number of coins in
-  ea,    //<<-- previous state
-  pe     //<<-- next state
-);
+//disable everything when reset is risen
+default disable iff reset; 
 
-//module inputs (:in)
-input m100, dev, r_green, r_atum, r_bacon, clock, reset;
+//check whether an arbitrary packet is routed properly
+property p_route;
+	@(posedge clock) (data_in[SOUTH] == "00010001") |-> ##4 data_out[LOCAL] == "00010001";
+endproperty;
+a_p_route : assert property (p_route);
 
-//module outputs (:out)
-//output d100, green, atum, bacon, busy;
-input d100, green, atum, bacon, busy;
+endmodule //RouterCC
 
-//internal signals
-input logic [0:4] count;
-input state ea, pe;
-
-default clocking @(posedge clock); endclocking // << defaults all assertions to posedge
-default disable iff reset; //disable everything when reset is risen
-
-//assumption: if the device is busy, there can be no input
-//assume_busy: assume property 
-//	(busy |-> m100 == 0 && dev == 0 && r_green == 0 && r_atum == 0 &&  r_bacon == 0);
+/*
 property p_input;
 	@(posedge clock) (ea != action) |=> 
 		(r_bacon == 0) and (r_atum == 0)
@@ -138,5 +142,5 @@ endproperty
 a_p_aprice : assert property (p_aprice);
 
 endmodule //sanduba_prop
-
+*/
 

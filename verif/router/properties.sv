@@ -1,5 +1,17 @@
 import HeMPS_defaults::*;
 
+`define SOUTH = HeMPS_defaults.SOUTH;
+`define LOCAL = HeMPS_defaults.LOCAL;
+
+/*
+constant NPORT: integer := 5;
+constant EAST: integer := 0;
+constant WEST: integer := 1;
+constant NORTH : integer := 2;
+constant SOUTH : integer := 3;
+constant LOCAL : integer := 4;
+*/
+
 module RouterCC_prop (
 	
     clock, reset,
@@ -49,7 +61,8 @@ default disable iff reset;
 
 //check whether an arbitrary packet is routed properly
 property p_route;
-	@(posedge clock) (data_in[SOUTH] == "00010001") |-> ##4 data_out[LOCAL] == "00010001";
+	@(posedge clock) (data_in[`SOUTH] == "00010001") |-> 
+		##4 data_out[`LOCAL] == "00010001";
 endproperty;
 a_p_route : assert property (p_route);
 

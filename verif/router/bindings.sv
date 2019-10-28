@@ -1,4 +1,4 @@
-module RouterCC_bind_top #(parameter address = "00010001");
+module RouterCC_bind_top #(parameter address = 8'b00010001);
 
 	bind RouterCC RouterCC_prop RouterCC_bind(
 

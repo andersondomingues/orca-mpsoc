@@ -35,10 +35,9 @@ input regNport clock_rx, rx, credit_i; //rx
 input regNport clock_tx, tx, credit_o; //tx
 
 //internals must be marked as input as well
-input regNport h, ack_h, data_av, sender, data_ack;
+input regNport h, ack_h, data_av, sender, data_ack, free;
 input arrayNport_regflit data;
 input arrayNport_reg3 mux_in, mux_out;
-input regNport free;
 
 //from generics
 input regmetadeflit address;
@@ -54,17 +53,18 @@ default disable iff reset;
 //================================================================================
 //assume clock to be global, that is, the same for all ports and internal hardware
 
+//adjust clock to tick together
 generate for (genvar i = 0; i<NPORT; i++) begin
 	property p_global_clock_pos;
-		@(posedge clock) clock == clock_tx[i];
+		@(posedge clock) clock_tx[i];
 	endproperty
 
 	property p_global_clock_neg;
-		@(negedge clock) clock == clock_tx[i];
+		@(negedge clock) !clock_tx[i];
 	endproperty
 
-	a_p_global_clock_pos : assume property (p_global_clock_pos);
-	a_p_global_clock_neg : assume property (p_global_clock_neg);
+	//a_p_global_clock_pos : assume property (p_global_clock_pos);
+	//a_p_global_clock_neg : assume property (p_global_clock_neg);
 end endgenerate;
 
 //check whether ports are blocked when no more credit is available (TODO: number of cycles)
@@ -82,8 +82,27 @@ generate for (genvar i = 0; i<NPORT; i++) begin
 end endgenerate;
 
 //================================================================================
+// SEQUENCES
+//================================================================================
+//sequence onehot_port(packet_t t)
+	//if($size(t) == 0)
+	//	1;
+	//else
+		//data_(rx[port] == 1) and $onehot(rx) and (credit_i[port] == 1)and $onehot(credit_i);
+///endsequence;
+
+//================================================================================
 // COVER POINTS
 //================================================================================
+//state cover
+generate for(genvar i = 0; i <= 4; i++) begin
+	c_p_south : cover property (@(posedge clock)(FSouth.EA == i));
+	c_p_north : cover property (@(posedge clock)(FNorth.EA == i));
+	c_p_east  : cover property (@(posedge clock)(FEast.EA == i));
+	c_p_west  : cover property (@(posedge clock)(FWest.EA == i));
+	c_p_local : cover property (@(posedge clock)(FLocal.EA == i));
+end endgenerate;
+
 // -- all possible values for credit_o and credit_i
 //generate 
 //	for (genvar i = 0; i < NPORT; i++) begin
@@ -94,16 +113,42 @@ end endgenerate;
 //	end 
 //endgenerate;
 
+//all possible values for nport signals
+generate for(genvar i = 0; i <= MAX_REGNPORT_VAL; i++) begin
+	c_p_val_h        : cover property (@(posedge clock)(h == i));
+	c_p_val_data_av  : cover property (@(posedge clock)(data_av == i));
+	c_p_val_sender   : cover property (@(posedge clock)(sender == i));
+	c_p_val_data_ack : cover property (@(posedge clock)(data_ack == i));
+	c_p_val_free     : cover property (@(posedge clock)(free == i));
+	//NOTE: ack_h won't have any possible value, see "a_p_ack_h"
+end endgenerate;
 
 //================================================================================
 // ASSERTIONS
 //================================================================================
+//check whether only a port can be acknowledged at once
+property p_ack_h;
+	@(posedge clock) $onehot0(ack_h);
+endproperty;
+
+a_p_ack_h : assert property (p_ack_h);
+
+//at most two port can be send flits at the same time
+property p_max_senders;
+	@(posedge clock) $countones(tx) <= 2;
+endproperty;
+
+a_p_max_senders : assert property (p_max_senders);
+
 //property p_buffer_size;
 //	@(posedge clock) (!credit_i and !rx and !tx) |=> 1;		
 //endproperty;
 //a_p_buffer_size : assert property (p_buffer_size);
 
-//property p_in_order_5(header_addr, header_size);
+//property p_packet_rec_queue(regflit packet[]);
+
+	//@(posedge clock) onehot_port(SOUTH)
+//		|-> data;
 
 	//regflit packet[]; //generate a new packet
 	//regflit packet[$];
@@ -127,7 +172,8 @@ end endgenerate;
 	//) |->
 
 //endproperty;
-//a_p_in_order_5 : assert property (p_in_order_5(16'h0011, 16'h0001));
+
+//a_p_packet_rec_queue : assert property (p_packet_rec_queue(gen_pkt(16'h0011, 16'h0001)));
 
 
 

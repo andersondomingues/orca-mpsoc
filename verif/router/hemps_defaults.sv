@@ -45,6 +45,14 @@ typedef regflit[(NPORT-1) : 0] arrayNport_regflit;
 
 typedef regflit[3:0] arrayNPORT_1_regflit;
 
+parameter regflit  MAX_REGFLIT_VAL  = 2 ** $bits(regflit)  - 1;
+parameter regNport MAX_REGNPORT_VAL = 2 ** $bits(regNport) - 1;
+
+typedef enum {S_INIT, S_HEADER, S_SENDHEADER, S_PAYLOAD, S_END} buffer_fsm_type;
+
+//SVA only!
+typedef regflit[0:MAX_REGFLIT_VAL] packet_t[$];
+
 //================================================================================
 // FUNCTIONS
 //================================================================================
@@ -76,19 +84,21 @@ function integer route(regmetadeflit addr_flit, regmetadeflit r_addr);
 endfunction
 
 //generate a packet of X+2 flits
-function automatic void gen_pkt(regflit addr, regflit size, ref regflit data_v[]);
+function packet_t gen_pkt(regflit addr, regflit size);
 
-	data_v = new[size + 2];
-	data_v[0] = addr;
-	data_v[1] = size;
+	packet_t data_v;
+
+	data_v.push_back(addr);
+	data_v.push_back(size);
 
 	for(int i = 0; i < size; i++) begin
-		data_v[i + 2] = i;
+		data_v.push_back(i);
 	end
+
+	return data_v;
+
 endfunction
 
-parameter regflit  MAX_REGFLIT_VAL  = 2 ** $bits(regflit)  - 1;
-parameter regNport MAX_REGNPORT_VAL = 2 ** $bits(regNport) - 1;
 
 
 

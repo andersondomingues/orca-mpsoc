@@ -45,7 +45,10 @@ typedef regflit[(NPORT-1) : 0] arrayNport_regflit;
 
 typedef regflit[3:0] arrayNPORT_1_regflit;
 
-/** XY routing **/
+//================================================================================
+// FUNCTIONS
+//================================================================================
+//XY routing 
 function integer route(regmetadeflit addr_flit, regmetadeflit r_addr);
 	regquartoflit x, y, rx, ry;
 	x = addr_flit[(METADEFLIT-1) : (QUARTOFLIT-1)];
@@ -71,3 +74,23 @@ function integer route(regmetadeflit addr_flit, regmetadeflit r_addr);
 		return WEST;
 	end
 endfunction
+
+//generate a packet of X+2 flits
+function automatic void gen_pkt(regflit addr, regflit size, ref regflit data_v[]);
+
+	data_v = new[size + 2];
+	data_v[0] = addr;
+	data_v[1] = size;
+
+	for(int i = 0; i < size; i++) begin
+		data_v[i + 2] = i;
+	end
+endfunction
+
+parameter regflit  MAX_REGFLIT_VAL  = 2 ** $bits(regflit)  - 1;
+parameter regNport MAX_REGNPORT_VAL = 2 ** $bits(regNport) - 1;
+
+
+
+
+

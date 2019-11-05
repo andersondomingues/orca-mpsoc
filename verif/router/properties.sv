@@ -1,5 +1,7 @@
 import hemps_defaults::*;
 
+`undef ENABLE_HARDCOVERS
+
 //================================================================================
 // INTERFACE
 //================================================================================
@@ -56,7 +58,7 @@ default disable iff reset;
 //adjust clock to tick together
 generate for (genvar i = 0; i<NPORT; i++) begin
 	property p_global_clock_pos;
-		@(posedge clock) clock_tx[i];
+		@(posedge clock) clock_tx[i];   //<-- cannot use these 
 	endproperty
 
 	property p_global_clock_neg;
@@ -95,6 +97,7 @@ end endgenerate;
 // COVER POINTS
 //================================================================================
 //state cover
+`ifdef ENABLE_HARDCOVERS
 generate for(genvar i = 0; i <= 4; i++) begin
 	c_p_south : cover property (@(posedge clock)(FSouth.EA == i));
 	c_p_north : cover property (@(posedge clock)(FNorth.EA == i));
@@ -102,18 +105,22 @@ generate for(genvar i = 0; i <= 4; i++) begin
 	c_p_west  : cover property (@(posedge clock)(FWest.EA == i));
 	c_p_local : cover property (@(posedge clock)(FLocal.EA == i));
 end endgenerate;
+`endif /* ENABLE_HARDCOVERS */
 
 // -- all possible values for credit_o and credit_i
-//generate 
-//	for (genvar i = 0; i < NPORT; i++) begin
-//		for (genvar j = 0; j < MAX_REGFLIT_VAL; j++) begin
-//			cover_credit_i : cover property (credit_i[i] == j);    << DO NOT USE THOSE,
-//			cover_credit_o : cover property (credit_o[i] == j);    << TOOL GONNA HANG!!
-//		end 
-//	end 
-//endgenerate;
+`ifdef ENABLE_HARDCOVERS
+generate 
+	for (genvar i = 0; i < 0/*NPORT*/; i++) begin
+		for (genvar j = 0; j < MAX_REGFLIT_VAL; j++) begin
+			cover_credit_i : cover property (credit_i[i] == j);    << DO NOT USE THOSE,
+			cover_credit_o : cover property (credit_o[i] == j);    << TOOL GONNA HANG!!
+		end 
+	end 
+endgenerate;
+`endif
 
 //all possible values for nport signals
+`ifdef ENABLE_HARDCOVERS
 generate for(genvar i = 0; i <= MAX_REGNPORT_VAL; i++) begin
 	c_p_val_h        : cover property (@(posedge clock)(h == i));
 	c_p_val_data_av  : cover property (@(posedge clock)(data_av == i));
@@ -122,6 +129,7 @@ generate for(genvar i = 0; i <= MAX_REGNPORT_VAL; i++) begin
 	c_p_val_free     : cover property (@(posedge clock)(free == i));
 	//NOTE: ack_h won't have any possible value, see "a_p_ack_h"
 end endgenerate;
+`endif /* ENABLE_HARDCOVERS */
 
 //================================================================================
 // ASSERTIONS
@@ -135,10 +143,21 @@ a_p_ack_h : assert property (p_ack_h);
 
 //at most two port can be send flits at the same time
 property p_max_senders;
-	@(posedge clock) $countones(tx) <= 2;
+	@(posedge clock) $countones(tx) <= 4;
 endproperty;
 
 a_p_max_senders : assert property (p_max_senders);
+
+//check whether buffer lower credit_o when no more room is available for new data
+property p_credit_o;
+	@(posedge clock) (credit_o[SOUTH]) |-> 
+		if (FSouth.first == 0) begin
+			(FSouth.last
+		end else begin
+
+		end
+endproperty;
+a_p_credit_o : assert property (p_credit_o);
 
 //property p_buffer_size;
 //	@(posedge clock) (!credit_i and !rx and !tx) |=> 1;		

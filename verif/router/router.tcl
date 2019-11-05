@@ -23,11 +23,11 @@ elaborate -vhdl -top {RouterCC} -multiple_clock -loop_limit 65535
 
 # set up clock 
 #clock clock -factor 1 -phase 1 -both_edges
-clock clock [list {clock_rx(0)} {clock_rx(1)} {clock_rx(2)} {clock_rx(3)} {clock_rx(4)} {clock_tx(0)} {clock_tx(1)} {clock_tx(2)} {clock_tx(3)} {clock_tx(4)}] 1 1 -both_edges
+clock clock [list {clock_rx(0)} {clock_rx(1)} {clock_rx(2)} {clock_rx(3)} {clock_rx(4)}] 1 1 -both_edges
+#{clock_tx(0)} {clock_tx(1)} {clock_tx(2)} {clock_tx(3)} {clock_tx(4)}] 
 
 #set reset sig
 reset -expression {reset = '1'};
-
 ##??
 sanity_check -verbose -analyze all
 
@@ -37,7 +37,7 @@ get_design_info
 # this command might be useful for more complex designs
 #set_max_trace_length 150
 
-prove -all
+prove -all -orchestration on
 
 # report proof results
 report

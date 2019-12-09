@@ -138,24 +138,17 @@ end endgenerate;
 property p_ack_h;
 	@(posedge clock) $onehot0(ack_h);
 endproperty;
-
 a_p_ack_h : assert property (p_ack_h);
 
 //at most two port can be send flits at the same time
 property p_max_senders;
-	@(posedge clock) $countones(tx) <= 4;
+	@(posedge clock) $countones(tx) == 5;
 endproperty;
-
-a_p_max_senders : assert property (p_max_senders);
+c_p_max_senders : cover property (p_max_senders);
 
 //check whether buffer lower credit_o when no more room is available for new data
 property p_credit_o;
-	@(posedge clock) (credit_o[SOUTH]) |-> 
-		if (FSouth.first == 0) begin
-			(FSouth.last
-		end else begin
-
-		end
+	@(posedge clock) (credit_o[SOUTH] == 0) |-> (FSouth.first == 0 and FSouth.last == TAM_BUFFER - 1) or (FSouth.last == FSouth.first + 1);
 endproperty;
 a_p_credit_o : assert property (p_credit_o);
 

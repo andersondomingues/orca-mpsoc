@@ -8,18 +8,21 @@ use work.standards.all;
 
 entity orca_dma is
 
-	port(
-	   clock : in std_logic;
-	   reset : in std_logic;
+  port(
+    clock : in std_logic;
+    reset : in std_logic;
 	
-	   -- mem0 if
-       mem0_address_i : in std_logic_vector(31 downto 0);
-       mem0_enable_i  : in std_logic;
-       mem0_wbe_i     : in std_logic_vector(3 downto 0);
-       mem0_data_write: in std_logic_vector(31 downto 0);
-       mem0_data_read : out std_logic_vector(31 downto 0);    
-          
-      -- mem1 if
+    -- memory interface, should be 
+    -- connected to the mem. mux
+    mem0_address   : in  std_logic_vector(31 downto 0);
+    mem0_rw        : in  std_logic_vector(3 downto 0);
+    mem0_data_write: in  std_logic_vector(31 downto 0);
+    mem0_data_read : out std_logic_vector(31 downto 0);    
+    
+    -- memory interface for the receive
+    -- buffer, should be connected to a FIFO  
+    
+
       mem1_address_i : in std_logic_vector(31 downto 0);
       mem1_enable_i  : in std_logic;
       mem1_wbe_i     : in std_logic_vector(3 downto 0);

@@ -17,13 +17,11 @@ entity orca_ni_send is
   port(
     clk : in std_logic;
     rst : in std_logic;
-    load: in std_logic;    -- load next packet into main memory
     stall : out std_logic; -- holds the cpu and takes control on memory i/f
 
     -- interface to the memory mux
-    m_addr_o : out std_logic_vector((RAM_WIDTH - 1) downto 0);
     m_data_i :  in std_logic_vector((RAM_WIDTH - 1) downto 0);
-    m_data_o : out std_logic_vector((RAM_WIDTH - 1) downto 0);
+    m_addr_o : out std_logic_vector((RAM_WIDTH - 1) downto 0);
     m_wb_o   : out std_logic_vector(3 downto 0);
 
     -- router interface (transmiting)
@@ -34,10 +32,9 @@ entity orca_ni_send is
 
     -- dma programming (must be mapped into memory space)
     send_start : in std_logic;
-    send_status : out std_logic_vector(31 downto 0);
     prog_address : in std_logic_vector(31 downto 0);
-    prog_size    : in std_logic_vector(31 downto 0)
-
+    prog_size    : in std_logic_vector(31 downto 0);
+    send_status : out std_logic_vector(31 downto 0)
   );
 
 end orca_ni_send;

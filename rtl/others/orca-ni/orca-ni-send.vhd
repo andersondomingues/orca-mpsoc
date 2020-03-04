@@ -19,7 +19,7 @@ entity orca_ni_send is
     rst : in std_logic;
     stall : out std_logic; -- holds the cpu and takes control on memory i/f
 
-    -- interface to the memory mux
+    -- interface to the memory mux (data_i is supressed)
     m_data_i :  in std_logic_vector((RAM_WIDTH - 1) downto 0);
     m_addr_o : out std_logic_vector((RAM_WIDTH - 1) downto 0);
     m_wb_o   : out std_logic_vector(3 downto 0);
@@ -99,7 +99,7 @@ begin
         r_tx <= '0'; -- make sure the router is not receiving anything
       when S_CONFIG_STALL => 
         stall <= '1'; -- stall cpu here
-        send_status <= "1"; --set status to busy
+        send_status <= x"11111111"; --set status to busy
         send_copy_addr <= prog_address; --copy dma info
         send_copy_size <= prog_size;
       when S_COPY_AND_RELEASE => --copy from memory to the output buffer
@@ -115,7 +115,7 @@ begin
       when S_FLUSH =>
           r_tx <= '0';
           if send_start = '0' then
-            send_status <= "0"; -- lowers busy signal
+            send_status <= x"00000000"; -- lowers busy signal
           end if;
     end case; -- send state
   

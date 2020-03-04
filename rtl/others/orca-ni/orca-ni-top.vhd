@@ -56,22 +56,44 @@ entity orca_ni_top is
 
 end orca_ni_top;
 
-architecture orca_ni of orca_ni_top is
-  component orca_n
-    generic (...);
-    port (Clk, Rst: in std_logic;
-          D: in std_logic_vector(3 downto 0);
-          Rd : out std_logic;
-          Q: out std_logic_vector(3 downto 0));
+architecture orca_ni_top of orca_ni_top is
+
+  component orca_ni_sender_comp
+    --generic (...);
+    port (
+      clk_s : in std_logic;
+      rst_s : in std_logic;
+      stall_s : out std_logic; -- holds the cpu and takes control on memory i/f
+
+      -- interface to the memory mux
+      m_data_i_s :  in std_logic_vector((RAM_WIDTH - 1) downto 0);
+      m_addr_o_s : out std_logic_vector((RAM_WIDTH - 1) downto 0);
+      m_wb_o_s   : out std_logic_vector(3 downto 0);
+
+      -- router interface (transmiting)
+      r_clock_tx_s  : out std_logic; 
+      r_tx_s        : out std_logic;
+      r_data_o_s    : out std_logic_vector(FLIT_WIDTH downto 0);
+      r_credit_i_s  : in std_logic;
+
+      -- dma programming (must be mapped into memory space)
+      send_start_s : in std_logic;
+      prog_address_s : in std_logic_vector(31 downto 0);
+      prog_size_s    : in std_logic_vector(31 downto 0);
+      send_status_s : out std_logic_vector(31 downto 0)
+    );
   end component;
+  
 begin
-  u1: CompA generic map(...)
-            port map(Clock, Reset, DIn, QOut);
-  u2: CompA generic map(...)
-            port map(Clk => Clock,
-                     Rst => Reset,
-                     D => DIn,
-                     Rd => open,
-                     Q(0) => QOut1,
-                     Q(3 downto 1) => QOut2);
-end Structure;
+  binding_sender: orca_ni_sender_comp
+  --  --generic map(...)
+    port map(
+      -- forward clk, rst, and stall signals
+      clk => clk_s,
+      rst => rst_s,
+      stall_s => stall,
+      -- bind memory acconding to the active process 
+      
+    );
+
+end orca_ni_top;

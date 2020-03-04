@@ -22,7 +22,9 @@ vcom -work work ../rtl/routers/hermes/RouterCC.vhd
 vcom -work work ../rtl/storage/single-port-ram-orca/single_port_ram.vhd
 
 #network interface sources
-vcom -work work ../rtl/others/orca-ni/orca-ni.vhd
+vcom -work work ../rtl/others/orca-ni/orca-ni-recv.vhd
+vcom -work work ../rtl/others/orca-ni/orca-ni-send.vhd
+vcom -work work ../rtl/others/orca-ni/orca-ni-top.vhd
 
 #top-level source
 vcom -work work ../rtl/others/tile-comm.vhd

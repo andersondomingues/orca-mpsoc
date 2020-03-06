@@ -13,6 +13,6 @@ vsim -novopt ram_tb
 
 do wave.do
 
-run 200 ms
+run 20 ms
 
 #quit

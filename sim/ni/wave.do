@@ -1,17 +1,22 @@
 onerror {resume}
 quietly WaveActivateNextPane {} 0
-add wave -noupdate /ram_tb/memory0lb/ram1
-add wave -noupdate /ram_tb/address_width
-add wave -noupdate /ram_tb/memory_file
-add wave -noupdate /ram_tb/clock
-add wave -noupdate /ram_tb/reset
-add wave -noupdate /ram_tb/counter
-add wave -noupdate /ram_tb/read_ram
-add wave -noupdate -expand /ram_tb/we
-add wave -noupdate -expand /ram_tb/memory0lb/ram1
-add wave -noupdate /ram_tb/memory0ub/ram1
-add wave -noupdate /ram_tb/memory1lb/ram1
-add wave -noupdate -expand /ram_tb/memory1ub/ram1
+add wave -noupdate -expand -group Control /ni_tb/clock
+add wave -noupdate -expand -group Control /ni_tb/reset
+add wave -noupdate -expand -group Control /ni_tb/stall
+add wave -noupdate -expand -group Memory /ni_tb/m_data_i
+add wave -noupdate -expand -group Memory /ni_tb/m_addr_o
+add wave -noupdate -expand -group Memory /ni_tb/m_wb_o
+add wave -noupdate -expand -group Router /ni_tb/r_clock_tx
+add wave -noupdate -expand -group Router /ni_tb/r_tx
+add wave -noupdate -expand -group Router /ni_tb/r_data_o
+add wave -noupdate -expand -group Router /ni_tb/r_credit_i
+add wave -noupdate -expand -group Programming /ni_tb/send_start
+add wave -noupdate -expand -group Programming /ni_tb/send_status
+add wave -noupdate -expand -group Programming /ni_tb/prog_address
+add wave -noupdate -expand -group Programming /ni_tb/prog_size
+add wave -noupdate -expand -group Internals /ni_tb/ni_sender_mod/send_state
+add wave -noupdate -expand -group Internals /ni_tb/ni_sender_mod/send_copy_addr
+add wave -noupdate -expand -group Internals /ni_tb/ni_sender_mod/send_copy_size
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {858 ns} 0}
 quietly wave cursor active 1
@@ -29,4 +34,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {2282 ns} {3038 ns}
+WaveRestoreZoom {0 ns} {756 ns}

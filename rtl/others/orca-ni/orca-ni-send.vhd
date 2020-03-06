@@ -10,8 +10,7 @@ entity orca_ni_send is
   --is preserved for all rtl files).
   generic (
     RAM_WIDTH  : natural; --width of main memory word
-    FLIT_WIDTH : natural; --width of router word
-    BUFFER_DEPTH : natural --depth of internal buffer (recv only)
+    FLIT_WIDTH : natural  --width of router word
   );
 
   port(
@@ -19,7 +18,7 @@ entity orca_ni_send is
     rst : in std_logic;
     stall : out std_logic; -- holds the cpu and takes control on memory i/f
 
-    -- interface to the memory mux (data_i is supressed)
+    -- interface to the memory mux (data_o is supressed)
     m_data_i :  in std_logic_vector((RAM_WIDTH - 1) downto 0);
     m_addr_o : out std_logic_vector((RAM_WIDTH - 1) downto 0);
     m_wb_o   : out std_logic_vector(3 downto 0);
@@ -27,7 +26,7 @@ entity orca_ni_send is
     -- router interface (transmiting)
     r_clock_tx  : out std_logic; 
     r_tx        : out std_logic;
-    r_data_o    : out std_logic_vector(FLIT_WIDTH downto 0);
+    r_data_o    : out std_logic_vector(FLIT_WIDTH-1 downto 0);
     r_credit_i  : in std_logic;
 
     -- dma programming (must be mapped into memory space)
@@ -71,13 +70,13 @@ begin
     elsif rising_edge(clk) then
 
       case send_state is
-        when S_WAIT_CONFIG_STALL => -- change states when software programs the dma
+        when S_WAIT_CONFIG_STALL => --  software programs the dma
           if send_start = '1' then
-            send_state <= S_COPY_AND_RELEASE;
+            send_state <= S_CONFIG_STALL;
           end if;
         when S_CONFIG_STALL => --stays for one cycle
           send_state <= S_COPY_AND_RELEASE;
-        when S_COPY_AND_RELEASE =>  -- change states when all flits have been copied
+        when S_COPY_AND_RELEASE =>  -- all flits have been copied
           if send_copy_size = 0 then
             send_state <= S_FLUSH;
           end if;
@@ -94,37 +93,46 @@ begin
   -- send proc, machine functioning
   send_machine_func_proc: process(clk)
   begin
-    case send_state is 
-      when S_WAIT_CONFIG_STALL =>
-        r_tx <= '0'; -- make sure the router is not receiving anything
-      when S_CONFIG_STALL => 
-        stall <= '1'; -- stall cpu here
-        send_status <= x"11111111"; --set status to busy
-        send_copy_addr <= prog_address; --copy dma info
-        send_copy_size <= prog_size;
-      when S_COPY_AND_RELEASE => --copy from memory to the output buffer
-        if r_credit_i = '1' then
-          --mem read
-          m_addr_o <= send_copy_addr; --origin of data
-          --push to noc
-          r_tx <= '1'; --!!NOTE: clock_tx being ignored
-          send_copy_size <= send_copy_size - RAM_WIDTH;
-        else
-          r_tx <= '0';
-        end if;
-      when S_FLUSH =>
+    if rising_edge(clk) then
+    --clk'event and clk = '1' then
+      case send_state is 
+        when S_WAIT_CONFIG_STALL =>
+          stall <= '0'; --start with the cpu on control
+          send_copy_addr <= (others => '0');
+          send_copy_size <= (others => '0');
+          r_tx <= '0'; -- make sure the router is not receiving anything
+
+        when S_CONFIG_STALL => 
+          stall <= '1'; -- stall cpu here
+          send_status <= (others => '1'); --set status to busy
+          send_copy_addr <= prog_address; --copy dma info
+          send_copy_size <= prog_size;
+        
+        when S_COPY_AND_RELEASE => --copy from memory to the output buffer
+          if r_credit_i = '1' then
+            --mem read
+            m_addr_o <= send_copy_addr; --origin of data
+            --push to noc
+            r_tx <= '1'; --!!NOTE: clock_tx being ignored
+            send_copy_size <= send_copy_size - 1;
+            send_copy_addr <= send_copy_addr + 4;
+          --else
+          --  r_tx <= '0';
+          end if;
+        
+        when S_FLUSH =>
           r_tx <= '0';
           if send_start = '0' then
-            send_status <= x"00000000"; -- lowers busy signal
+            send_status <= (others => '0'); -- lowers busy signal
           end if;
-    end case; -- send state
-  
+      end case; -- send state
+  	end if;	
   end process;
 
   --buffer output always comes from memory 
   r_data_o <= m_data_i;
 
   -- sending does not requires the main memory to be in write mode
-  m_wb_o <= "0000";
+  m_wb_o <= (others => '0');
 
 end orca_ni_send;

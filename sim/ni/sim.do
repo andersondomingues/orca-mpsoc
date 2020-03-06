@@ -11,10 +11,10 @@ vcom -work work ../../rtl/others/orca-ni/orca-ni-send.vhd
 vcom -work work ./ni_tb.vhd 
 
 #sim source
-vsim -novopt ram_tb
+vsim -novopt ni_tb
 
 do wave.do
 
-run 200 ms
+run 20 ms
 
 #quit

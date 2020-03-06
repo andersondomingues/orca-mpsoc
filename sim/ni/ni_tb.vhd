@@ -1,10 +1,10 @@
--- Single port RAM testbench. 
+-- NI (sender) testbench. 
 
 -- This file is part of project ORCA. More information on the project
 -- can be found at ORCA's repository at GitHub >>
 -- http://https://github.com/andersondomingues/orca-mpsoc
  
--- Copyright (C) 2020 Guilherme Heck, <heckgui@gmail.com>
+-- Copyright (C) 2020 Anderson Domingues, <ti.andersondomingues@gmail.com>
 
 -- This program is free software; you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -24,106 +24,101 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
+entity ni_tb is 
+  generic (
+    RAM_WIDTH  : natural := 32; --width of main memory word
+    FLIT_WIDTH : natural := 32  --width of router word
+  );
+end ni_tb;
 
-entity ram_tb is 
-	generic(
-		address_width: integer := 8;
-		memory_file : string := "code.txt"
-	);
-end ram_tb;
+architecture ni_tb of ni_tb is
+    
+  procedure clk_gen(signal clk : out std_logic; constant f: real) is
+    constant PERIOD    : time := 1 sec / f;  
+    constant HIGH_TIME : time := PERIOD / 2; 
+    constant LOW_TIME  : time := PERIOD - HIGH_TIME;
+  begin
+    assert (HIGH_TIME /= 0 fs) report "clk_plain: High time is zero; time resolution to large for frequency" severity FAILURE;
+    loop
+      clk <= '1';
+      wait for HIGH_TIME;
+      clk <= '0';
+      wait for LOW_TIME;
+    end loop;
+  end procedure;
+    
+  signal clock : std_logic := '1';
+  signal reset : std_logic := '0';
+    
+  signal stall : std_logic := '0';
+    
+  --mem
+  signal m_data_i : std_logic_vector((RAM_WIDTH - 1) downto 0)
+    := (others => '0');
+  
+  signal m_addr_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
+  signal m_wb_o   : std_logic_vector(3 downto 0);
+    
+  --router
+  signal r_clock_tx  : std_logic; 
+  signal r_tx        : std_logic;
+  signal r_data_o    : std_logic_vector(FLIT_WIDTH-1 downto 0);
+  signal r_credit_i  : std_logic;
 
+  --programming
+  signal send_start  : std_logic;
+  signal prog_address: std_logic_vector(31 downto 0);
+  signal prog_size   : std_logic_vector(31 downto 0);
+  signal send_status : std_logic_vector(31 downto 0);
 
-architecture ram_tb of ram_tb is
-    signal clock   : std_logic := '0';
-    signal reset   : std_logic := '0';
-    signal counter : std_logic_vector(31 downto 0);
-    signal read_ram: std_logic_vector(31 downto 0);
-    signal we      : std_logic_vector(3 downto 0);
 begin
+	--sender mod binding
+	ni_sender_mod: entity work.orca_ni_send
+		generic map (	
+			RAM_WIDTH => RAM_WIDTH,
+			FLIT_WIDTH => FLIT_WIDTH
+		)
+		port map(
+			clk  => clock,
+			rst  => reset,
+			stall => stall,
+			
+			m_data_i => m_data_i,
+			m_addr_o => m_addr_o,
+			m_wb_o => m_wb_o,
+			
+			r_credit_i => r_credit_i,
+			r_tx => r_tx,
+			r_data_o => r_data_o,
+			r_clock_tx => r_clock_tx,
+			
+			send_start => send_start,
+			send_status => send_status,
+			prog_address => prog_address,
+			prog_size => prog_size
+		);
 
-	process						--25Mhz system clock
+	--initial reset
+	reset <= '0', '1' after 10 ns, '0' after 20 ns;
+
+	-- clock generation
+	clk_gen(clock, 166.667E6);  -- 166.667 MHz clock
+	r_clock_tx <= clock;
+	r_credit_i <= '1';
+
+	--perform some tests
+	send_start <= '0', '1' after 50 ns, '0' after 100 ns;
+
+	-- fix values for memory access
+	prog_address <= x"40001000";
+	prog_size <= x"0000000A"; -- 10 dec
+	
+	-- generate arbitrary values at memory output
+	mem_seq_proc : process(clock)
 	begin
-		clock <= not clock;
-		wait for 20 ns;
-		clock <= not clock;
-		wait for 20 ns;
+		m_data_i <= m_data_i + 1;
 	end process;
 
-	reset <= '0', '1' after 5 ns, '0' after 500 ns;
-
-
-	process(clock, reset)
-	begin
-		if reset = '1' then
-			counter <= (others => '0');
-			we <= "1111";
-		elsif clock'event and clock = '1' then
-			if we = "0000" then
-				counter <= counter + 1;
-				we <= "1111";
-			else
-			we <= '0' & we(3 downto 1);
-			end if;
-		end if;
-	end process;
-
-	memory0lb: entity work.bram
-	generic map (	memory_file => memory_file,
-					data_width => 8,
-					address_width => address_width,
-					bank => 0)
-	port map(
-		clk 	=> clock,
-		addr 	=> counter(address_width -1 downto 2),
-		cs_n 	=> '0',
-		we_n	=> we(0),
-		data_i	=> counter(7 downto 0),
-		data_o	=> read_ram(7 downto 0)
-	);
-
-	memory0ub: entity work.bram
-	generic map (	memory_file => memory_file,
-					data_width => 8,
-					address_width => address_width,
-					bank => 1)
-	port map(
-		clk 	=> clock,
-		addr 	=> counter(address_width -1 downto 2),
-		cs_n 	=> '0',
-		we_n	=> we(1),
-		data_i	=> counter(15 downto 8),
-		data_o	=> read_ram(15 downto 8)
-	);
-
-	memory1lb: entity work.bram
-	generic map (	memory_file => memory_file,
-					data_width => 8,
-					address_width => address_width,
-					bank => 2)
-	port map(
-		clk 	=> clock,
-		addr 	=> counter(address_width -1 downto 2),
-		cs_n 	=> '0',
-		we_n	=> we(2),
-		data_i	=> counter(23 downto 16),
-		data_o	=> read_ram(23 downto 16)
-	);
-
-	memory1ub: entity work.bram
-	generic map (	memory_file => memory_file,
-					data_width => 8,
-					address_width => address_width,
-					bank => 3)
-	port map(
-		clk 	=> clock,
-		addr 	=> counter(address_width -1 downto 2),
-		cs_n 	=> '0',
-		we_n	=> we(3),
-		data_i	=> counter(31 downto 24),
-		data_o	=> read_ram(31 downto 24)
-	);
-
-
-end ram_tb;
+end ni_tb;
 
 

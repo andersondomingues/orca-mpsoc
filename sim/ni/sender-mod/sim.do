@@ -3,9 +3,7 @@ vlib work
 vmap work work
 
 #memory source
-vcom -work work ../../rtl/others/orca-ni/orca-ni-send.vhd
-#vcom -work work ../../rtl/others/orca-ni/orca-ni-recv.vhd
-#vcom -work work ../../rtl/others/orca-ni/orca-ni-top.vhd
+vcom -work work ../../../rtl/others/orca-ni/orca-ni-send.vhd
 
 #tb source
 vcom -work work ./ni_tb.vhd 

@@ -7,7 +7,7 @@
 # To load quest, type the command below.
 # $module load questa
 
-vsim -do sim.do
+vsim -do sim.do -debugDB
 
 #cleanup
 rm -rf transcript modelsim.ini work

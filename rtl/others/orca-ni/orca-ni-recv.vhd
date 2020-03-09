@@ -10,19 +10,18 @@ entity orca_ni_recv is
   --is preserved for all rtl files).
   generic (
     RAM_WIDTH  : natural; --width of main memory word
-    FLIT_WIDTH : natural; --width of router word
-    BUFFER_DEPTH : natural --depth of internal buffer (recv only)
+    FLIT_WIDTH : natural;  --width of router word
+    PRELOAD_ADDR : natural --base addres for memory preload
   );
 
   port(
     clk : in std_logic;
     rst : in std_logic;
-    load: in std_logic;    -- load next packet into main memory
     stall : out std_logic; -- holds the cpu and takes control on memory i/f
+    -- load: in std_logic;    -- load next packet into main memory
 
     -- interface to the memory mux
     m_addr_o : out std_logic_vector((RAM_WIDTH - 1) downto 0);
-    m_data_i :  in std_logic_vector((RAM_WIDTH - 1) downto 0);
     m_data_o : out std_logic_vector((RAM_WIDTH - 1) downto 0);
     m_wb_o   : out std_logic_vector(3 downto 0);
 
@@ -32,26 +31,17 @@ entity orca_ni_recv is
     b_data_o : out std_logic_vector((RAM_WIDTH - 1) downto 0);
     b_wb_o   : out std_logic_vector(3 downto 0);
 
-    -- router interface (transmiting)
-    clock_tx   : in std_logic; 
-    tx         : out std_logic;
-    data_out   : out std_logic_vector(FLIT_WIDTH downto 0);
-    credit_in  : out std_logic;
-
     -- router interface (receiving)
-    clock_rx   : out std_logic;
-    rx         : in std_logic;
-    data_in    : in std_logic_vector(FLIT_WIDTH downto 0);
-    credit_out : in std_logic;
+    r_clock_rx : in std_logic;
+    r_rx       : in std_logic;
+    r_data_i   : in std_logic_vector(FLIT_WIDTH downto 0);
+    r_credit_o : out std_logic;
 
     -- dma programming (must be mapped into memory space)
-    send_start : in std_logic;
     recv_start : in std_logic;
-    send_status : out std_logic_vector(31 downto 0);
     recv_status : out std_logic_vector(31 downto 0);
     prog_address : in std_logic_vector(31 downto 0);
     prog_size    : in std_logic_vector(31 downto 0)
-
   );
 
 end orca_ni_recv;
@@ -62,8 +52,9 @@ architecture orca_ni_recv of orca_ni_recv is
   type recv_state_type is (
 
     -- preload means "put everything from the input into memory" 
-    R_WAIT_PRELOAD,  -- initial state, happens once as long as "load" stays low
-    R_PRELOAD_WRITE, -- copy raw data from input to the memory
+    R_PRELOAD_WAIT, -- initial state, happens once as long as "load" stays low
+    R_PRELOAD_SIZE, -- receive the second flit and stores burst lenght
+    R_PRELOAD_COPY, -- copy raw data from input to the memory
 
     -- these states relate to usual ni functioning (recv-irq-release)
     R_WAIT_FLIT_ADDR, --wait for the leading flit (should have the address flit)
@@ -77,28 +68,68 @@ architecture orca_ni_recv of orca_ni_recv is
   --storage for both machine states
   signal recv_state : recv_state_type;
 
+  --temporary data
+  signal recv_copy_addr : std_logic_vector(31 downto 0);
+  signal recv_copy_size : std_logic_vector(31 downto 0);
+
 begin
 
   -- recv proc, state control
-  --recv_state_control_proc: process(clk, rst) 
-  --begin 
+  recv_state_control_proc: process(clk, rst) 
+  begin 
   
-  --  if rising_edge(clk) then 
+    if rst = '1' then
+      recv_state <= R_PRELOAD_WAIT;
+    elsif rising_edge(clk) then
 
-  --    if rst = rst'high then
-  --      recv_state <= R_WAIT_PRELOAD;  -- preload is the default action at the startup
-  --    elsif recv_state = R_WAIT_PRELOAD then
+      case recv_state is 
       
-  --    elsif recv_state = R_PRELOAD_WRITE then
-      
-  --    elsif 
+        -- preload mode state machine 
+        when R_PRELOAD_WAIT => --wait for a flit to appear at the input
+          if r_rx = '1' then
+            --recv_copy_addr <= PRELOAD_ADDR;
+            recv_state <= R_PRELOAD_SIZE;
+          end if;
+        when R_PRELOAD_SIZE =>
+          --recv_copy_size <= r_data_i; --second flit carries the size of the burst
+          recv_state <= R_PRELOAD_COPY;
+        when R_PRELOAD_COPY =>
+          if recv_copy_size = recv_copy_size'low then
+            recv_state <= R_WAIT_FLIT_ADDR;
+          end if;
+          
+        -- driver mode state machine 
+        when R_WAIT_FLIT_ADDR =>
+          if r_rx = '1' then
+            recv_state <= R_WAIT_FLIT_SIZE;
+          end if;
+        when R_WAIT_FLIT_SIZE => 
+          if r_rx = '1' then
+            recv_state <= R_WAIT_PAYLOAD;
+          end if;
+        when R_WAIT_PAYLOAD =>
+          if recv_copy_size = x"0" then
+            recv_state <= R_WAIT_CONFIG_STALL;
+          end if;
+        when R_WAIT_CONFIG_STALL =>
+          if recv_start = '1' then
+            recv_state <= R_COPY_RELEASE;
+          end if;
+        when R_COPY_RELEASE =>
+          if recv_copy_size = x"0" then
+            recv_state <= R_FLUSH;
+          end if;
+        when R_FLUSH =>
+          if recv_start = '0' then
+            recv_state <= R_WAIT_FLIT_ADDR;
+          end if;
 
-  --    end if;
-      
-  --  end if; --clk
+      end case;
+
+    end if;
+  end process;
   
-  --end process;
   
-  recv_state <= R_COPY_RELEASE;
+  
 
 end orca_ni_recv;

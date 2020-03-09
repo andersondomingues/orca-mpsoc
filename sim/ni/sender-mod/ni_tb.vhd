@@ -114,9 +114,13 @@ begin
 	prog_size <= x"0000000A"; -- 10 dec
 	
 	-- generate arbitrary values at memory output
-	mem_seq_proc : process(clock)
+	mem_seq_proc : process(clock, reset)
 	begin
-		m_data_i <= m_data_i + 1;
+		if reset = '1' then
+			m_data_i <= (others => '0');
+		elsif rising_edge(clock) then
+			m_data_i <= m_data_i + 1;
+		end if;
 	end process;
 
 end ni_tb;

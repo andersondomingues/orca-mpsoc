@@ -1,2 +1,6 @@
 *__vivado*
 *__questa*
+
+*.dbg
+*.bak
+*.wlf

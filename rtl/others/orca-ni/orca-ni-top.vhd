@@ -9,15 +9,15 @@ entity orca_ni_top is
   --parameters come from the top level rtl (naming consistency
   --is preserved for all rtl files).
   generic (
-    RAM_WIDTH  : natural; --width of main memory word
-    FLIT_WIDTH : natural; --width of router word
-    BUFFER_DEPTH : natural --depth of internal buffer (recv only)
+    RAM_WIDTH    : natural := 32; --width of main memory word
+    FLIT_WIDTH   : natural := 32; --width of router word
+    PRELOAD_ADDR : natural := 32 --address to preload first burst at
   );
 
   port(
     clk : in std_logic;
     rst : in std_logic;
-    load: in std_logic;    -- load next packet into main memory
+    intr  : out std_logic;    -- load next packet into main memory
     stall : out std_logic; -- holds the cpu and takes control on memory i/f
 
     -- interface to the memory mux
@@ -33,16 +33,16 @@ entity orca_ni_top is
     b_wb_o   : out std_logic_vector(3 downto 0);
 
     -- router interface (transmiting)
-    clock_tx   : in std_logic; 
-    tx         : out std_logic;
-    data_out   : out std_logic_vector(FLIT_WIDTH downto 0);
-    credit_in  : out std_logic;
+    r_clock_tx : out std_logic; 
+    r_tx       : out std_logic;
+    r_data_o   : out std_logic_vector((FLIT_WIDTH -1) downto 0);
+    r_credit_i : in std_logic;
 
     -- router interface (receiving)
-    clock_rx   : out std_logic;
-    rx         : in std_logic;
-    data_in    : in std_logic_vector(FLIT_WIDTH downto 0);
-    credit_out : in std_logic;
+    r_clock_rx : in std_logic;
+    r_rx       : in std_logic;
+    r_data_i   : in std_logic_vector((FLIT_WIDTH -1) downto 0);
+    r_credit_o : out std_logic;
 
     -- dma programming (must be mapped into memory space)
     send_start : in std_logic;
@@ -53,47 +53,105 @@ entity orca_ni_top is
     prog_size    : in std_logic_vector(31 downto 0)
 
   );
-
 end orca_ni_top;
 
 architecture orca_ni_top of orca_ni_top is
 
-  component orca_ni_sender_comp
-    --generic (...);
-    port (
-      clk_s : in std_logic;
-      rst_s : in std_logic;
-      stall_s : out std_logic; -- holds the cpu and takes control on memory i/f
+  signal recv_status_r : std_logic_vector(31 downto 0);
+  signal send_status_s : std_logic_vector(31 downto 0);
 
-      -- interface to the memory mux
-      m_data_i_s :  in std_logic_vector((RAM_WIDTH - 1) downto 0);
-      m_addr_o_s : out std_logic_vector((RAM_WIDTH - 1) downto 0);
-      m_wb_o_s   : out std_logic_vector(3 downto 0);
+  signal stall_r : std_logic;
+  signal stall_s : std_logic; 
 
-      -- router interface (transmiting)
-      r_clock_tx_s  : out std_logic; 
-      r_tx_s        : out std_logic;
-      r_data_o_s    : out std_logic_vector(FLIT_WIDTH downto 0);
-      r_credit_i_s  : in std_logic;
+  signal m_addr_o_s : std_logic_vector((RAM_WIDTH - 1) downto 0);
+  signal m_wb_o_s   : std_logic_vector(3 downto 0);
 
-      -- dma programming (must be mapped into memory space)
-      send_start_s : in std_logic;
-      prog_address_s : in std_logic_vector(31 downto 0);
-      prog_size_s    : in std_logic_vector(31 downto 0);
-      send_status_s : out std_logic_vector(31 downto 0)
-    );
-  end component;
-  
+  signal m_addr_o_r : std_logic_vector((RAM_WIDTH - 1) downto 0);
+  signal m_wb_o_r   : std_logic_vector(3 downto 0);
+
 begin
-  binding_sender: orca_ni_sender_comp
-  --  --generic map(...)
+
+  --sender mod binding
+  ni_sender_mod: entity work.orca_ni_send
+    generic map (
+      RAM_WIDTH => RAM_WIDTH,
+      FLIT_WIDTH => FLIT_WIDTH
+    )
     port map(
-      -- forward clk, rst, and stall signals
-      clk => clk_s,
-      rst => rst_s,
-      stall_s => stall,
-      -- bind memory acconding to the active process 
+      clk  => clk,
+      rst  => rst,
+      stall => stall_s,
+
+      m_data_i => m_data_i,
+      m_addr_o => m_addr_o_s,
+      m_wb_o => m_wb_o_s,
+
+      r_credit_i => r_credit_i,
+      r_tx => r_tx,
+      r_data_o => r_data_o,
+      r_clock_tx => r_clock_tx,
+
+      send_start => send_start,
+      send_status => send_status_s,
       
+      prog_address => prog_address,
+      prog_size => prog_size
     );
+
+  --recv mod binding
+  ni_recv_mod: entity work.orca_ni_recv
+    generic map (	
+      RAM_WIDTH => RAM_WIDTH,
+      FLIT_WIDTH => FLIT_WIDTH,
+      PRELOAD_ADDR => PRELOAD_ADDR
+    )
+    port map(
+      clk  => clk,
+      rst  => rst,
+      stall => stall_r,
+      intr => intr,
+
+      m_data_o => m_data_o,
+      m_addr_o => m_addr_o_r,
+      m_wb_o => m_wb_o_r,
+
+      r_credit_o => r_credit_o,
+      r_rx => r_rx,
+      r_data_i => r_data_i,
+      r_clock_rx => r_clock_rx,
+
+      recv_start => recv_start,
+      recv_status => recv_status_r,
+      
+      prog_address => prog_address,
+      prog_size => prog_size,
+      
+      b_data_i => b_data_i,
+      b_data_o => b_data_o,
+      b_addr_o => b_addr_o,
+      b_wb_o => b_wb_o
+    );
+
+  --resolve signal conflicts
+  arbiter: process(clk)
+  begin
+
+    stall <= stall_r or stall_s;
+    recv_status <= recv_status_r;
+    send_status <= send_status_s;
+
+    if rising_edge(clk) then
+
+      if recv_status_r /= 0 then
+        m_addr_o <= m_addr_o_r;
+        m_wb_o <= m_wb_o_r;
+      else
+        m_addr_o <= m_addr_o_s;
+        m_wb_o <= m_wb_o_s;
+      end if;
+      
+    end if;
+
+  end process;
 
 end orca_ni_top;

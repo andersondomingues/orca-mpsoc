@@ -9,8 +9,8 @@ entity orca_ni_send is
   --parameters come from the top level rtl (naming consistency
   --is preserved for all rtl files).
   generic (
-    RAM_WIDTH  : natural; --width of main memory word
-    FLIT_WIDTH : natural  --width of router word
+    RAM_WIDTH  : natural := 32; --width of main memory word
+    FLIT_WIDTH : natural := 32 --width of router word
   );
 
   port(

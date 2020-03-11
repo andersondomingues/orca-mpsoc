@@ -1,6 +1,15 @@
 # Welcome to the home of ORCA MPSoC project!
 
-This repository holds the project for the hardware of ORCA MPSoC platform. The software counterpart of this repository can be found at [https://github.com/andersondomingues/ursa].
+This repository holds the project for the hardware of ORCA MPSoC platform. This repository is part of Project ORCA, whose repositories include 
+
+- [URSA](https://github.com/andersondomingues/ursa), a library and API for creating system-level simulators
+- [ORCA-MPSoC](https://github.com/andersondomingues/orca-mpsoc): RTL and simulation files for a NoC-based MPSoC system
+- [ORCA-SIM](https://github.com/andersondomingues/orca-sim), a simulation tool on top of URSA that emulates the ORCA MPSoC
+- [ORCA-SOFTWARE-ASSETS](https://github.com/andersondomingues/orca-software-assets), applications and libraries to support software development
+
+Other repositories include:
+
+- (HellfireOS)[https://github.com/andersondomingues/hellfireos], an real-time operating system that runs on ORCA MPSoC.
 
 ## The ORCA Platform
 
@@ -16,7 +25,7 @@ This repository is organized as follows.
    
 ## Third-Party Work
 
-- HF-RISCV. The hf-riscv core is maintained by Sergio Johann (sjohann81). More information on his work can be found at [his repository](https://github.com/sjohann81). Also, our model of hf-riscv core is very based on the one provided by him. 
+- HF-RISCV. The hf-riscv core is maintained by Sergio Johann (sjohann81). See [his repository](https://github.com/sjohann81). The version of HellfireOS that we use in the project is a fork from Johann's HellfireOS, which can be found [here](https://github.com/sjohann81/hellfireos)
 
 - HEMPS (and HERMES). The GAPH group maintains the HEMPS project. More information on their work can be found at [their website](http://www.inf.pucrs.br/hemps/getting_started.html). Provided network-on-chip router model is based on the RTL models available at [their repository](https://github.com/GaphGroup/hemps). 
 

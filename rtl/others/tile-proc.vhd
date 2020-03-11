@@ -12,10 +12,12 @@ use ieee.numeric_std.all;
 entity orca_processing_tile is
 
   generic (
-    RAM_WIDTH    : natural := 32; --width of main memory word
-    FLIT_WIDTH   : natural := 32; --width of router word
-    PRELOAD_ADDR : natural := 32; --address to preload first burst at
-    BUFFER_DEPTH : natural := 128 --size of internal buffer of recv proc
+    RAM_WIDTH    : natural := 32;        --width of main memory word
+    RAM_SIZE     : natural := 320000000; -- 4MB
+    
+    FLIT_WIDTH   : natural := 32;  --width of router word
+    BUFFER_DEPTH : natural := 128; --size of internal buffer of recv proc
+    PRELOAD_ADDR : natural := 32   --address to preload first burst at
   );
 
   port (
@@ -43,10 +45,10 @@ architecture orca_processing_tile of orca_processing_tile is
   signal stall : std_logic;
 
   -- interface to the memory mux
-  signal m_addr_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
-  signal m_data_i : std_logic_vector((RAM_WIDTH - 1) downto 0);
+  signal m_addr_i : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal m_data_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
-  signal m_wb_o   : std_logic_vector(3 downto 0);
+  signal m_data_i : std_logic_vector((RAM_WIDTH - 1) downto 0);
+  signal m_wb_i   : std_logic_vector(3 downto 0);
 
   -- dma programming (must be mapped into memory space)
   signal send_start : std_logic;
@@ -57,34 +59,33 @@ architecture orca_processing_tile of orca_processing_tile is
   signal prog_size    : std_logic_vector(31 downto 0);
   
   signal n_addr_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
-  signal n_data_i : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal n_data_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal n_wb_o   : std_logic_vector(3 downto 0);
 
   -- proc i/f
-  signal p_addr_o:   std_logic_vector(31 downto 0);
-  signal p_data_i:   std_logic_vector(31 downto 0);
-  signal p_data_o:   std_logic_vector(31 downto 0);
-  signal p_data_w_o: std_logic_vector(3 downto 0);
+  signal p_addr_o:   std_logic_vector((RAM_WIDTH - 1) downto 0);
+  signal p_data_o:   std_logic_vector((RAM_WIDTH - 1) downto 0);
+  signal p_wb_o: std_logic_vector(3 downto 0);
 
   signal p_data_mode_o: std_logic_vector(2 downto 0);
   signal p_extio_in: std_logic_vector(7 downto 0);
-  signal p_extio_out: std_logic_vector(7 downto 0)
+  signal p_extio_out: std_logic_vector(7 downto 0);
 
 begin
 
   --cpu core binding
-  prov_cpu_binding : entity work.arch_processor
+  prov_cpu_binding : entity work.processor
     port map(
       clk_i => clk,
       rst_i => rst,
       stall_i => stall,
 
       addr_o => p_addr_o,
-      data_i => p_data_i,
       data_o => p_data_o,
-      data_w_o => p_data_w_o,
-      
+      data_w_o => p_wb_o,
+
+      data_i => m_data_o,
+
       data_mode_o => p_data_mode_o,
       extio_in => p_extio_in,
       extio_out => p_extio_out
@@ -100,10 +101,10 @@ begin
         clk => clk,
         rst => rst,
 
-        addr_i => m_addr_o,
-        data_o => m_data_i,
-        data_i => m_data_o,
-        wb_i => m_wb_o
+        addr_i => m_addr_i,
+        data_o => m_data_o,
+        data_i => m_data_i,
+        wb_i => m_wb_i
     );
     
   -- ni binding
@@ -121,9 +122,10 @@ begin
       stall => stall,
 
       m_addr_o => n_addr_o, -- interface to the memory mux
-      m_data_i => n_data_i,
-      m_data_o => n_data_o,
+      m_data_o => n_data_o, -- output is driven to both modules
       m_wb_o   => n_wb_o,
+
+      m_data_i => m_data_o,
 
       r_clock_tx => r_clock_tx, -- router i/f
       r_tx => r_tx,
@@ -140,7 +142,11 @@ begin
       recv_status => recv_status,
       prog_address => prog_address,
       prog_size => prog_size
-      
     );
     
+    -- memory mux
+    m_addr_i <= n_addr_o when stall = '1' else p_addr_o;
+    m_data_i <= n_data_o when stall = '1' else p_data_o;
+    m_wb_i <= n_wb_o when stall = '1' else p_wb_o;
+
 end orca_processing_tile;

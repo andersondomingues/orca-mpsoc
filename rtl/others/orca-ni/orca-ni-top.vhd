@@ -9,9 +9,10 @@ entity orca_ni_top is
   --parameters come from the top level rtl (naming consistency
   --is preserved for all rtl files).
   generic (
-    RAM_WIDTH    : natural := 32; --width of main memory word
-    FLIT_WIDTH   : natural := 32; --width of router word
-    PRELOAD_ADDR : natural := 32 --address to preload first burst at
+    RAM_WIDTH    : natural;
+    FLIT_WIDTH   : natural;
+    PRELOAD_ADDR : natural;
+    BUFFER_DEPTH : natural
   );
 
   port(
@@ -25,12 +26,6 @@ entity orca_ni_top is
     m_data_i :  in std_logic_vector((RAM_WIDTH - 1) downto 0);
     m_data_o : out std_logic_vector((RAM_WIDTH - 1) downto 0);
     m_wb_o   : out std_logic_vector(3 downto 0);
-
-    -- interface with the receiving buffer (no fifo required)
-    b_addr_o : out std_logic_vector((RAM_WIDTH - 1) downto 0);
-    b_data_i :  in std_logic_vector((RAM_WIDTH - 1) downto 0);
-    b_data_o : out std_logic_vector((RAM_WIDTH - 1) downto 0);
-    b_wb_o   : out std_logic_vector(3 downto 0);
 
     -- router interface (transmiting)
     r_clock_tx : out std_logic; 
@@ -100,10 +95,11 @@ begin
 
   --recv mod binding
   ni_recv_mod: entity work.orca_ni_recv
-    generic map (	
+    generic map (
       RAM_WIDTH => RAM_WIDTH,
       FLIT_WIDTH => FLIT_WIDTH,
-      PRELOAD_ADDR => PRELOAD_ADDR
+      PRELOAD_ADDR => PRELOAD_ADDR,
+      BUFFER_DEPTH => BUFFER_DEPTH
     )
     port map(
       clk  => clk,
@@ -124,34 +120,14 @@ begin
       recv_status => recv_status_r,
       
       prog_address => prog_address,
-      prog_size => prog_size,
-      
-      b_data_i => b_data_i,
-      b_data_o => b_data_o,
-      b_addr_o => b_addr_o,
-      b_wb_o => b_wb_o
+      prog_size => prog_size
     );
-
-  --resolve signal conflicts
-  arbiter: process(clk)
-  begin
 
     stall <= stall_r or stall_s;
     recv_status <= recv_status_r;
     send_status <= send_status_s;
 
-    if rising_edge(clk) then
-
-      if recv_status_r /= 0 then
-        m_addr_o <= m_addr_o_r;
-        m_wb_o <= m_wb_o_r;
-      else
-        m_addr_o <= m_addr_o_s;
-        m_wb_o <= m_wb_o_s;
-      end if;
-      
-    end if;
-
-  end process;
-
+    m_addr_o <= m_addr_o_r when recv_status_r /= 0 else m_addr_o_s;
+    m_wb_o <= m_wb_o_r when recv_status_r /= 0 else m_wb_o_s;
+  
 end orca_ni_top;

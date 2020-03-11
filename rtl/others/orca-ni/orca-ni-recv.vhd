@@ -11,7 +11,8 @@ entity orca_ni_recv is
   generic (
     RAM_WIDTH  : natural; --width of main memory word
     FLIT_WIDTH : natural;  --width of router word
-    PRELOAD_ADDR : natural --base addres for memory preload
+    PRELOAD_ADDR : natural; --base addres for memory preload
+    BUFFER_DEPTH : natural -- size of internal buffer (max pkt size)
   );
 
   port(
@@ -24,12 +25,6 @@ entity orca_ni_recv is
     m_addr_o : out std_logic_vector((RAM_WIDTH - 1) downto 0);
     m_data_o : out std_logic_vector((RAM_WIDTH - 1) downto 0);
     m_wb_o   : out std_logic_vector(3 downto 0);
-
-    -- interface with the receiving buffer (no fifo required)
-    b_addr_o : out std_logic_vector((RAM_WIDTH - 1) downto 0);
-    b_data_i :  in std_logic_vector((RAM_WIDTH - 1) downto 0);
-    b_data_o : out std_logic_vector((RAM_WIDTH - 1) downto 0);
-    b_wb_o   : out std_logic_vector(3 downto 0);
 
     -- router interface (receiving)
     r_clock_rx : in std_logic;
@@ -71,8 +66,30 @@ architecture orca_ni_recv of orca_ni_recv is
   --temporary data
   signal recv_copy_addr : std_logic_vector(31 downto 0);
   signal recv_copy_size : std_logic_vector(31 downto 0);
+  
+  --buffer i/f
+  signal b_addr_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
+  signal b_data_i : std_logic_vector((RAM_WIDTH - 1) downto 0);
+  signal b_data_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
+  signal b_wb_o   : std_logic_vector(3 downto 0);
 
 begin
+
+  --memory buffer binding
+  ni_recv_buffer_mod: entity work.single_port_ram
+    generic map(
+        RAM_WIDTH => RAM_WIDTH,
+        RAM_DEPTH => BUFFER_DEPTH
+    )
+    port map(
+        clk => clk,
+        rst => rst,
+
+        addr_i => b_addr_o,
+        data_o => b_data_i,
+        data_i => b_data_o,
+        wb_i => b_wb_o
+    );
 
   -- recv proc, state control
   recv_state_control_proc: process(clk, rst) 
@@ -228,8 +245,9 @@ begin
           recv_copy_size <= recv_copy_size -1;
 
         when R_FLUSH =>
+          m_wb_o <= x"0"; -- disable mem write for until next packet
           if recv_start = '0' then
-            --recv_state <= R_WAIT_FLIT_ADDR;
+            intr <= '0'; --low interruption 
           end if;
         
       end case;

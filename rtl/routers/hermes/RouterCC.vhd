@@ -31,23 +31,23 @@
 --                      -----------------------------------------------
 --                                              SOUTH
 --
---  As chaves realizam a transferência de mensagens entre núcleos. 
---  A chave possui uma lógica de controle de chaveamento e 5 portas bidirecionais:
+--  As chaves realizam a transferï¿½ncia de mensagens entre nï¿½cleos. 
+--  A chave possui uma lï¿½gica de controle de chaveamento e 5 portas bidirecionais:
 --  East, West, North, South e Local. Cada porta possui uma fila para o armazenamento 
---  temporário de flits. A porta Local estabelece a comunicação entre a chave e seu 
---  núcleo. As demais portas ligam a chave às chaves vizinhas.
---  Os endereços das chaves são compostos pelas coordenadas XY da rede de interconexão, 
---  onde X é a posição horizontal e Y a posição vertical. A atribuição de endereços às 
---  chaves é necessária para a execução do algoritmo de chaveamento.
---  Os módulos principais que compõem a chave são: fila, árbitro e lógica de 
+--  temporï¿½rio de flits. A porta Local estabelece a comunicaï¿½ï¿½o entre a chave e seu 
+--  nï¿½cleo. As demais portas ligam a chave ï¿½s chaves vizinhas.
+--  Os endereï¿½os das chaves sï¿½o compostos pelas coordenadas XY da rede de interconexï¿½o, 
+--  onde X ï¿½ a posiï¿½ï¿½o horizontal e Y a posiï¿½ï¿½o vertical. A atribuiï¿½ï¿½o de endereï¿½os ï¿½s 
+--  chaves ï¿½ necessï¿½ria para a execuï¿½ï¿½o do algoritmo de chaveamento.
+--  Os mï¿½dulos principais que compï¿½em a chave sï¿½o: fila, ï¿½rbitro e lï¿½gica de 
 --  chaveamento implementada pelo controle_mux. Cada uma das filas da chave (E, W, N, 
---  S e L), ao receber um novo pacote requisita chaveamento ao árbitro. O árbitro 
---  seleciona a requisição de maior prioridade, quando existem requisições simultâneas, 
---  e encaminha o pedido de chaveamento à lógica de chaveamento. A lógica de 
---  chaveamento verifica se é possível atender à solicitação. Sendo possível, a conexão
---  é estabelecida e o árbitro é informado. Por sua vez, o árbitro informa a fila que 
---  começa a enviar os flits armazenados. Quando todos os flits do pacote foram 
---  enviados, a conexão é concluída pela sinalização, por parte da fila, através do 
+--  S e L), ao receber um novo pacote requisita chaveamento ao ï¿½rbitro. O ï¿½rbitro 
+--  seleciona a requisiï¿½ï¿½o de maior prioridade, quando existem requisiï¿½ï¿½es simultï¿½neas, 
+--  e encaminha o pedido de chaveamento ï¿½ lï¿½gica de chaveamento. A lï¿½gica de 
+--  chaveamento verifica se ï¿½ possï¿½vel atender ï¿½ solicitaï¿½ï¿½o. Sendo possï¿½vel, a conexï¿½o
+--  ï¿½ estabelecida e o ï¿½rbitro ï¿½ informado. Por sua vez, o ï¿½rbitro informa a fila que 
+--  comeï¿½a a enviar os flits armazenados. Quando todos os flits do pacote foram 
+--  enviados, a conexï¿½o ï¿½ concluï¿½da pela sinalizaï¿½ï¿½o, por parte da fila, atravï¿½s do 
 --  sinal sender.
 ---------------------------------------------------------------------------------------
 library IEEE;
@@ -57,7 +57,7 @@ use work.HeMPS_defaults.all;
 --use work.HemPS_PKG.all;
 
 entity RouterCC is
-generic( address: regmetadeflit := "00010001");
+generic( address: regmetadeflit := x"0101");
 port(
         clock:     in  std_logic;
         reset:     in  std_logic;

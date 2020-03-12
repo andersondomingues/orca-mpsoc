@@ -51,7 +51,7 @@ package HeMPS_defaults is
 ---------------------------------------------------------
 -- CONSTANT DEPENDENTE DA LARGURA DE BANDA DA REDE - FIXED FOR HEMPS
 ---------------------------------------------------------
-        constant TAM_FLIT : integer range 1 to 64 := 16;
+        constant TAM_FLIT : integer range 1 to 64 := 32;
         constant METADEFLIT : integer range 1 to 32 := (TAM_FLIT/2);
         constant QUARTOFLIT : integer range 1 to 16 := (TAM_FLIT/4);
 
@@ -84,6 +84,9 @@ package HeMPS_defaults is
 -- SUBTIPOS, TIPOS E FUNCOES
 ---------------------------------------------------------
 
+        -- orca only
+        subtype regNportLONE is std_logic_vector((NPORT-2) downto 0); 
+        
         subtype reg3 is std_logic_vector(2 downto 0);
         subtype reg8 is std_logic_vector(7 downto 0);
         subtype reg30 is std_logic_vector(29 downto 0); 
@@ -99,6 +102,8 @@ package HeMPS_defaults is
         type buff is array(0 to TAM_BUFFER-1) of regflit;
         type buff_dmni is array(0 to TAM_BUFFER_DMNI-1) of regflit;
 
+        -- orca only
+        type arrayNport_regflitLONE is array((NPORT-2) downto 0) of regflit; 
 
         type arrayNport_reg3 is array((NPORT-1) downto 0) of reg3;
         type arrayNport_reg8 is array((NPORT-1) downto 0) of reg8;

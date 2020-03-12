@@ -145,7 +145,7 @@ begin
   end process;
   
   -- functional implementation
-  recv_machine_funct: process(clk) 
+  recv_machine_funct: process(clk, rst) 
   begin 
     if rst = '1' then
       recv_copy_size <= (others => '0'); --reset internals
@@ -186,6 +186,7 @@ begin
         -- !!! -- driver mode
         -- wait for a packet to arrive 
         when R_WAIT_FLIT_ADDR =>
+          stall <= '0'; --enable cpu to use memory until next packet arrival
           if r_rx = '1' then
 
             b_data_o <= r_data_i; -- write first flit to buffer
@@ -231,6 +232,7 @@ begin
           recv_copy_size <= prog_size;
 
         when R_COPY_RELEASE =>
+          stall <= '1'; -- stall cpu during copy
           b_wb_o <= x"0"; --read from buffer
           b_addr_o <= (
             recv_copy_size + recv_copy_size + recv_copy_size + recv_copy_size
@@ -248,6 +250,7 @@ begin
           m_wb_o <= x"0"; -- disable mem write for until next packet
           if recv_start = '0' then
             intr <= '0'; --low interruption 
+            stall <= '0';
           end if;
         
       end case;

@@ -1,0 +1,955 @@
+/*
+
+Vivado v2016.2 (64-bit)
+SW Build 1577090 on Thu Jun  2 16:32:35 MDT 2016
+Process ID: 32536
+
+Current time: 	3/12/20 4:59:38 PM BRT
+Time zone: 	Brasilia Time (America/Sao_Paulo)
+
+OS: PRETTY_NAME="Debian GNU/Linux 10 (buster)"
+Version: 4.19.0-6-amd64
+Architecture: amd64
+Available processors (cores): 4
+
+DISPLAY: :0.0
+Screen size: 3200x1080
+Screen resolution (DPI): 95
+Available screens: 2
+Default font: family=Dialog,name=Dialog,style=plain,size=12
+
+Java version: 	1.8.0_66 64-bit
+Java home: 	/soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/tps/lnx64/jre
+
+User name: 	adomingues
+User home directory: /home/adomingues
+User working directory: /home/adomingues/gaph/orca-mpsoc/vivado
+User country: 	US
+User language: 	en
+User locale: 	en_US
+
+RDI Base root directory: /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado
+RDI Data directory: /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/data
+RDI Bin directory: /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/bin
+
+Vivado preferences path: /home/adomingues/.Xilinx/Vivado/2016.2/vivado.ini
+Vivado layouts directory: /home/adomingues/.Xilinx/Vivado/2016.2/layouts
+
+GUI allocated memory:	198 MB
+GUI max memory:		3,052 MB
+Engine allocated memory: 787 MB
+
+*/
+
+// TclEventType: START_GUI
+// Tcl Message: start_gui 
+// [GUI Memory]: 28 MB (+27237kb) [00:00:05]
+// [Engine Memory]: 787 MB (+673925kb) [00:00:05]
+// HMemoryUtils.trashcanNow. Engine heap size: 795 MB. GUI used memory: 21 MB. Current time: 3/12/20 4:59:40 PM BRT
+selectButton(PAResourceEtoH.GettingStartedView_CREATE_NEW_PROJECT, "Create New Project"); // l:JideButton (JPanel:JComponent, cv:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_NEW_PROJECT
+// [GUI Memory]: 36 MB (+6633kb) [00:00:14]
+// [Engine Memory]: 832 MB (+5885kb) [00:00:14]
+// [GUI Memory]: 45 MB (+7679kb) [00:00:14]
+// h:g (cv:JFrame): New Project: addNotify
+selectButton("NEXT", "Next >"); // JButton:AbstractButton (ButtonPanel:JPanel, h:g)
+setText(PAResourceOtoP.ProjectNameChooser_PROJECT_NAME, "orca-mpsoc"); // ao:JTextField (JPanel:JComponent, h:g)
+// [GUI Memory]: 48 MB (+486kb) [00:00:35]
+// Elapsed time: 11 seconds
+setText(PAResourceOtoP.ProjectNameChooser_PROJECT_NAME, "orca-mpsoc-standard"); // ao:JTextField (JPanel:JComponent, h:g)
+selectButton("NEXT", "Next >"); // JButton:AbstractButton (ButtonPanel:JPanel, h:g)
+// [GUI Memory]: 52 MB (+1223kb) [00:00:40]
+// Elapsed time: 13 seconds
+selectButton("NEXT", "Next >"); // JButton:AbstractButton (ButtonPanel:JPanel, h:g)
+selectButton(PAResourceQtoS.SrcChooserPanel_ADD_DIRECTORIES, "Add Directories"); // a:JButton (F:JPanel, h:g)
+// Elapsed time: 11 seconds
+setFolderChooser("/home/adomingues/gaph/orca-mpsoc/rtl");
+selectComboBox(PAResourceQtoS.SrcChooserPanel_TARGET_LANGUAGE, "VHDL", 0); // f:JComboBox (JPanel:JComponent, h:g)
+selectComboBox(PAResourceQtoS.SrcChooserPanel_SIMULATOR_LANGUAGE, "VHDL", 0); // f:JComboBox (JPanel:JComponent, h:g)
+selectButton("NEXT", "Next >"); // JButton:AbstractButton (ButtonPanel:JPanel, h:g)
+selectButton("NEXT", "Next >"); // JButton:AbstractButton (ButtonPanel:JPanel, h:g)
+selectButton(PAResourceAtoD.ConstraintsChooserPanel_ADD_EXISTING_OR_CREATE_NEW_CONSTRAINTS, "Add"); // y:JideButton (CommandBar:DockableBar, h:g)
+selectButton("NEXT", "Next >"); // JButton:AbstractButton (ButtonPanel:JPanel, h:g)
+selectButton(PAResourceOtoP.PartChooser_BOARDS, "Boards"); // m:s (JPanel:JComponent, h:g): TRUE
+selectTable(PAResourceOtoP.PartChooser_BOARDS, "ZedBoard Zynq Evaluation and Development Kit ; em.avnet.com ; d ; xc7z020clg484-1 ; 484 ; 1.3 ; 140 ; 220 ; 106400 ; 0 ; 0 ; 200 ; 53200 ; 4 ; 0 ; 85 ; 0 ; 85 ; C ; 1.05 ; 0.95 ; 0.95 ; 0 ; 0 ; 0", 0, "ZedBoard Zynq Evaluation and Development Kit", 0); // P:v (JViewport:JComponent, h:g)
+selectTable(PAResourceOtoP.PartChooser_BOARDS, "Kintex-7 KC705 Evaluation Platform ; xilinx.com ; 1.1 ; xc7k325tffg900-2 ; 900 ; 1.3 ; 445 ; 840 ; 407600 ; 16 ; 16 ; 500 ; 203800 ; 10 ; 1 ; 85 ; 0 ; 85 ; C ; 1.03 ; 0.97 ; 0.97 ; 0 ; 0 ; 0", 1, "Kintex-7 KC705 Evaluation Platform", 0); // P:v (JViewport:JComponent, h:g)
+selectTable(PAResourceOtoP.PartChooser_BOARDS, "Virtex-7 VC707 Evaluation Platform ; xilinx.com ; 1.1 ; xc7vx485tffg1761-2 ; 1761 ; 1.3 ; 1030 ; 2800 ; 607200 ; 28 ; 28 ; 700 ; 303600 ; 14 ; 4 ; 85 ; 0 ; 85 ; C ; 1.03 ; 0.97 ; 0.97 ; 0 ; 0 ; 0", 2, "Virtex-7 VC707 Evaluation Platform", 0); // P:v (JViewport:JComponent, h:g)
+selectTable(PAResourceOtoP.PartChooser_BOARDS, "Virtex-7 VC709 Evaluation Platform ; xilinx.com ; 1.0 ; xc7vx690tffg1761-2 ; 1761 ; 1.8 ; 1470 ; 3600 ; 866400 ; 0 ; 36 ; 850 ; 433200 ; 20 ; 3 ; 85 ; 0 ; 85 ; C ; 1.03 ; 0.97 ; 0.97 ; 36 ; 0 ; 0", 3, "Virtex-7 VC709 Evaluation Platform", 0); // P:v (JViewport:JComponent, h:g)
+selectTable(PAResourceOtoP.PartChooser_BOARDS, "ZYNQ-7 ZC702 Evaluation Board ; xilinx.com ; 1.0 ; xc7z020clg484-1 ; 484 ; 1.2 ; 140 ; 220 ; 106400 ; 0 ; 0 ; 200 ; 53200 ; 4 ; 0 ; 85 ; 0 ; 85 ; C ; 1.05 ; 0.95 ; 0.95 ; 0 ; 0 ; 0", 4, "ZYNQ-7 ZC702 Evaluation Board", 0); // P:v (JViewport:JComponent, h:g)
+// [Engine Memory]: 879 MB (+5537kb) [00:01:36]
+selectTable(PAResourceOtoP.PartChooser_BOARDS, "ZYNQ-7 ZC706 Evaluation Board ; xilinx.com ; 1.1 ; xc7z045ffg900-2 ; 900 ; 1.3 ; 545 ; 900 ; 437200 ; 16 ; 16 ; 362 ; 218600 ; 8 ; 1 ; 85 ; 0 ; 85 ; C ; 1.03 ; 0.97 ; 0.97 ; 0 ; 0 ; 0", 5, "ZYNQ-7 ZC706 Evaluation Board", 0); // P:v (JViewport:JComponent, h:g)
+// HMemoryUtils.trashcanNow. Engine heap size: 879 MB. GUI used memory: 25 MB. Current time: 3/12/20 5:01:10 PM BRT
+selectButton(PAResourceOtoP.PartChooser_PARTS, "Parts"); // m:s (F:JPanel, h:g): TRUE
+selectTable(PAResourceOtoP.PartChooser_PARTS, "xc7vx485tffg1761-2 ; 1761 ; 1030 ; 2800 ; 607200 ; 28 ; 28 ; 700 ; 303600 ; 14 ; 4 ; 85 ; 0 ; 85 ; C ; 1.03 ; 0.97 ; 0.97 ; 0 ; 0 ; 0", 313, "1761", 1); // P:v (JViewport:JComponent, h:g)
+selectTable(PAResourceOtoP.PartChooser_PARTS, "xc7vx485tffg1158-1 ; 1158 ; 1030 ; 2800 ; 607200 ; 48 ; 48 ; 350 ; 303600 ; 14 ; 4 ; 85 ; 0 ; 85 ; C ; 1.03 ; 0.97 ; 0.97 ; 0 ; 0 ; 0", 311, "xc7vx485tffg1158-1", 0); // P:v (JViewport:JComponent, h:g)
+selectTable(PAResourceOtoP.PartChooser_PARTS, "xc7vx485tffg1157-1 ; 1157 ; 1030 ; 2800 ; 607200 ; 20 ; 20 ; 600 ; 303600 ; 14 ; 4 ; 85 ; 0 ; 85 ; C ; 1.03 ; 0.97 ; 0.97 ; 0 ; 0 ; 0", 307, "xc7vx485tffg1157-1", 0); // P:v (JViewport:JComponent, h:g)
+selectButton(PAResourceOtoP.PartChooser_BOARDS, "Boards"); // m:s (JPanel:JComponent, h:g): TRUE
+// [GUI Memory]: 55 MB (+488kb) [00:01:40]
+selectTable(PAResourceOtoP.PartChooser_BOARDS, "Kintex-7 KC705 Evaluation Platform ; xilinx.com ; 1.1 ; xc7k325tffg900-2 ; 900 ; 1.3 ; 445 ; 840 ; 407600 ; 16 ; 16 ; 500 ; 203800 ; 10 ; 1 ; 85 ; 0 ; 85 ; C ; 1.03 ; 0.97 ; 0.97 ; 0 ; 0 ; 0", 1, "Kintex-7 KC705 Evaluation Platform", 0); // P:v (JViewport:JComponent, h:g)
+selectTable(PAResourceOtoP.PartChooser_BOARDS, "Virtex-7 VC707 Evaluation Platform ; xilinx.com ; 1.1 ; xc7vx485tffg1761-2 ; 1761 ; 1.3 ; 1030 ; 2800 ; 607200 ; 28 ; 28 ; 700 ; 303600 ; 14 ; 4 ; 85 ; 0 ; 85 ; C ; 1.03 ; 0.97 ; 0.97 ; 0 ; 0 ; 0", 2, "Virtex-7 VC707 Evaluation Platform", 0); // P:v (JViewport:JComponent, h:g)
+selectTable(PAResourceOtoP.PartChooser_BOARDS, "Virtex-7 VC709 Evaluation Platform ; xilinx.com ; 1.0 ; xc7vx690tffg1761-2 ; 1761 ; 1.8 ; 1470 ; 3600 ; 866400 ; 0 ; 36 ; 850 ; 433200 ; 20 ; 3 ; 85 ; 0 ; 85 ; C ; 1.03 ; 0.97 ; 0.97 ; 36 ; 0 ; 0", 3, "Virtex-7 VC709 Evaluation Platform", 0); // P:v (JViewport:JComponent, h:g)
+selectTable(PAResourceOtoP.PartChooser_BOARDS, "ZYNQ-7 ZC706 Evaluation Board ; xilinx.com ; 1.1 ; xc7z045ffg900-2 ; 900 ; 1.3 ; 545 ; 900 ; 437200 ; 16 ; 16 ; 362 ; 218600 ; 8 ; 1 ; 85 ; 0 ; 85 ; C ; 1.03 ; 0.97 ; 0.97 ; 0 ; 0 ; 0", 5, "ZYNQ-7 ZC706 Evaluation Board", 0); // P:v (JViewport:JComponent, h:g)
+selectTableHeader(PAResourceOtoP.PartChooser_BOARDS, "I/O Pin Count", 4); // P:v (JViewport:JComponent, h:g)
+selectTableHeader(PAResourceOtoP.PartChooser_BOARDS, "I/O Pin Count", 4); // P:v (JViewport:JComponent, h:g)
+selectTable(PAResourceOtoP.PartChooser_BOARDS, "Virtex-7 VC709 Evaluation Platform ; xilinx.com ; 1.0 ; xc7vx690tffg1761-2 ; 1761 ; 1.8 ; 1470 ; 3600 ; 866400 ; 0 ; 36 ; 850 ; 433200 ; 20 ; 3 ; 85 ; 0 ; 85 ; C ; 1.03 ; 0.97 ; 0.97 ; 36 ; 0 ; 0", 1, "1761", 4); // P:v (JViewport:JComponent, h:g)
+selectTable(PAResourceOtoP.PartChooser_BOARDS, "Virtex-7 VC707 Evaluation Platform ; xilinx.com ; 1.1 ; xc7vx485tffg1761-2 ; 1761 ; 1.3 ; 1030 ; 2800 ; 607200 ; 28 ; 28 ; 700 ; 303600 ; 14 ; 4 ; 85 ; 0 ; 85 ; C ; 1.03 ; 0.97 ; 0.97 ; 0 ; 0 ; 0", 0, "1.1", 2); // P:v (JViewport:JComponent, h:g)
+selectTable(PAResourceOtoP.PartChooser_BOARDS, "Virtex-7 VC709 Evaluation Platform ; xilinx.com ; 1.0 ; xc7vx690tffg1761-2 ; 1761 ; 1.8 ; 1470 ; 3600 ; 866400 ; 0 ; 36 ; 850 ; 433200 ; 20 ; 3 ; 85 ; 0 ; 85 ; C ; 1.03 ; 0.97 ; 0.97 ; 36 ; 0 ; 0", 1, "1.0", 2); // P:v (JViewport:JComponent, h:g)
+selectTable(PAResourceOtoP.PartChooser_BOARDS, "Virtex-7 VC707 Evaluation Platform ; xilinx.com ; 1.1 ; xc7vx485tffg1761-2 ; 1761 ; 1.3 ; 1030 ; 2800 ; 607200 ; 28 ; 28 ; 700 ; 303600 ; 14 ; 4 ; 85 ; 0 ; 85 ; C ; 1.03 ; 0.97 ; 0.97 ; 0 ; 0 ; 0", 0, "Virtex-7 VC707 Evaluation Platform", 0); // P:v (JViewport:JComponent, h:g)
+selectButton("NEXT", "Next >"); // JButton:AbstractButton (ButtonPanel:JPanel, h:g)
+// bL:g (h:g):  Create Project : addNotify
+// TclEventType: DEBUG_PROBE_SET_CHANGE
+// TclEventType: FILE_SET_NEW
+// TclEventType: RUN_ADD
+// TclEventType: RUN_CURRENT
+// TclEventType: PROJECT_NEW
+// Tcl Message: create_project orca-mpsoc-standard /home/adomingues/gaph/orca-mpsoc/vivado/orca-mpsoc-standard -part xc7vx485tffg1761-2 
+// Tcl Message: INFO: [IP_Flow 19-234] Refreshing IP repositories INFO: [IP_Flow 19-1704] No user IP repositories specified 
+// TclEventType: PROJECT_NEW
+// TclEventType: FILE_SET_OPTIONS_CHANGE
+// Tcl Message: INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/data/ip'. 
+// TclEventType: FILE_SET_OPTIONS_CHANGE
+// [GUI Memory]: 58 MB (+527kb) [00:02:18]
+// TclEventType: FILE_SET_OPTIONS_CHANGE
+// [GUI Memory]: 64 MB (+2918kb) [00:02:19]
+// TclEventType: FILE_SET_OPTIONS_CHANGE
+// Tcl Message: create_project: Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 5824.695 ; gain = 18.879 ; free physical = 14908 ; free virtual = 41753 
+// TclEventType: BOARD_MODIFIED
+// Tcl Message: set_property board_part xilinx.com:vc707:part0:1.3 [current_project] 
+// TclEventType: PROJECT_CHANGE
+// Tcl Message: set_property target_language VHDL [current_project] 
+// TclEventType: PROJECT_CHANGE
+// Tcl Message: set_property simulator_language VHDL [current_project] 
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// Tcl Message: add_files -scan_for_includes /home/adomingues/gaph/orca-mpsoc/rtl 
+// Elapsed time: 19 seconds
+selectButton("FINISH", "Finish"); // JButton:AbstractButton (ButtonPanel:JPanel, h:g)
+// 'g' command handler elapsed time: 125 seconds
+dismissDialog("Create Project"); // bL:g (h:g)
+dismissDialog("New Project"); // h:g (cv:JFrame)
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_GRAPH_STALE
+// Tcl Message: update_compile_order -fileset sources_1 
+// Tcl Message: update_compile_order -fileset sim_1 
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// HMemoryUtils.trashcanNow. Engine heap size: 920 MB. GUI used memory: 30 MB. Current time: 3/12/20 5:01:55 PM BRT
+// TclEventType: DG_UPDATE_GRAPH
+// Tcl Message: update_compile_order -fileset sources_1 
+// [GUI Memory]: 68 MB (+1051kb) [00:02:30]
+// Elapsed time: 11 seconds
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd)]", 3); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), proc_tile_ni_binding - orca_ni_top - orca_ni_top (orca-ni-top.vhd)]", 7, true); // z:k (G:JPanel, cv:JFrame) - Node
+// [Engine Memory]: 923 MB (+14kb) [00:02:34]
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), proc_tile_mem_binding - single_port_ram - single_port_ram (single_port_ram.vhd)]", 6, false); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd)]", 5, true); // z:k (G:JPanel, cv:JFrame) - Node
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd)]", 5); // z:k (G:JPanel, cv:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), core - datapath - arch_datapath (datapath.vhd)]", 6); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), core - datapath - arch_datapath (datapath.vhd), control_unit - control - arch_control (control.vhd)]", 7, false); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), core - datapath - arch_datapath (datapath.vhd), register_bank - reg_bank - arch_reg_bank (reg_bank.vhd)]", 8, false); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), core - datapath - arch_datapath (datapath.vhd), alu - alu - arch_alu (alu.vhd)]", 9, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), proc_tile_mem_binding - single_port_ram - single_port_ram (single_port_ram.vhd)]", 11, false); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), proc_tile_ni_binding - orca_ni_top - orca_ni_top (orca-ni-top.vhd)]", 12, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd)]", 5, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), router_binding - RouterCC - RouterCC (RouterCC.vhd)]", 4, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd)]", 3, true); // z:k (G:JPanel, cv:JFrame) - Node
+// Elapsed time: 12 seconds
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, Syntax Error Files]", 1); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, Syntax Error Files, orca-tile-comm.vhd]", 2, false); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, Syntax Error Files, orca-tile-comm.vhd]", 2, false, false, false, false, true, false); // z:k (G:JPanel, cv:JFrame) - Popup Trigger
+selectMenu(PAResourceCommand.PACommandNames_AUTO_UPDATE_HIER, "Hierarchy Update"); // ab:JMenu (am:JPopupMenu, cv:JFrame)
+selectMenu(PAResourceQtoS.SrcMenu_IP_HIERARCHY, "IP Hierarchy"); // ab:JMenu (am:JPopupMenu, cv:JFrame)
+selectMenu(PAResourceQtoS.SrcMenu_IP_HIERARCHY, "IP Hierarchy"); // ab:JMenu (am:JPopupMenu, cv:JFrame)
+selectMenu(PAResourceCommand.PACommandNames_AUTO_UPDATE_HIER, "Hierarchy Update"); // ab:JMenu (am:JPopupMenu, cv:JFrame)
+selectMenuItem(PAResourceCommand.PACommandNames_SRC_DISABLE, "Disable File"); // af:JMenuItem (am:JPopupMenu, cv:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_SRC_DISABLE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: set_property is_enabled false [get_files  /home/adomingues/gaph/orca-mpsoc/rtl/orca-tile-comm.vhd] 
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, Syntax Error Files, single_port_fifo_orca.vhd]", 2, false, false, false, false, true, false); // z:k (G:JPanel, cv:JFrame) - Popup Trigger
+selectMenu(PAResourceCommand.PACommandNames_AUTO_UPDATE_HIER, "Hierarchy Update"); // ab:JMenu (am:JPopupMenu, cv:JFrame)
+selectMenu(PAResourceQtoS.SrcMenu_IP_HIERARCHY, "IP Hierarchy"); // ab:JMenu (am:JPopupMenu, cv:JFrame)
+selectMenu(PAResourceQtoS.SrcMenu_IP_HIERARCHY, "IP Hierarchy"); // ab:JMenu (am:JPopupMenu, cv:JFrame)
+selectMenu(PAResourceCommand.PACommandNames_AUTO_UPDATE_HIER, "Hierarchy Update"); // ab:JMenu (am:JPopupMenu, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd)]", 4, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, Syntax Error Files, single_port_fifo_orca.vhd]", 2, false); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, Syntax Error Files, single_port_fifo_orca.vhd]", 2, false, false, false, false, true, false); // z:k (G:JPanel, cv:JFrame) - Popup Trigger
+selectMenuItem(RDIResourceCommand.RDICommands_DELETE, "Remove File from Project..."); // af:JMenuItem (am:JPopupMenu, cv:JFrame)
+// Run Command: RDIResourceCommand.RDICommands_DELETE
+// aB:g (cv:JFrame): Remove Sources: addNotify
+selectButton(RDIResource.BaseDialog_OK, "OK"); // a:JButton (JPanel:JComponent, aB:g)
+// TclEventType: DG_GRAPH_STALE
+dismissDialog("Remove Sources"); // aB:g (cv:JFrame)
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: remove_files /home/adomingues/gaph/orca-mpsoc/rtl/storage/single-port-fifo-orca/single_port_fifo_orca.vhd 
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// HMemoryUtils.trashcanNow. Engine heap size: 934 MB. GUI used memory: 32 MB. Current time: 3/12/20 5:02:50 PM BRT
+// Elapsed time: 17 seconds
+selectTab(PAResourceEtoH.FileSetView_TABBED_PANE, (HResource) null, "Hierarchy", 0); // g:JideTabbedPane (N:aK, cv:JFrame)
+selectTab(PAResourceEtoH.FileSetView_TABBED_PANE, (HResource) null, "Libraries", 1); // g:JideTabbedPane (N:aK, cv:JFrame)
+selectTab(PAResourceEtoH.FileSetView_TABBED_PANE, (HResource) null, "Hierarchy", 0); // g:JideTabbedPane (N:aK, cv:JFrame)
+selectTab(PAResourceEtoH.FileSetView_TABBED_PANE, (HResource) null, "Compile Order", 2); // g:JideTabbedPane (N:aK, cv:JFrame)
+selectTab(PAResourceEtoH.FileSetView_TABBED_PANE, (HResource) null, "Hierarchy", 0); // g:JideTabbedPane (N:aK, cv:JFrame)
+collapseTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd)]", 2); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, datapath - arch_datapath (datapath.vhd)]", 3, true, false, false, false, true, false); // z:k (G:JPanel, cv:JFrame) - Popup Trigger - Node
+selectMenuItem(RDIResourceCommand.RDICommands_PROPERTIES, "Source Node Properties..."); // af:JMenuItem (am:JPopupMenu, cv:JFrame)
+// Run Command: RDIResourceCommand.RDICommands_PROPERTIES
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd)]", 2, true); // z:k (G:JPanel, cv:JFrame) - Node
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd)]", 2); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd)]", 4, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), core - datapath - arch_datapath (datapath.vhd)]", 5, true); // z:k (G:JPanel, cv:JFrame) - Node
+collapseTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd)]", 2); // z:k (G:JPanel, cv:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Simulation Sources]", 17); // z:k (G:JPanel, cv:JFrame)
+collapseTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Simulation Sources]", 17); // z:k (G:JPanel, cv:JFrame)
+selectTab(RDIResource.PropertiesView_TABBED_PANE, (HResource) null, "Properties", 1); // g:JideTabbedPane (JPanel:JComponent, cv:JFrame)
+selectTab(RDIResource.PropertiesView_TABBED_PANE, (HResource) null, "General", 0); // g:JideTabbedPane (JPanel:JComponent, cv:JFrame)
+// [GUI Memory]: 73 MB (+1599kb) [00:03:59]
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Project Manager, Add Sources]", 2, false); // x:Y (w:G, cv:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_ADD_SOURCES
+// b:g (cv:JFrame): Add Sources: addNotify
+selectButton("CANCEL", "Cancel"); // JButton:AbstractButton (ButtonPanel:JPanel, b:g)
+dismissDialog("Add Sources"); // b:g (cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources]", 0, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, Non-module Files]", 1, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, Non-module Files]", 1, true); // z:k (G:JPanel, cv:JFrame) - Node
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, Non-module Files]", 1); // z:k (G:JPanel, cv:JFrame)
+// HMemoryUtils.trashcanNow. Engine heap size: 964 MB. GUI used memory: 32 MB. Current time: 3/12/20 5:03:45 PM BRT
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, Non-module Files, orca-top.vhd]", 2, false); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, Non-module Files, orca-top.vhd]", 2, false, false, false, false, true, false); // z:k (G:JPanel, cv:JFrame) - Popup Trigger
+selectMenuItem(RDIResourceCommand.RDICommands_DELETE, "Remove File from Project..."); // af:JMenuItem (am:JPopupMenu, cv:JFrame)
+// Run Command: RDIResourceCommand.RDICommands_DELETE
+// aB:g (cv:JFrame): Remove Sources: addNotify
+selectButton(RDIResource.BaseDialog_OK, "OK"); // a:JButton (JPanel:JComponent, aB:g)
+// TclEventType: DG_GRAPH_STALE
+dismissDialog("Remove Sources"); // aB:g (cv:JFrame)
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: remove_files /home/adomingues/gaph/orca-mpsoc/rtl/orca-top.vhd 
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, Disabled Sources]", 14); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, Disabled Sources, orca-tile-comm.vhd]", 15, false); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, Disabled Sources, orca-tile-comm.vhd]", 15, false, false, false, false, true, false); // z:k (G:JPanel, cv:JFrame) - Popup Trigger
+selectMenuItem(RDIResourceCommand.RDICommands_DELETE, "Remove File from Project..."); // af:JMenuItem (am:JPopupMenu, cv:JFrame)
+// Run Command: RDIResourceCommand.RDICommands_DELETE
+// aB:g (cv:JFrame): Remove Sources: addNotify
+selectButton(RDIResource.BaseDialog_OK, "OK"); // a:JButton (JPanel:JComponent, aB:g)
+// TclEventType: DG_GRAPH_STALE
+dismissDialog("Remove Sources"); // aB:g (cv:JFrame)
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: remove_files /home/adomingues/gaph/orca-mpsoc/rtl/orca-tile-comm.vhd 
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Simulation Sources]", 15); // z:k (G:JPanel, cv:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Simulation Sources, sim_1]", 16); // z:k (G:JPanel, cv:JFrame)
+// [GUI Memory]: 76 MB (+2kb) [00:04:34]
+collapseTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Simulation Sources]", 15); // z:k (G:JPanel, cv:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd)]", 1); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd)]", 1, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), router_binding - RouterCC - RouterCC (RouterCC.vhd)]", 2, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd)]", 3, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), proc_tile_mem_binding - single_port_ram - single_port_ram (single_port_ram.vhd)]", 4, false); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), proc_tile_ni_binding - orca_ni_top - orca_ni_top (orca-ni-top.vhd)]", 5, true); // z:k (G:JPanel, cv:JFrame) - Node
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), router_binding - RouterCC - RouterCC (RouterCC.vhd)]", 2); // z:k (G:JPanel, cv:JFrame)
+collapseTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), router_binding - RouterCC - RouterCC (RouterCC.vhd)]", 2); // z:k (G:JPanel, cv:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd)]", 3); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), core - datapath - arch_datapath (datapath.vhd)]", 4, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), int_control - interrupt_controller - arch_interrupt_controller (int_control.vhd)]", 5, false); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), core - datapath - arch_datapath (datapath.vhd)]", 4, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd)]", 3, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd)]", 3, true, false, false, false, true, false); // z:k (G:JPanel, cv:JFrame) - Popup Trigger - Node
+selectMenu(PAResourceCommand.PACommandNames_AUTO_UPDATE_HIER, "Hierarchy Update"); // ab:JMenu (am:JPopupMenu, cv:JFrame)
+selectMenu(PAResourceQtoS.SrcMenu_IP_HIERARCHY, "IP Hierarchy"); // ab:JMenu (am:JPopupMenu, cv:JFrame)
+selectMenu(PAResourceQtoS.SrcMenu_IP_HIERARCHY, "IP Hierarchy"); // ab:JMenu (am:JPopupMenu, cv:JFrame)
+selectMenu(PAResourceCommand.PACommandNames_AUTO_UPDATE_HIER, "Hierarchy Update"); // ab:JMenu (am:JPopupMenu, cv:JFrame)
+selectMenuItem(RDIResourceCommand.RDICommands_PROPERTIES, "Source Node Properties..."); // af:JMenuItem (am:JPopupMenu, cv:JFrame)
+// Run Command: RDIResourceCommand.RDICommands_PROPERTIES
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd)]", 3, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), core - datapath - arch_datapath (datapath.vhd)]", 4, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd)]", 3, true); // z:k (G:JPanel, cv:JFrame) - Node
+collapseTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd)]", 3); // z:k (G:JPanel, cv:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd)]", 3); // z:k (G:JPanel, cv:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), core - datapath - arch_datapath (datapath.vhd)]", 4); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), router_binding - RouterCC - RouterCC (RouterCC.vhd)]", 2, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), core - datapath - arch_datapath (datapath.vhd)]", 4, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd)]", 3, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectButton(PAResourceTtoZ.TaskBanner_CLOSE, (String) null); // l:JideButton (JPanel:JComponent, cv:JFrame)
+closeTask("Project Manager", "Project Manager", "DesignTask.PROJECT_SETUP");
+// Run Command: PAResourceCommand.PACommandNames_CLOSE_PROJECT
+// G:be (cv:JFrame): Close Project: addNotify
+selectButton(RDIResource.BaseDialog_CANCEL, "Cancel"); // a:JButton (JPanel:JComponent, G:be)
+dismissDialog("Close Project"); // G:be (cv:JFrame)
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, RTL Analysis, Open Elaborated Design]", 14, true); // x:Y (w:G, cv:JFrame) - Node
+// Run Command: PAResourceCommand.PACommandNames_GOTO_RTL_DESIGN
+// bL:g (cv:JFrame):  Open Elaborated Design : addNotify
+// TclEventType: ELABORATE_START
+// Tcl Message: synth_design -rtl -name rtl_1 
+// Tcl Message: Command: synth_design -rtl -name rtl_1 Starting synth_design Using part: xc7vx485tffg1761-2 Top: orca_processing_tile 
+// TclEventType: ELABORATE_FINISH
+// HMemoryUtils.trashcanNow. Engine heap size: 1,128 MB. GUI used memory: 33 MB. Current time: 3/12/20 5:04:55 PM BRT
+// [Engine Memory]: 1,158 MB (+197506kb) [00:05:23]
+// [Engine Memory]: 1,244 MB (+29705kb) [00:05:28]
+// TclEventType: FLOORPLAN_MODIFY
+// TclEventType: DESIGN_NEW
+// [Engine Memory]: 1,440 MB (+140544kb) [00:05:30]
+// HMemoryUtils.trashcanNow. Engine heap size: 1,440 MB. GUI used memory: 32 MB. Current time: 3/12/20 5:05:03 PM BRT
+// TclEventType: HFED_INIT_ROUTE_STORAGE_COMPLETED
+// TclEventType: DESIGN_NEW
+// [Engine Memory]: 1,513 MB (+1042kb) [00:05:34]
+// [GUI Memory]: 85 MB (+5302kb) [00:05:34]
+// Schematic: addNotify
+// TclEventType: CURR_DESIGN_SET
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: Starting RTL Elaboration : Time (s): cpu = 00:01:16 ; elapsed = 00:05:22 . Memory (MB): peak = 5890.727 ; gain = 5030.980 ; free physical = 14792 ; free virtual = 41637 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: INFO: [Synth 8-638] synthesizing module 'orca_processing_tile' [/home/adomingues/gaph/orca-mpsoc/rtl/orca-tile-proc.vhd:44] 
+// Tcl Message: 	Parameter RAM_WIDTH bound to: 32 - type: integer  	Parameter RAM_SIZE bound to: 320000000 - type: integer  	Parameter FLIT_WIDTH bound to: 32 - type: integer  	Parameter BUFFER_DEPTH bound to: 128 - type: integer  	Parameter PRELOAD_ADDR bound to: 32 - type: integer  	Parameter R_ADDRESS bound to: 16'b0000000000010001  	Parameter LOCAL_PORT_NUM bound to: 4 - type: integer  
+// Tcl Message: INFO: [Synth 8-638] synthesizing module 'RouterCC' [/home/adomingues/gaph/orca-mpsoc/rtl/routers/hermes/RouterCC.vhd:74] 
+// Tcl Message: 	Parameter address bound to: 16'b0000000000010001  
+// Tcl Message: 	Parameter RAM_WIDTH bound to: 32 - type: integer  	Parameter RAM_DEPTH bound to: 128 - type: integer  
+// Tcl Message: INFO: [Synth 8-256] done synthesizing module 'single_port_ram' (12#1) [/home/adomingues/gaph/orca-mpsoc/rtl/storage/single-port-ram-orca/single_port_ram.vhd:48] INFO: [Synth 8-638] synthesizing module 'orca_ni_top' [/home/adomingues/gaph/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-top.vhd:53] 
+// Tcl Message: 	Parameter RAM_WIDTH bound to: 32 - type: integer  	Parameter FLIT_WIDTH bound to: 32 - type: integer  	Parameter PRELOAD_ADDR bound to: 32 - type: integer  	Parameter BUFFER_DEPTH bound to: 128 - type: integer  
+// Tcl Message: INFO: [Synth 8-638] synthesizing module 'orca_ni_send' [/home/adomingues/gaph/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-send.vhd:41] 
+// Tcl Message: 	Parameter RAM_WIDTH bound to: 32 - type: integer  	Parameter FLIT_WIDTH bound to: 32 - type: integer  
+// Tcl Message: INFO: [Synth 8-256] done synthesizing module 'orca_ni_send' (13#1) [/home/adomingues/gaph/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-send.vhd:41] INFO: [Synth 8-638] synthesizing module 'orca_ni_recv' [/home/adomingues/gaph/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-recv.vhd:44] 
+// Tcl Message: 	Parameter RAM_WIDTH bound to: 32 - type: integer  	Parameter FLIT_WIDTH bound to: 32 - type: integer  	Parameter PRELOAD_ADDR bound to: 32 - type: integer  	Parameter BUFFER_DEPTH bound to: 128 - type: integer  
+// Tcl Message: INFO: [Synth 8-256] done synthesizing module 'orca_ni_recv' (14#1) [/home/adomingues/gaph/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-recv.vhd:44] INFO: [Synth 8-256] done synthesizing module 'orca_ni_top' (15#1) [/home/adomingues/gaph/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-top.vhd:53] 
+// Tcl Message: INFO: [Synth 8-256] done synthesizing module 'orca_processing_tile' (16#1) [/home/adomingues/gaph/orca-mpsoc/rtl/orca-tile-proc.vhd:44] 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: Finished RTL Elaboration : Time (s): cpu = 00:01:17 ; elapsed = 00:05:23 . Memory (MB): peak = 5917.570 ; gain = 5057.824 ; free physical = 14764 ; free virtual = 41610 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message:  Report Check Netlist:  +------+------------------+-------+---------+-------+------------------+ |      |Item              |Errors |Warnings |Status |Description       | +------+------------------+-------+---------+-------+------------------+ |1     |multi_driven_nets |      0|        0|Passed |Multi driven nets | +------+------------------+-------+---------+-------+------------------+ 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: Finished RTL Optimization Phase 1 : Time (s): cpu = 00:01:17 ; elapsed = 00:05:23 . Memory (MB): peak = 5917.570 ; gain = 5057.824 ; free physical = 14764 ; free virtual = 41609 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: INFO: [Device 21-403] Loading part xc7vx485tffg1761-2 INFO: [Project 1-570] Preparing netlist for logic optimization INFO: [Opt 31-141] Inserted 4 OBUFs to IO ports without IO buffers. 
+// Tcl Message:  Processing XDC Constraints Initializing timing engine Completed Processing XDC Constraints  
+// Tcl Message: INFO: [Opt 31-140] Inserted 1 IBUFs to IO ports without IO buffers. INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s). INFO: [Project 1-111] Unisim Transformation Summary: No Unisim elements were transformed.  
+// Elapsed time: 19 seconds
+selectButton(RDIResource.ProgressDialog_CANCEL, "Cancel"); // a:JButton (JPanel:JComponent, bL:g)
+// Tcl Message: RTL Elaboration Complete:  : Time (s): cpu = 00:01:35 ; elapsed = 00:05:38 . Memory (MB): peak = 6448.602 ; gain = 5588.855 ; free physical = 14280 ; free virtual = 41125 
+// Tcl Message: 43 Infos, 166 Warnings, 0 Critical Warnings and 0 Errors encountered. synth_design completed successfully 
+// Tcl Message: synth_design: Time (s): cpu = 00:00:22 ; elapsed = 00:00:19 . Memory (MB): peak = 6448.602 ; gain = 575.875 ; free physical = 14280 ; free virtual = 41125 
+// 'dG' command handler elapsed time: 20 seconds
+dismissDialog("Open Elaborated Design"); // bL:g (cv:JFrame)
+selectButton(PAResourceTtoZ.TaskBanner_CLOSE, (String) null); // l:JideButton (JPanel:JComponent, cv:JFrame)
+closeTask("RTL Analysis", "Elaborated Design", "DesignTask.RTL_PLANNING");
+// TclEventType: DESIGN_CLOSE
+// [GUI Memory]: 91 MB (+1883kb) [00:05:39]
+// HMemoryUtils.trashcanNow. Engine heap size: 1,524 MB. GUI used memory: 37 MB. Current time: 3/12/20 5:05:12 PM BRT
+// Engine heap size: 1,524 MB. GUI used memory: 38 MB. Current time: 3/12/20 5:05:12 PM BRT
+// TclEventType: CURR_DESIGN_SET
+// TclEventType: DESIGN_CLOSE
+// Tcl Message: close_design 
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), core - datapath - arch_datapath (datapath.vhd)]", 4, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd)]", 3, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectCheckBox(PAResourceQtoS.SrcFilePropPanels_ENABLED, "Enabled", false); // h:JCheckBox (JPanel:JComponent, cv:JFrame): FALSE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: set_property is_enabled false [get_files  /home/adomingues/gaph/orca-mpsoc/rtl/processors/hfriscv-2018/cpu.vhd] 
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// Tcl Message: update_compile_order -fileset sources_1 
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd)]", 3, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), core - datapath - arch_datapath (datapath.vhd)]", 4, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectCheckBox(PAResourceQtoS.SrcFilePropPanels_ENABLED, "Enabled", false); // h:JCheckBox (JPanel:JComponent, cv:JFrame): FALSE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: set_property is_enabled false [get_files  /home/adomingues/gaph/orca-mpsoc/rtl/processors/hfriscv-2018/datapath.vhd] 
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// Tcl Message: update_compile_order -fileset sources_1 
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), core - datapath - arch_datapath (datapath.vhd)]", 4, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd)]", 3, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), core - datapath - arch_datapath (datapath.vhd)]", 4, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), core - datapath - arch_datapath (datapath.vhd), control_unit - control - arch_control (control.vhd)]", 5, false); // z:k (G:JPanel, cv:JFrame)
+selectCheckBox(PAResourceQtoS.SrcFilePropPanels_ENABLED, "Enabled", false); // h:JCheckBox (JPanel:JComponent, cv:JFrame): FALSE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: set_property is_enabled false [get_files  /home/adomingues/gaph/orca-mpsoc/rtl/processors/hfriscv-2018/control.vhd] 
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// Tcl Message: update_compile_order -fileset sources_1 
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), core - datapath - arch_datapath (datapath.vhd), control_unit - control - arch_control (control.vhd)]", 5, false); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), core - datapath - arch_datapath (datapath.vhd), register_bank - reg_bank - arch_reg_bank (reg_bank.vhd)]", 6, false); // z:k (G:JPanel, cv:JFrame)
+selectCheckBox(PAResourceQtoS.SrcFilePropPanels_ENABLED, "Enabled", false); // h:JCheckBox (JPanel:JComponent, cv:JFrame): FALSE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: set_property is_enabled false [get_files  /home/adomingues/gaph/orca-mpsoc/rtl/processors/hfriscv-2018/reg_bank.vhd] 
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// Tcl Message: update_compile_order -fileset sources_1 
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), core - datapath - arch_datapath (datapath.vhd), register_bank - reg_bank - arch_reg_bank (reg_bank.vhd)]", 6, false); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), core - datapath - arch_datapath (datapath.vhd), alu - alu - arch_alu (alu.vhd)]", 7, true); // z:k (G:JPanel, cv:JFrame) - Node
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), core - datapath - arch_datapath (datapath.vhd), alu - alu - arch_alu (alu.vhd)]", 7); // z:k (G:JPanel, cv:JFrame)
+selectCheckBox(PAResourceQtoS.SrcFilePropPanels_ENABLED, "Enabled", false); // h:JCheckBox (JPanel:JComponent, cv:JFrame): FALSE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: set_property is_enabled false [get_files  /home/adomingues/gaph/orca-mpsoc/rtl/processors/hfriscv-2018/alu.vhd] 
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// Tcl Message: update_compile_order -fileset sources_1 
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), core - datapath - arch_datapath (datapath.vhd), alu - alu - arch_alu (alu.vhd)]", 7, true); // z:k (G:JPanel, cv:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), core - datapath - arch_datapath (datapath.vhd), alu - alu - arch_alu (alu.vhd)]", 7, true); // z:k (G:JPanel, cv:JFrame) - Node
+collapseTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), core - datapath - arch_datapath (datapath.vhd), alu - alu - arch_alu (alu.vhd)]", 7); // z:k (G:JPanel, cv:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), core - datapath - arch_datapath (datapath.vhd), alu - alu - arch_alu (alu.vhd)]", 7); // z:k (G:JPanel, cv:JFrame)
+selectTab("PlanAheadTabBaseWorkspace_JideTabbedPane", (HResource) null, "alu.vhd", 1); // TdiGroup:JideTabbedPane (CodeEditorDocumentPane:DocumentPane, cv:JFrame)
+closeView(PAResourceOtoP.PAViews_CODE, "Code"); // D:b
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), core - datapath - arch_datapath (datapath.vhd), alu - alu - arch_alu (alu.vhd), barrel_shifter - bshift - logic (bshift.vhd)]", 8, false); // z:k (G:JPanel, cv:JFrame)
+selectCheckBox(PAResourceQtoS.SrcFilePropPanels_ENABLED, "Enabled", false); // h:JCheckBox (JPanel:JComponent, cv:JFrame): FALSE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: set_property is_enabled false [get_files  /home/adomingues/gaph/orca-mpsoc/rtl/processors/hfriscv-2018/bshift.vhd] 
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// Tcl Message: update_compile_order -fileset sources_1 
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), core - datapath - arch_datapath (datapath.vhd), alu - alu - arch_alu (alu.vhd), barrel_shifter - bshift - logic (bshifter.vhd)]", 8, false); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), int_control - interrupt_controller - arch_interrupt_controller (int_control.vhd)]", 9, false); // z:k (G:JPanel, cv:JFrame)
+selectCheckBox(PAResourceQtoS.SrcFilePropPanels_ENABLED, "Enabled", false); // h:JCheckBox (JPanel:JComponent, cv:JFrame): FALSE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: set_property is_enabled false [get_files  /home/adomingues/gaph/orca-mpsoc/rtl/processors/hfriscv-2018/int_control.vhd] 
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// Tcl Message: update_compile_order -fileset sources_1 
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), int_control - interrupt_controller - arch_interrupt_controller (int_control.vhd)]", 9, false); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), int_control - interrupt_controller - arch_interrupt_controller (int_control.vhd)]", 9, false); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), proc_tile_mem_binding - single_port_ram - single_port_ram (single_port_ram.vhd)]", 10, false); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, ring_buffer - rtl (fifo.vhd)]", 15, false); // z:k (G:JPanel, cv:JFrame)
+selectCheckBox(PAResourceQtoS.SrcFilePropPanels_ENABLED, "Enabled", false); // h:JCheckBox (JPanel:JComponent, cv:JFrame): FALSE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: set_property is_enabled false [get_files  /home/adomingues/gaph/orca-mpsoc/rtl/storage/dual-port-fifo/fifo.vhd] 
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, single_port_ram (single_port_ram.sv)]", 15, false); // z:k (G:JPanel, cv:JFrame)
+selectCheckBox(PAResourceQtoS.SrcFilePropPanels_ENABLED, "Enabled", false); // h:JCheckBox (JPanel:JComponent, cv:JFrame): FALSE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: set_property is_enabled false [get_files  /home/adomingues/gaph/orca-mpsoc/rtl/storage/single-port-ram-intel/single_port_ram.sv] 
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), prov_cpu_binding - processor - arch_processor (cpu.vhd), int_control - interrupt_controller - arch_interrupt_controller (int_control.vhd)]", 9, false); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), proc_tile_mem_binding - single_port_ram - single_port_ram (single_port_ram.vhd)]", 10, false); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), proc_tile_ni_binding - orca_ni_top - orca_ni_top (orca-ni-top.vhd)]", 11, true); // z:k (G:JPanel, cv:JFrame) - Node
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), proc_tile_ni_binding - orca_ni_top - orca_ni_top (orca-ni-top.vhd)]", 11); // z:k (G:JPanel, cv:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd), proc_tile_ni_binding - orca_ni_top - orca_ni_top (orca-ni-top.vhd), ni_recv_mod - orca_ni_recv - orca_ni_recv (orca-ni-recv.vhd)]", 13); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, bram - memory (ram.vhd)]", 15, false); // z:k (G:JPanel, cv:JFrame)
+selectCheckBox(PAResourceQtoS.SrcFilePropPanels_ENABLED, "Enabled", false); // h:JCheckBox (JPanel:JComponent, cv:JFrame): FALSE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: set_property is_enabled false [get_files  /home/adomingues/gaph/orca-mpsoc/rtl/storage/single-port-ram-orca/ram.vhd] 
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, peripherals - peripherals_arch (orca-minimal-soc.vhd)]", 15, false); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, ram - generic_ram (mp-ram.vhd)]", 16, false); // z:k (G:JPanel, cv:JFrame)
+selectCheckBox(PAResourceQtoS.SrcFilePropPanels_ENABLED, "Enabled", false); // h:JCheckBox (JPanel:JComponent, cv:JFrame): FALSE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: set_property is_enabled false [get_files  /home/adomingues/gaph/orca-mpsoc/rtl/storage/dual-port-ram/mp-ram.vhd] 
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, peripherals - peripherals_arch (orca-minimal-soc.vhd)]", 15, false); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, peripherals - peripherals_arch (orca-minimal-soc.vhd)]", 15, false, false, false, false, false, true); // z:k (G:JPanel, cv:JFrame) - Double Click
+selectCodeEditor("orca-minimal-soc.vhd", 149, 238); // bH:N (JPanel:JComponent, cv:JFrame)
+selectCodeEditor("orca-minimal-soc.vhd", 57, 235); // bH:N (JPanel:JComponent, cv:JFrame)
+typeControlKey((HResource) null, "orca-minimal-soc.vhd", 'c'); // bH:N (JPanel:JComponent, cv:JFrame)
+typeControlKey((HResource) null, "orca-minimal-soc.vhd", 'c'); // bH:N (JPanel:JComponent, cv:JFrame)
+typeControlKey((HResource) null, "orca-minimal-soc.vhd", 'c'); // bH:N (JPanel:JComponent, cv:JFrame)
+typeControlKey((HResource) null, "orca-minimal-soc.vhd", 'c'); // bH:N (JPanel:JComponent, cv:JFrame)
+typeControlKey((HResource) null, "orca-minimal-soc.vhd", 'c'); // bH:N (JPanel:JComponent, cv:JFrame)
+// Elapsed time: 14 seconds
+selectCodeEditor("orca-minimal-soc.vhd", 149, 270, false, false, false, true, false); // bH:N (JPanel:JComponent, cv:JFrame) - Popup Trigger
+selectMenuItem(RDIResourceCommand.RDICommands_COPY, "Copy"); // af:JMenuItem (am:JPopupMenu, cv:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, Disabled Sources]", 16); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, Disabled Sources, single_port_ram.sv]", 17, false); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, Disabled Sources, reg_bank.vhd]", 27, false, true, false, false, false, false); // z:k (G:JPanel, cv:JFrame) - Shift Key
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, Disabled Sources, single_port_ram.sv]", 17, false, false, false, false, true, false); // z:k (G:JPanel, cv:JFrame) - Popup Trigger
+selectMenuItem(RDIResourceCommand.RDICommands_DELETE, "Remove File from Project..."); // af:JMenuItem (am:JPopupMenu, cv:JFrame)
+// Run Command: RDIResourceCommand.RDICommands_DELETE
+// aB:g (cv:JFrame): Remove Sources: addNotify
+selectButton(RDIResource.BaseDialog_OK, "OK"); // a:JButton (JPanel:JComponent, aB:g)
+// TclEventType: DG_GRAPH_STALE
+dismissDialog("Remove Sources"); // aB:g (cv:JFrame)
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd)]", 1, true); // z:k (G:JPanel, cv:JFrame) - Node
+collapseTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd)]", 1); // z:k (G:JPanel, cv:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, orca_processing_tile - orca_processing_tile (orca-tile-proc.vhd)]", 1); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, RTL Analysis, Open Elaborated Design, Schematic]", 17, false); // x:Y (w:G, cv:JFrame)
+// bL:g (cv:JFrame):  Open Elaborated Design : addNotify
+// TclEventType: ELABORATE_START
+// Tcl Message: synth_design -rtl -name rtl_1 
+// Tcl Message: Command: synth_design -rtl -name rtl_1 Starting synth_design Using part: xc7vx485tffg1761-2 Top: orca_processing_tile 
+// TclEventType: ELABORATE_FINISH
+// TclEventType: FLOORPLAN_MODIFY
+// TclEventType: DESIGN_NEW
+// HMemoryUtils.trashcanNow. Engine heap size: 1,518 MB. GUI used memory: 38 MB. Current time: 3/12/20 5:07:58 PM BRT
+// TclEventType: DESIGN_NEW
+// [GUI Memory]: 97 MB (+609kb) [00:08:25]
+// TclEventType: HFED_INIT_ROUTE_STORAGE_COMPLETED
+// Schematic: addNotify
+// TclEventType: CURR_DESIGN_SET
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: Starting RTL Elaboration : Time (s): cpu = 00:02:03 ; elapsed = 00:08:25 . Memory (MB): peak = 6452.531 ; gain = 5592.785 ; free physical = 14237 ; free virtual = 41083 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: INFO: [Synth 8-638] synthesizing module 'orca_processing_tile' [/home/adomingues/gaph/orca-mpsoc/rtl/orca-tile-proc.vhd:44] 
+// Tcl Message: 	Parameter RAM_WIDTH bound to: 32 - type: integer  	Parameter RAM_SIZE bound to: 320000000 - type: integer  	Parameter FLIT_WIDTH bound to: 32 - type: integer  	Parameter BUFFER_DEPTH bound to: 128 - type: integer  	Parameter PRELOAD_ADDR bound to: 32 - type: integer  	Parameter R_ADDRESS bound to: 16'b0000000000010001  	Parameter LOCAL_PORT_NUM bound to: 4 - type: integer  
+// Tcl Message: INFO: [Synth 8-638] synthesizing module 'RouterCC' [/home/adomingues/gaph/orca-mpsoc/rtl/routers/hermes/RouterCC.vhd:74] 
+// Tcl Message: 	Parameter address bound to: 16'b0000000000010001  
+// Tcl Message: 	Parameter RAM_WIDTH bound to: 32 - type: integer  	Parameter RAM_DEPTH bound to: 128 - type: integer  
+// Tcl Message: INFO: [Synth 8-256] done synthesizing module 'single_port_ram' (12#1) [/home/adomingues/gaph/orca-mpsoc/rtl/storage/single-port-ram-orca/single_port_ram.vhd:48] INFO: [Synth 8-638] synthesizing module 'orca_ni_top' [/home/adomingues/gaph/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-top.vhd:53] 
+// Tcl Message: 	Parameter RAM_WIDTH bound to: 32 - type: integer  	Parameter FLIT_WIDTH bound to: 32 - type: integer  	Parameter PRELOAD_ADDR bound to: 32 - type: integer  	Parameter BUFFER_DEPTH bound to: 128 - type: integer  
+// Tcl Message: INFO: [Synth 8-638] synthesizing module 'orca_ni_send' [/home/adomingues/gaph/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-send.vhd:41] 
+// Tcl Message: 	Parameter RAM_WIDTH bound to: 32 - type: integer  	Parameter FLIT_WIDTH bound to: 32 - type: integer  
+// Tcl Message: INFO: [Synth 8-256] done synthesizing module 'orca_ni_send' (13#1) [/home/adomingues/gaph/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-send.vhd:41] INFO: [Synth 8-638] synthesizing module 'orca_ni_recv' [/home/adomingues/gaph/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-recv.vhd:44] 
+// Tcl Message: 	Parameter RAM_WIDTH bound to: 32 - type: integer  	Parameter FLIT_WIDTH bound to: 32 - type: integer  	Parameter PRELOAD_ADDR bound to: 32 - type: integer  	Parameter BUFFER_DEPTH bound to: 128 - type: integer  
+// Tcl Message: INFO: [Synth 8-256] done synthesizing module 'orca_ni_recv' (14#1) [/home/adomingues/gaph/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-recv.vhd:44] INFO: [Synth 8-256] done synthesizing module 'orca_ni_top' (15#1) [/home/adomingues/gaph/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-top.vhd:53] 
+// Tcl Message: INFO: [Synth 8-256] done synthesizing module 'orca_processing_tile' (16#1) [/home/adomingues/gaph/orca-mpsoc/rtl/orca-tile-proc.vhd:44] 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: Finished RTL Elaboration : Time (s): cpu = 00:02:04 ; elapsed = 00:08:26 . Memory (MB): peak = 6452.531 ; gain = 5592.785 ; free physical = 14237 ; free virtual = 41083 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message:  Report Check Netlist:  +------+------------------+-------+---------+-------+------------------+ |      |Item              |Errors |Warnings |Status |Description       | +------+------------------+-------+---------+-------+------------------+ |1     |multi_driven_nets |      0|        0|Passed |Multi driven nets | +------+------------------+-------+---------+-------+------------------+ 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: Finished RTL Optimization Phase 1 : Time (s): cpu = 00:02:04 ; elapsed = 00:08:27 . Memory (MB): peak = 6452.531 ; gain = 5592.785 ; free physical = 14236 ; free virtual = 41082 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: INFO: [Project 1-570] Preparing netlist for logic optimization INFO: [Opt 31-141] Inserted 4 OBUFs to IO ports without IO buffers. 
+// Tcl Message:  Processing XDC Constraints Initializing timing engine Completed Processing XDC Constraints  
+// Tcl Message: INFO: [Opt 31-140] Inserted 1 IBUFs to IO ports without IO buffers. INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s). INFO: [Project 1-111] Unisim Transformation Summary: No Unisim elements were transformed.  
+// Tcl Message: RTL Elaboration Complete:  : Time (s): cpu = 00:02:10 ; elapsed = 00:08:30 . Memory (MB): peak = 6494.664 ; gain = 5634.918 ; free physical = 14202 ; free virtual = 41047 
+// Tcl Message: 42 Infos, 166 Warnings, 0 Critical Warnings and 0 Errors encountered. synth_design completed successfully 
+// Tcl Message: synth_design: Time (s): cpu = 00:00:10 ; elapsed = 00:00:07 . Memory (MB): peak = 6494.664 ; gain = 42.133 ; free physical = 14202 ; free virtual = 41047 
+// Run Command: PAResourceCommand.PACommandNames_SCHEMATIC
+// Schematic: addNotify
+dismissDialog("Open Elaborated Design"); // bL:g (cv:JFrame)
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: DESIGN_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: DESIGN_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: DESIGN_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// Tcl Message: update_compile_order -fileset sources_1 
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: DESIGN_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: DESIGN_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// Tcl Message: update_compile_order -fileset sources_1 
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: DESIGN_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// Elapsed time: 190 seconds
+selectButton(PAResourceOtoP.ProjectTab_RELOAD, "Reload"); // i:l (JPanel:JComponent, cv:JFrame)
+// bL:g (cv:JFrame):  Reloading : addNotify
+// TclEventType: ELABORATE_START
+// Tcl Message: refresh_design 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: Starting RTL Elaboration : Time (s): cpu = 00:02:20 ; elapsed = 00:11:44 . Memory (MB): peak = 6494.664 ; gain = 5634.918 ; free physical = 14158 ; free virtual = 41004 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// TclEventType: ELABORATE_FAIL
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: Finished RTL Elaboration : Time (s): cpu = 00:02:20 ; elapsed = 00:11:44 . Memory (MB): peak = 6494.664 ; gain = 5634.918 ; free physical = 14158 ; free virtual = 41004 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: RTL Elaboration failed ERROR: [Common 17-39] 'refresh_design' failed due to earlier errors. 
+// N:a (cv:JFrame): Critical Messages: addNotify
+dismissDialog("Reloading"); // bL:g (cv:JFrame)
+selectButton(PAResourceAtoD.CmdMsgDialog_OK, "OK"); // i:a (JPanel:JComponent, N:a)
+dismissDialog("Critical Messages"); // N:a (cv:JFrame)
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: DESIGN_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: DESIGN_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// Tcl Message: update_compile_order -fileset sources_1 
+// Elapsed time: 19 seconds
+selectButton(PAResourceOtoP.ProjectTab_RELOAD, "Reload"); // i:l (JPanel:JComponent, cv:JFrame)
+// bL:g (cv:JFrame):  Reloading : addNotify
+// TclEventType: ELABORATE_START
+// Tcl Message: refresh_design 
+// TclEventType: ELABORATE_FAIL
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: Starting RTL Elaboration : Time (s): cpu = 00:02:25 ; elapsed = 00:12:10 . Memory (MB): peak = 6494.664 ; gain = 5634.918 ; free physical = 14157 ; free virtual = 41003 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: ERROR: [Synth 8-2029] formal addr_i has no actual or default value [/home/adomingues/gaph/orca-mpsoc/rtl/orca-tile-proc.vhd:91] 
+// Tcl Message: INFO: [Synth 8-994] addr_i is declared here [/home/adomingues/gaph/orca-mpsoc/rtl/orca-minimal-soc.vhd:18] INFO: [Synth 8-994] data_i is declared here [/home/adomingues/gaph/orca-mpsoc/rtl/orca-minimal-soc.vhd:19] INFO: [Synth 8-994] sel_i is declared here [/home/adomingues/gaph/orca-mpsoc/rtl/orca-minimal-soc.vhd:21] INFO: [Synth 8-994] wr_i is declared here [/home/adomingues/gaph/orca-mpsoc/rtl/orca-minimal-soc.vhd:22] INFO: [Synth 8-994] gpioa_in is declared here [/home/adomingues/gaph/orca-mpsoc/rtl/orca-minimal-soc.vhd:24] INFO: [Synth 8-2810] unit orca_processing_tile ignored due to previous errors [/home/adomingues/gaph/orca-mpsoc/rtl/orca-tile-proc.vhd:44] 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: Finished RTL Elaboration : Time (s): cpu = 00:02:26 ; elapsed = 00:12:11 . Memory (MB): peak = 6494.664 ; gain = 5634.918 ; free physical = 14157 ; free virtual = 41003 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: RTL Elaboration failed ERROR: [Common 17-39] 'refresh_design' failed due to earlier errors. 
+// N:a (cv:JFrame): Critical Messages: addNotify
+dismissDialog("Reloading"); // bL:g (cv:JFrame)
+// [GUI Memory]: 107 MB (+5337kb) [00:12:09]
+selectList(PAResourceAtoD.CmdMsgDialog_MESSAGES, "[Synth 8-2029] formal addr_i has no actual or default value [/home/adomingues/gaph/orca-mpsoc/rtl/orca-tile-proc.vhd:91]", 0); // d:a (JViewport:JComponent, N:a)
+selectButton(PAResourceAtoD.CmdMsgDialog_OK, "OK"); // i:a (JPanel:JComponent, N:a)
+dismissDialog("Critical Messages"); // N:a (cv:JFrame)
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: DESIGN_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: DESIGN_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DESIGN_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_GRAPH_STALE
+// Tcl Message: update_compile_order -fileset sources_1 
+// Tcl Message: update_compile_order -fileset sim_1 
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: DESIGN_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// Tcl Message: update_compile_order -fileset sources_1 
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// [GUI Memory]: 112 MB (+191kb) [00:15:11]
+// Elapsed time: 184 seconds
+selectButton(PAResourceOtoP.ProjectTab_RELOAD, "Reload"); // i:l (JPanel:JComponent, cv:JFrame)
+// bL:g (cv:JFrame):  Reloading : addNotify
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: ELABORATE_START
+// Tcl Message: refresh_design 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: Starting RTL Elaboration : Time (s): cpu = 00:02:35 ; elapsed = 00:15:24 . Memory (MB): peak = 6494.664 ; gain = 5634.918 ; free physical = 14162 ; free virtual = 41009 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// TclEventType: ELABORATE_FINISH
+// TclEventType: DESIGN_REFRESH
+// HMemoryUtils.trashcanNow. Engine heap size: 1,568 MB. GUI used memory: 70 MB. Current time: 3/12/20 5:14:56 PM BRT
+// Engine heap size: 1,569 MB. GUI used memory: 71 MB. Current time: 3/12/20 5:14:56 PM BRT
+// Tcl Message: INFO: [Synth 8-638] synthesizing module 'RouterCC' [/home/adomingues/gaph/orca-mpsoc/rtl/routers/hermes/RouterCC.vhd:74] 
+// Tcl Message: 	Parameter address bound to: 16'b0000000100000001  
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: Finished RTL Elaboration : Time (s): cpu = 00:02:36 ; elapsed = 00:15:25 . Memory (MB): peak = 6494.664 ; gain = 5634.918 ; free physical = 14162 ; free virtual = 41008 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message:  Report Check Netlist:  +------+------------------+-------+---------+-------+------------------+ |      |Item              |Errors |Warnings |Status |Description       | +------+------------------+-------+---------+-------+------------------+ |1     |multi_driven_nets |      0|        0|Passed |Multi driven nets | +------+------------------+-------+---------+-------+------------------+ --------------------------------------------------------------------------------- 
+// Tcl Message: Finished RTL Optimization Phase 1 : Time (s): cpu = 00:02:36 ; elapsed = 00:15:25 . Memory (MB): peak = 6494.664 ; gain = 5634.918 ; free physical = 14162 ; free virtual = 41008 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// TclEventType: FLOORPLAN_MODIFY
+// TclEventType: DESIGN_REFRESH
+// HMemoryUtils.trashcanNow. Engine heap size: 1,595 MB. GUI used memory: 38 MB. Current time: 3/12/20 5:14:57 PM BRT
+// [Engine Memory]: 1,595 MB (+6130kb) [00:15:24]
+// TclEventType: HFED_INIT_ROUTE_STORAGE_COMPLETED
+// Schematic: addNotify
+// Schematic: addNotify
+// Tcl Message: INFO: [Project 1-570] Preparing netlist for logic optimization INFO: [Opt 31-141] Inserted 5 OBUFs to IO ports without IO buffers. 
+// Tcl Message:  Processing XDC Constraints Initializing timing engine Completed Processing XDC Constraints  
+// Tcl Message: INFO: [Opt 31-140] Inserted 1 IBUFs to IO ports without IO buffers. INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s). 
+// Tcl Message: refresh_design: Time (s): cpu = 00:00:10 ; elapsed = 00:00:07 . Memory (MB): peak = 6538.668 ; gain = 44.004 ; free physical = 14117 ; free virtual = 40963 
+dismissDialog("Reloading"); // bL:g (cv:JFrame)
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// Elapsed time: 27 seconds
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, Syntax Error Files]", 1); // z:k (G:JPanel, cv:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, Syntax Error Files, orca-tile-proc.vhd]", 2, false); // z:k (G:JPanel, cv:JFrame)
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DESIGN_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_GRAPH_STALE
+// Tcl Message: update_compile_order -fileset sources_1 
+// Tcl Message: update_compile_order -fileset sim_1 
+// Elapsed time: 81 seconds
+selectButton(PAResourceOtoP.ProjectTab_RELOAD, "Reload"); // i:l (JPanel:JComponent, cv:JFrame)
+// bL:g (cv:JFrame):  Reloading : addNotify
+// TclEventType: ELABORATE_START
+// Tcl Message: refresh_design 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: Starting RTL Elaboration : Time (s): cpu = 00:02:54 ; elapsed = 00:17:21 . Memory (MB): peak = 6538.695 ; gain = 5678.949 ; free physical = 14100 ; free virtual = 40946 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// TclEventType: ELABORATE_FAIL
+// Tcl Message: ERROR: [Synth 8-439] module 'orca_processing_tile' not found 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: Finished RTL Elaboration : Time (s): cpu = 00:02:54 ; elapsed = 00:17:22 . Memory (MB): peak = 6538.695 ; gain = 5678.949 ; free physical = 14100 ; free virtual = 40946 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: RTL Elaboration failed ERROR: [Common 17-39] 'refresh_design' failed due to earlier errors. 
+// N:a (cv:JFrame): Critical Messages: addNotify
+dismissDialog("Reloading"); // bL:g (cv:JFrame)
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: DESIGN_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// Tcl Message: update_compile_order -fileset sources_1 
+selectButton(PAResourceAtoD.CmdMsgDialog_OK, "OK"); // i:a (JPanel:JComponent, N:a)
+dismissDialog("Critical Messages"); // N:a (cv:JFrame)
+selectButton(PAResourceOtoP.ProjectTab_RELOAD, "Reload"); // i:l (JPanel:JComponent, cv:JFrame)
+// bL:g (cv:JFrame):  Reloading : addNotify
+// TclEventType: ELABORATE_START
+// Tcl Message: refresh_design 
+// TclEventType: ELABORATE_FAIL
+// Tcl Message: --------------------------------------------------------------------------------- --------------------------------------------------------------------------------- 
+// Tcl Message: ERROR: [Synth 8-2032] formal gpioa_addr is not declared [/home/adomingues/gaph/orca-mpsoc/rtl/orca-tile-proc.vhd:117] 
+// Tcl Message: INFO: [Synth 8-2810] unit orca_processing_tile ignored due to previous errors [/home/adomingues/gaph/orca-mpsoc/rtl/orca-tile-proc.vhd:44] 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: Finished RTL Elaboration : Time (s): cpu = 00:02:59 ; elapsed = 00:17:35 . Memory (MB): peak = 6538.695 ; gain = 5678.949 ; free physical = 14098 ; free virtual = 40944 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: RTL Elaboration failed ERROR: [Common 17-39] 'refresh_design' failed due to earlier errors. 
+// N:a (cv:JFrame): Critical Messages: addNotify
+dismissDialog("Reloading"); // bL:g (cv:JFrame)
+selectButton(PAResourceAtoD.CmdMsgDialog_OK, "OK"); // i:a (JPanel:JComponent, N:a)
+selectButton(PAResourceAtoD.CmdMsgDialog_OK, "OK"); // i:a (JPanel:JComponent, N:a)
+dismissDialog("Critical Messages"); // N:a (cv:JFrame)
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: DESIGN_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// Elapsed time: 56 seconds
+selectButton(PAResourceOtoP.ProjectTab_RELOAD, "Reload"); // i:l (JPanel:JComponent, cv:JFrame)
+// bL:g (cv:JFrame):  Reloading : addNotify
+// TclEventType: ELABORATE_START
+// Tcl Message: refresh_design 
+// TclEventType: ELABORATE_FAIL
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: Starting RTL Elaboration : Time (s): cpu = 00:03:04 ; elapsed = 00:18:39 . Memory (MB): peak = 6538.695 ; gain = 5678.949 ; free physical = 14076 ; free virtual = 40922 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: ERROR: [Synth 8-2032] formal gpioa_addr is not declared [/home/adomingues/gaph/orca-mpsoc/rtl/orca-tile-proc.vhd:117] 
+// Tcl Message: INFO: [Synth 8-2810] unit orca_processing_tile ignored due to previous errors [/home/adomingues/gaph/orca-mpsoc/rtl/orca-tile-proc.vhd:44] 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: Finished RTL Elaboration : Time (s): cpu = 00:03:04 ; elapsed = 00:18:40 . Memory (MB): peak = 6538.695 ; gain = 5678.949 ; free physical = 14076 ; free virtual = 40922 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: RTL Elaboration failed ERROR: [Common 17-39] 'refresh_design' failed due to earlier errors. 
+// N:a (cv:JFrame): Critical Messages: addNotify
+dismissDialog("Reloading"); // bL:g (cv:JFrame)
+selectList(PAResourceAtoD.CmdMsgDialog_MESSAGES, "[Synth 8-2032] formal gpioa_addr is not declared [/home/adomingues/gaph/orca-mpsoc/rtl/orca-tile-proc.vhd:117]", 0); // d:a (JViewport:JComponent, N:a)
+selectButton(PAResourceAtoD.CmdMsgDialog_OK, "OK"); // i:a (JPanel:JComponent, N:a)
+dismissDialog("Critical Messages"); // N:a (cv:JFrame)
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: DESIGN_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// Elapsed time: 20 seconds
+selectButton(PAResourceOtoP.ProjectTab_RELOAD, "Reload"); // i:l (JPanel:JComponent, cv:JFrame)
+// bL:g (cv:JFrame):  Reloading : addNotify
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: DESIGN_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: ELABORATE_START
+// Tcl Message: refresh_design 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: Starting RTL Elaboration : Time (s): cpu = 00:03:09 ; elapsed = 00:19:07 . Memory (MB): peak = 6538.695 ; gain = 5678.949 ; free physical = 14070 ; free virtual = 40916 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// TclEventType: ELABORATE_FINISH
+// TclEventType: DESIGN_REFRESH
+// [GUI Memory]: 118 MB (+247kb) [00:19:05]
+// HMemoryUtils.trashcanNow. Engine heap size: 1,614 MB. GUI used memory: 69 MB. Current time: 3/12/20 5:18:39 PM BRT
+// Engine heap size: 1,614 MB. GUI used memory: 70 MB. Current time: 3/12/20 5:18:39 PM BRT
+// Tcl Message: INFO: [Synth 8-638] synthesizing module 'orca_processing_tile' [/home/adomingues/gaph/orca-mpsoc/rtl/orca-tile-proc.vhd:44] 
+// Tcl Message: 	Parameter RAM_WIDTH bound to: 32 - type: integer  	Parameter RAM_SIZE bound to: 320000000 - type: integer  	Parameter FLIT_WIDTH bound to: 32 - type: integer  	Parameter BUFFER_DEPTH bound to: 128 - type: integer  	Parameter PRELOAD_ADDR bound to: 32 - type: integer  	Parameter R_ADDRESS bound to: 16'b0000000000010001  	Parameter LOCAL_PORT_NUM bound to: 4 - type: integer  
+// Tcl Message: INFO: [Synth 8-638] synthesizing module 'peripherals' [/home/adomingues/gaph/orca-mpsoc/rtl/orca-minimal-soc.vhd:30] INFO: [Synth 8-256] done synthesizing module 'peripherals' (1#1) [/home/adomingues/gaph/orca-mpsoc/rtl/orca-minimal-soc.vhd:30] INFO: [Synth 8-638] synthesizing module 'RouterCC' [/home/adomingues/gaph/orca-mpsoc/rtl/routers/hermes/RouterCC.vhd:74] 
+// Tcl Message: 	Parameter address bound to: 16'b0000000000010001  
+// Tcl Message: 	Parameter RAM_WIDTH bound to: 32 - type: integer  	Parameter RAM_DEPTH bound to: 128 - type: integer  
+// Tcl Message: INFO: [Synth 8-256] done synthesizing module 'single_port_ram' (13#1) [/home/adomingues/gaph/orca-mpsoc/rtl/storage/single-port-ram-orca/single_port_ram.vhd:48] INFO: [Synth 8-638] synthesizing module 'orca_ni_top' [/home/adomingues/gaph/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-top.vhd:53] 
+// Tcl Message: 	Parameter RAM_WIDTH bound to: 32 - type: integer  	Parameter FLIT_WIDTH bound to: 32 - type: integer  	Parameter PRELOAD_ADDR bound to: 32 - type: integer  	Parameter BUFFER_DEPTH bound to: 128 - type: integer  
+// Tcl Message: INFO: [Synth 8-638] synthesizing module 'orca_ni_send' [/home/adomingues/gaph/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-send.vhd:41] 
+// Tcl Message: 	Parameter RAM_WIDTH bound to: 32 - type: integer  	Parameter FLIT_WIDTH bound to: 32 - type: integer  
+// Tcl Message: INFO: [Synth 8-256] done synthesizing module 'orca_ni_send' (14#1) [/home/adomingues/gaph/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-send.vhd:41] INFO: [Synth 8-638] synthesizing module 'orca_ni_recv' [/home/adomingues/gaph/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-recv.vhd:44] 
+// Tcl Message: 	Parameter RAM_WIDTH bound to: 32 - type: integer  	Parameter FLIT_WIDTH bound to: 32 - type: integer  	Parameter PRELOAD_ADDR bound to: 32 - type: integer  	Parameter BUFFER_DEPTH bound to: 128 - type: integer  
+// Tcl Message: INFO: [Synth 8-256] done synthesizing module 'orca_ni_recv' (15#1) [/home/adomingues/gaph/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-recv.vhd:44] INFO: [Synth 8-256] done synthesizing module 'orca_ni_top' (16#1) [/home/adomingues/gaph/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-top.vhd:53] 
+// Tcl Message: INFO: [Synth 8-256] done synthesizing module 'orca_processing_tile' (17#1) [/home/adomingues/gaph/orca-mpsoc/rtl/orca-tile-proc.vhd:44] 
+// Tcl Message: INFO: [Common 17-14] Message 'Synth 8-3331' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings. 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message: Finished RTL Elaboration : Time (s): cpu = 00:03:10 ; elapsed = 00:19:08 . Memory (MB): peak = 6538.695 ; gain = 5678.949 ; free physical = 14070 ; free virtual = 40916 
+// Tcl Message: --------------------------------------------------------------------------------- 
+// Tcl Message:  Report Check Netlist:  +------+------------------+-------+---------+-------+------------------+ |      |Item              |Errors |Warnings |Status |Description       | +------+------------------+-------+---------+-------+------------------+ |1     |multi_driven_nets |      0|        0|Passed |Multi driven nets | +------+------------------+-------+---------+-------+------------------+ 
+// Tcl Message: INFO: [Common 17-14] Message 'Synth 8-3295' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings. 
+// Tcl Message: --------------------------------------------------------------------------------- --------------------------------------------------------------------------------- 
+// TclEventType: FLOORPLAN_MODIFY
+// TclEventType: DESIGN_REFRESH
+// HMemoryUtils.trashcanNow. Engine heap size: 1,608 MB. GUI used memory: 39 MB. Current time: 3/12/20 5:18:40 PM BRT
+// TclEventType: HFED_INIT_ROUTE_STORAGE_COMPLETED
+// Schematic: addNotify
+// Schematic: addNotify
+// Tcl Message: INFO: [Project 1-570] Preparing netlist for logic optimization INFO: [Opt 31-141] Inserted 4 OBUFs to IO ports without IO buffers. 
+// Tcl Message:  Processing XDC Constraints Initializing timing engine Completed Processing XDC Constraints  
+// Tcl Message: INFO: [Opt 31-140] Inserted 1 IBUFs to IO ports without IO buffers. INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s). 
+// Tcl Message: refresh_design: Time (s): cpu = 00:00:11 ; elapsed = 00:00:08 . Memory (MB): peak = 6548.668 ; gain = 9.973 ; free physical = 14058 ; free virtual = 40904 
+dismissDialog("Reloading"); // bL:g (cv:JFrame)
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// Elapsed time: 14 seconds
+selectButton(PAResourceTtoZ.TaskBanner_CLOSE, (String) null); // l:JideButton (JPanel:JComponent, cv:JFrame)
+closeTask("RTL Analysis", "Elaborated Design", "DesignTask.RTL_PLANNING");
+// TclEventType: DESIGN_CLOSE
+// HMemoryUtils.trashcanNow. Engine heap size: 1,630 MB. GUI used memory: 69 MB. Current time: 3/12/20 5:18:57 PM BRT
+// Engine heap size: 1,630 MB. GUI used memory: 69 MB. Current time: 3/12/20 5:18:57 PM BRT
+// TclEventType: CURR_DESIGN_SET
+// TclEventType: DESIGN_CLOSE
+// Tcl Message: close_design 

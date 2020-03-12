@@ -84,7 +84,39 @@ architecture orca_processing_tile of orca_processing_tile is
   signal r_data_o   : arrayNport_regflit;
   signal r_credit_i : regNport;
 
+  -- peripherals
+  signal dummy_addr_i: std_logic_vector(31 downto 0);
+  signal dummy_data_i: std_logic_vector(31 downto 0);
+  signal dummy_data_o: std_logic_vector(31 downto 0);
+
+  signal dummy_sel_i: std_logic;
+  signal dummy_wr_i:  std_logic;
+  signal dummy_irq_o: std_logic;
+
+  signal dummy_gpioa_in:  std_logic_vector(7 downto 0);
+  signal dummy_gpioa_out: std_logic_vector(7 downto 0);
+  signal dummy_gpioa_ddr: std_logic_vector(7 downto 0);
+
 begin
+
+  peripherals_binding : entity work.peripherals
+    port map(
+      clk_i => clk,
+      rst_i => rst,
+      
+      addr_i => dummy_addr_i,
+      data_i => dummy_data_i,
+      data_o => dummy_data_o,
+
+      sel_i => dummy_sel_i,
+      wr_i  => dummy_wr_i,
+      irq_o => dummy_irq_o,
+      
+      gpioa_in  => dummy_gpioa_in,
+      gpioa_out => dummy_gpioa_out,
+      gpioa_ddr => dummy_gpioa_ddr
+    );
+
   router_binding : entity work.RouterCC
     generic map(
       address => R_ADDRESS

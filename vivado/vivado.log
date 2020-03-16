@@ -1075,3 +1075,5 @@ INFO: [Opt 31-140] Inserted 1 IBUFs to IO ports without IO buffers.
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
 refresh_design: Time (s): cpu = 00:00:11 ; elapsed = 00:00:08 . Memory (MB): peak = 6548.668 ; gain = 9.973 ; free physical = 14058 ; free virtual = 40904
 close_design
+exit
+INFO: [Common 17-206] Exiting Vivado at Mon Mar 16 15:46:14 2020...

@@ -18,6 +18,7 @@ entity orca_ni_top is
   port(
     clk : in std_logic;
     rst : in std_logic;
+    rst_reload : out std_logic;
     intr  : out std_logic;    -- load next packet into main memory
     stall : out std_logic; -- holds the cpu and takes control on memory i/f
 
@@ -40,10 +41,11 @@ entity orca_ni_top is
     r_credit_o : out std_logic;
 
     -- dma programming (must be mapped into memory space)
+    recv_reload : in std_logic;
     send_start : in std_logic;
     recv_start : in std_logic;
-    send_status : out std_logic_vector(31 downto 0);
-    recv_status : out std_logic_vector(31 downto 0);
+    send_status : out std_logic;
+    recv_status : out std_logic_vector(15 downto 0);
     prog_address : in std_logic_vector(31 downto 0);
     prog_size    : in std_logic_vector(31 downto 0)
 
@@ -104,6 +106,7 @@ begin
     port map(
       clk  => clk,
       rst  => rst,
+      rst_reload => rst_reload,
       stall => stall_r,
       intr => intr,
 
@@ -116,6 +119,7 @@ begin
       r_data_i => r_data_i,
       r_clock_rx => r_clock_rx,
 
+      recv_reload => recv_reload,
       recv_start => recv_start,
       recv_status => recv_status_r,
       

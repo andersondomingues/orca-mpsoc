@@ -18,6 +18,7 @@ entity orca_ni_recv is
   port(
     clk : in std_logic;
     rst : in std_logic;
+    rst_reload : out std_logic -- reset cpu for reload app
     stall : out std_logic; -- holds the cpu and takes control on memory i/f
     intr  : out std_logic; -- interruption flag
 
@@ -33,8 +34,9 @@ entity orca_ni_recv is
     r_credit_o : out std_logic;
 
     -- dma programming (must be mapped into memory space)
+    recv_reload : in std_logic;
     recv_start : in std_logic;
-    recv_status : out std_logic_vector(31 downto 0);
+    recv_status : out std_logic_vector(15 downto 0);
     prog_address : in std_logic_vector(31 downto 0);
     prog_size    : in std_logic_vector(31 downto 0)
   );
@@ -47,9 +49,9 @@ architecture orca_ni_recv of orca_ni_recv is
   type recv_state_type is (
 
     -- preload means "put everything from the input into memory" 
-    R_PRELOAD_WAIT, -- initial state, happens once as long as "load" stays low
-    R_PRELOAD_SIZE, -- receive the second flit and stores burst lenght
-    R_PRELOAD_COPY, -- copy raw data from input to the memory
+    R_RELOAD_WAIT, -- initial state, happens once as long as "load" stays low
+    R_RELOAD_SIZE, -- receive the second flit and stores burst lenght
+    R_RELOAD_COPY, -- copy raw data from input to the memory
 
     -- these states relate to usual ni functioning (recv-irq-release)
     R_WAIT_FLIT_ADDR, --wait for the leading flit (should have the address flit)
@@ -96,26 +98,32 @@ begin
   begin 
   
     if rst = '1' then
-      recv_state <= R_PRELOAD_WAIT;
+      recv_state <= R_RELOAD_WAIT;
     elsif rising_edge(clk) then
 
       case recv_state is 
       
         -- preload mode state machine 
-        when R_PRELOAD_WAIT => --wait for a flit to appear at the input
+        when R_RELOAD_WAIT => --wait for a flit to appear at the input
           if r_rx = '1' then
-            recv_state <= R_PRELOAD_SIZE;
+            recv_state <= R_RELOAD_SIZE;
           end if;
-        when R_PRELOAD_SIZE =>
-          recv_state <= R_PRELOAD_COPY;
-        when R_PRELOAD_COPY =>
+        when R_RELOAD_SIZE =>
+          recv_state <= R_RELOAD_COPY;
+        when R_RELOAD_COPY =>
           if recv_copy_size = recv_copy_size'low then
+            recv_state <= R_RELOAD_FLUSH;
+          end if;
+        when R_RELOAD_FLUSH =>
+          if recv_reload = '0' then
             recv_state <= R_WAIT_FLIT_ADDR;
           end if;
           
         -- driver mode state machine 
         when R_WAIT_FLIT_ADDR =>
-          if r_rx = '1' then
+          if recv_reload = '1' then
+            recv_state <= R_RELOAD_WAIT;
+          elsif r_rx = '1' then
             recv_state <= R_WAIT_FLIT_SIZE;
           end if;
         when R_WAIT_FLIT_SIZE => 
@@ -150,7 +158,8 @@ begin
     if rst = '1' then
       recv_copy_size <= (others => '0'); --reset internals
       recv_copy_addr <= (others => '0');
-      stall <= '1'; -- cpu gets stalled until the end of preload
+      stall <= '1'; -- cpu gets stalled until the end of reload
+      rst_reload <= '1'; -- cpu reset for reload app
       r_credit_o <= '1'; -- credit is up when not copying to memory
       m_wb_o <= (others => '0'); --set memory to read mode
       b_wb_o <= (others => '0'); --set buffer to read mode
@@ -161,17 +170,20 @@ begin
       
         -- !!! -- preload mode
         --drop first flit and prepare to preload content
-        when R_PRELOAD_WAIT => 
+        when R_RELOAD_WAIT => 
+          rst_reload <= '1';
+          stall <= '1';
           if r_rx = '1' then
+            rst_reload <= '0';
             recv_copy_addr <= conv_std_logic_vector(PRELOAD_ADDR, 32);
           end if;
         -- drop second flit and store size info.
-        when R_PRELOAD_SIZE =>
+        when R_RELOAD_SIZE =>
           if r_rx = '1' then 
             recv_copy_size <= r_data_i;
           end if;
         -- copy flits directly to the main memory
-        when R_PRELOAD_COPY =>
+        when R_RELOAD_COPY =>
           if r_rx = '1' then
             m_addr_o <= recv_copy_addr;
             m_data_o <= r_data_i;
@@ -182,10 +194,17 @@ begin
           else
             m_wb_o <= x"0"; --prevent memory from being written during slack time
           end if ;
+        when R_RELOAD_FLUSH =>
+          m_wb_o <= x"0"; -- disable mem write for until next packet
+          stall <= '0';
+          end if;
+
+
 
         -- !!! -- driver mode
         -- wait for a packet to arrive 
         when R_WAIT_FLIT_ADDR =>
+          r_credit_o <= '1';
           stall <= '0'; --enable cpu to use memory until next packet arrival
           if r_rx = '1' then
 
@@ -207,7 +226,7 @@ begin
             
             recv_copy_addr <= recv_copy_addr + 4; --advances mem ptr.
             recv_copy_size <= r_data_i;
-            recv_status <= r_data_i; -- notify recv flits to cpu
+            recv_status <= r_data_i(15 downto 0); -- notify recv flits to cpu
           else 
             b_wb_o <= x"0";
           end if;
@@ -227,6 +246,7 @@ begin
           
         -- raises interruption and wait the cpu to treat the request
         when R_WAIT_CONFIG_STALL =>
+          r_credit_o <= '0';
           intr <= '1'; -- raise interruption flag
           recv_copy_addr <= prog_address; --copy dma info
           recv_copy_size <= prog_size;
@@ -248,9 +268,9 @@ begin
 
         when R_FLUSH =>
           m_wb_o <= x"0"; -- disable mem write for until next packet
+          stall <= '0';
           if recv_start = '0' then
             intr <= '0'; --low interruption 
-            stall <= '0';
           end if;
         
       end case;

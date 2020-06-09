@@ -5,6 +5,9 @@
 --
 -- Very simple configuration for a minimal SoC. Only a single GPIO port
 -- a counter and timer are included in this version.
+-- NI: registradores: NI_STATUS (0xe0ff8000), NI_MEM_ADDR (0xe0ff8010), NI_PCT_SIZE (0xe0ff8020)
+
+
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -23,7 +26,16 @@ entity peripherals is
 		irq_o: out std_logic;
 		gpioa_in: in std_logic_vector(7 downto 0);
 		gpioa_out: out std_logic_vector(7 downto 0);
-		gpioa_ddr: out std_logic_vector(7 downto 0)
+		gpioa_ddr: out std_logic_vector(7 downto 0);
+		
+		ni_reload : out std_logic;
+		ni_send_start : out std_logic;
+		ni_recv_start : out std_logic;
+		ni_send_status : in std_logic;
+		ni_intr : in std_logic;
+		ni_recv_size : in std_logic_vector(15 downto 0);
+		ni_mem_addr : out std_logic_vector(31 downto 0);
+		ni_pct_size : out std_logic_vector(31 downto 0)
 	);
 end peripherals;
 
@@ -35,13 +47,14 @@ architecture peripherals_arch of peripherals is
 
 	signal paaltcfg0, s0cause, gpiocause, gpiocause_inv, gpiomask, timercause, timercause_inv, timermask: std_logic_vector(3 downto 0);
 	signal paddr, paout, pain, pain_inv, pain_mask: std_logic_vector(7 downto 0);
-	signal timer0: std_logic_vector(31 downto 0);
+	signal timer0, ni_addr, ni_size : std_logic_vector(31 downto 0);
 	signal timer1, timer1_ctc, timer1_ocr: std_logic_vector(15 downto 0);
 	signal timer1_pre: std_logic_vector(2 downto 0);
 	signal timer1_set: std_logic;
 	signal int_gpio, int_timer: std_logic;
 	signal int_gpioa, int_timer1_ocr, int_timer1_ctc, tmr1_pulse, tmr1_dly, tmr1_dly2: std_logic;
 	signal paalt0: std_logic;
+	signal ni_send_strt, ni_recv_strt, ni_reld : std_logic;
 
 begin
 	segment <= addr_i(27 downto 24);
@@ -50,7 +63,7 @@ begin
 	funct <= addr_i(7 downto 4);
 
 	irq_o <= '1' when s0cause /= "0000" else '0';
-	s0cause <= '0' & int_timer & int_gpio & '0';
+	s0cause <= '0' & int_timer & int_gpio & ni_intr; -- check if NI IRQ is correct
 
 	int_gpio <= '1' when ((gpiocause xor gpiocause_inv) and gpiomask) /= "0000" else '0';
 	gpiocause <= "000" & int_gpioa;
@@ -65,7 +78,11 @@ begin
 
 	paalt0 <= int_timer1_ctc when paaltcfg0(1 downto 0) = "01" else int_timer1_ocr when paaltcfg0(1 downto 0) = "10" else paout(0);
 
-
+	ni_send_start <= ni_send_strt;
+	ni_recv_start <= ni_recv_strt;
+	ni_reload <= ni_reld;
+	ni_mem_addr <= ni_addr;
+	ni_pct_size <= ni_size;
 
 	-- address decoder, read from peripheral registers
 	process(clk_i, rst_i, segment, class, device, funct)
@@ -75,6 +92,27 @@ begin
 		elsif clk_i'event and clk_i = '1' then
 			if sel_i = '1' then
 				case segment is
+				when "0000" =>
+					case class is
+					when "1111" =>
+						case device is
+						when "100000" =>
+							case funct is
+							when "0000" =>
+								data_o <= ni_reld & ni_send_strt & ni_recv_strt & ni_send_status & x"000" & ni_recv_size;	-- NI_STATUS		(RW+RO)
+							when "0001" =>
+								data_o <= ni_addr;										-- NI_MEM_ADDR		(RW)
+							when "0010" =>
+								data_o <= ni_size;										-- NI_PCT_SIZE		(RW)
+							when others =>
+								data_o <= (others => '0');
+							end case;
+						when others =>
+							data_o <= (others => '0');
+						end case;
+					when others =>
+						data_o <= (others => '0');
+					end case;
 				when "0001" =>
 					case class is
 					when "0000" =>							-- Segment 0
@@ -168,9 +206,34 @@ begin
 			timer1_ctc <= (others => '1');
 			timer1_ocr <= (others => '0');
 			int_timer1_ctc <= '0';
+			ni_reld <= '1';
+			ni_send_strt <= '0';
+			ni_recv_strt <= '0';
+			ni_addr <= (others => '0');
+			ni_size <= (others => '0');
 		elsif clk_i'event and clk_i = '1' then
 			if sel_i = '1' and wr_i = '1' then
 				case segment is
+				when "0000" =>
+					case class is
+					when "1111" =>
+						case device is
+						when "100000" =>
+							case funct is
+							when "0000" =>
+								ni_reld <= data_i(31);			-- NI_RELOAD_FLAG	(RW)
+                                                                ni_send_strt <= data_i(30);		-- NI_SEND_START_FLAG	(RW)
+                                                                ni_recv_strt <= data_i(29);		-- NI_RECV_START_FLAG	(RW)
+							when "0001" =>
+								ni_addr <= data_i;			-- NI_MEM_ADDR		(RW)
+							when "0010" =>
+								ni_size <= data_i;			-- NI_PCT_SIZE		(RW)
+							when others =>
+							end case;
+						when others =>
+						end case;
+					when others =>
+					end case;
 				when "0001" =>
 					case class is
 					when "0000" =>							-- Segment 0

@@ -33,7 +33,7 @@ entity orca_ni_send is
     send_start : in std_logic;
     prog_address : in std_logic_vector(31 downto 0);
     prog_size    : in std_logic_vector(31 downto 0);
-    send_status : out std_logic_vector(31 downto 0)
+    send_status : out std_logic
   );
 
 end orca_ni_send;
@@ -104,7 +104,7 @@ begin
 
         when S_CONFIG_STALL => 
           stall <= '1'; -- stall cpu here
-          send_status <= (others => '1'); --set status to busy
+          send_status <= '1'; --set status to busy
           send_copy_addr <= prog_address; --copy dma info
           send_copy_size <= prog_size;
         
@@ -122,8 +122,9 @@ begin
         
         when S_FLUSH =>
           r_tx <= '0';
+          stall <= '0';
           if send_start = '0' then
-            send_status <= (others => '0'); -- lowers busy signal
+            send_status <= '0'; -- lowers busy signal
           end if;
       end case; -- send state
   	end if;	

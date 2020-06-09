@@ -121,6 +121,7 @@ begin
           end if;
         
         when S_FLUSH =>
+          stall <= '0';		  
           r_tx <= '0';
           stall <= '0';
           if send_start = '0' then

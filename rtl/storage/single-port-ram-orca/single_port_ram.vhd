@@ -29,17 +29,17 @@ use ieee.Numeric_Std.all;
 
 entity single_port_ram is 
     generic (
-        RAM_WIDTH : natural;
-        RAM_DEPTH : natural
+        RAM_WIDTH_I : natural;
+        RAM_DEPTH_I : natural
     );
     
     port(
         clk : in std_logic;
         rst : in std_logic;
 
-        addr_i :  in std_logic_vector((RAM_WIDTH - 1) downto 0);
-        data_o : out std_logic_vector((RAM_WIDTH - 1) downto 0);
-        data_i :  in std_logic_vector((RAM_WIDTH - 1) downto 0);
+        addr_i :  in std_logic_vector((RAM_WIDTH_I - 1) downto 0);
+        data_o : out std_logic_vector((RAM_WIDTH_I - 1) downto 0);
+        data_i :  in std_logic_vector((RAM_WIDTH_I - 1) downto 0);
         wb_i   :  in std_logic_vector(3 downto 0)
     );
 end single_port_ram;
@@ -47,7 +47,7 @@ end single_port_ram;
 
 architecture single_port_ram of single_port_ram is
 --    type ram_type is array (0 to (2 ** addr_i'length) -1) of std_logic_vector(data_i'range);
-    type ram_type is array (0 to RAM_DEPTH -1) of std_logic_vector(data_i'range);
+    type ram_type is array (0 to RAM_DEPTH_I -1) of std_logic_vector(data_i'range);
     signal ram : ram_type;
     signal c_read : std_logic_vector(addr_i'range);
 begin

@@ -3,17 +3,9 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
+use work.orca_defaults.all;
 
 entity orca_ni_top is
-
-  --parameters come from the top level rtl (naming consistency
-  --is preserved for all rtl files).
-  generic (
-    RAM_WIDTH    : natural;
-    FLIT_WIDTH   : natural;
-    PRELOAD_ADDR : natural;
-    BUFFER_DEPTH : natural
-  );
 
   port(
     clk : in std_logic;
@@ -31,13 +23,13 @@ entity orca_ni_top is
     -- router interface (transmiting)
     r_clock_tx : out std_logic; 
     r_tx       : out std_logic;
-    r_data_o   : out std_logic_vector((FLIT_WIDTH -1) downto 0);
+    r_data_o   : out std_logic_vector((TAM_FLIT -1) downto 0);
     r_credit_i : in std_logic;
 
     -- router interface (receiving)
     r_clock_rx : in std_logic;
     r_rx       : in std_logic;
-    r_data_i   : in std_logic_vector((FLIT_WIDTH -1) downto 0);
+    r_data_i   : in std_logic_vector((TAM_FLIT -1) downto 0);
     r_credit_o : out std_logic;
 
     -- dma programming (must be mapped into memory space)
@@ -70,10 +62,6 @@ begin
 
   --sender mod binding
   ni_sender_mod: entity work.orca_ni_send
-    generic map (
-      RAM_WIDTH => RAM_WIDTH,
-      FLIT_WIDTH => FLIT_WIDTH
-    )
     port map(
       clk  => clk,
       rst  => rst,
@@ -97,12 +85,6 @@ begin
 
   --recv mod binding
   ni_recv_mod: entity work.orca_ni_recv
-    generic map (
-      RAM_WIDTH => RAM_WIDTH,
-      FLIT_WIDTH => FLIT_WIDTH,
-      PRELOAD_ADDR => PRELOAD_ADDR,
-      BUFFER_DEPTH => BUFFER_DEPTH
-    )
     port map(
       clk  => clk,
       rst  => rst,

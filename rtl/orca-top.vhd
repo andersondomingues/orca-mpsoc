@@ -3,25 +3,9 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 use ieee.numeric_std.all;
-use work.HeMPS_defaults.all;
+use work.orca_defaults.all;
 
 entity orca_top is
-
-  generic (
-    RAM_WIDTH    : natural := 32;        --width of main memory word
-    RAM_SIZE     : natural := 16384; -- 64kb --8388608; -- 4MB
-    
-    FLIT_WIDTH   : natural := 32;  --width of router word
-    BUFFER_DEPTH : natural := 64; --size of internal buffer of recv proc
-    PRELOAD_ADDR : natural := 0;   --address to preload first burst at
-
-    S_INIT_MEM_ADDR : natural := 0; --base addres for memory
-    R_INIT_MEM_ADDR : natural := 0; --base addres for memory
-
-    S_MEM_DEPTH : natural := 256; -- size of send comm buffer
-    R_MEM_DEPTH : natural := 256 -- size of recv comm buffer
-  );
-
   port (
     clk : in std_logic;
     rst : in std_logic;
@@ -77,14 +61,6 @@ begin
 
   comm_tile : entity work.orca_communication_tile
   generic map(
-      RAM_WIDTH => RAM_WIDTH, --width of main memory word
-      FLIT_WIDTH => FLIT_WIDTH,  --width of router word
-      S_INIT_MEM_ADDR => S_INIT_MEM_ADDR, --base addres for memory
-      R_INIT_MEM_ADDR => R_INIT_MEM_ADDR, --base addres for memory
-
-      S_MEM_DEPTH => S_MEM_DEPTH, -- size of internal buffer
-      R_MEM_DEPTH => R_MEM_DEPTH, -- size of internal buffer
-
       R_ADDRESS => x"0000" --address
     )
   port map(
@@ -116,18 +92,38 @@ begin
     credit_i => credit_i(0)
   );
 
-  rx(0)(NORTH)       <= tx(0+NUMBER_PROCESSORS_X)(SOUTH);
-  clock_rx(0)(NORTH) <= clock_tx(0+NUMBER_PROCESSORS_X)(SOUTH);
-  credit_i(0)(NORTH) <= credit_o(0+NUMBER_PROCESSORS_X)(SOUTH);
-  data_in(0)(NORTH)  <= data_out(0+NUMBER_PROCESSORS_X)(SOUTH);
+    north_grounding_00: if RouterPosition(0) = TL or RouterPosition(0) = TC or RouterPosition(0) = TR or NUMBER_PROCESSORS_Y = 1 generate
+      rx(0)(NORTH)            <= '0';
+      clock_rx(0)(NORTH)      <= '0';
+      credit_i(0)(NORTH)      <= '0';
+      data_in(0)(NORTH)       <= (others => '0');
+    end generate;
+
+    north_connection_00: if (RouterPosition(0) = BL or RouterPosition(0) = BC or RouterPosition(0) = BR or RouterPosition(0) = CL or RouterPosition(0) = CRX or RouterPosition(0) = CC) and NUMBER_PROCESSORS_Y /= 1 generate
+      rx(0)(NORTH)            <= tx(0+NUMBER_PROCESSORS_X)(SOUTH);
+      clock_rx(0)(NORTH)      <= clock_tx(0+NUMBER_PROCESSORS_X)(SOUTH);
+      credit_i(0)(NORTH)      <= credit_o(0+NUMBER_PROCESSORS_X)(SOUTH);
+      data_in(0)(NORTH)       <= data_out(0+NUMBER_PROCESSORS_X)(SOUTH);
+    end generate;
+
+    east_grounding_00: if RouterPosition(0) = BR or RouterPosition(0) = CRX or RouterPosition(0) = TR or NUMBER_PROCESSORS_X = 1 generate
+      rx(0)(EAST)             <= '0';
+      clock_rx(0)(EAST)       <= '0';
+      credit_i(0)(EAST)       <= '0';
+      data_in(0)(EAST)        <= (others => '0');
+    end generate;
+
+    east_connection_00: if (RouterPosition(0) = BL or RouterPosition(0) = CL or RouterPosition(0) = TL  or RouterPosition(0) = BC or RouterPosition(0) = TC or RouterPosition(0) = CC) and NUMBER_PROCESSORS_X /= 1 generate
+      rx(0)(EAST)             <= tx(0+1)(WEST);
+      clock_rx(0)(EAST)       <= clock_tx(0+1)(WEST);
+      credit_i(0)(EAST)       <= credit_o(0+1)(WEST);
+      data_in(0)(EAST)        <= data_out(0+1)(WEST);
+    end generate;
+
   rx(0)(SOUTH)       <= '0';
   clock_rx(0)(SOUTH) <= '0';
   credit_i(0)(SOUTH) <= '0';
   data_in(0)(SOUTH)  <= (others => '0');
-  rx(0)(EAST)        <= tx(0+1)(WEST);
-  clock_rx(0)(EAST)  <= clock_tx(0+1)(WEST);
-  credit_i(0)(EAST)  <= credit_o(0+1)(WEST);
-  data_in(0)(EAST)   <= data_out(0+1)(WEST);
   rx(0)(WEST)        <= '0';
   clock_rx(0)(WEST)  <= '0';
   credit_i(0)(WEST)  <= '0';
@@ -136,13 +132,7 @@ begin
   proc: for i in 1 to NUMBER_PROCESSORS-1 generate
     orca_tile: entity work.orca_processing_tile
     generic map (
-      RAM_WIDTH => RAM_WIDTH,
-      RAM_SIZE => RAM_SIZE,
-    
-      FLIT_WIDTH => FLIT_WIDTH,
-      BUFFER_DEPTH => BUFFER_DEPTH,
-      PRELOAD_ADDR => PRELOAD_ADDR,
-    
+   
       R_ADDRESS => RouterAddress(i)
     )
     port map(
@@ -162,14 +152,14 @@ begin
     ------------------------------------------------------------------------------
     --- EAST PORT CONNECTIONS ----------------------------------------------------
     ------------------------------------------------------------------------------
-    east_grounding: if RouterPosition(i) = BR or RouterPosition(i) = CRX or RouterPosition(i) = TR generate
+    east_grounding: if RouterPosition(i) = BR or RouterPosition(i) = CRX or RouterPosition(i) = TR or NUMBER_PROCESSORS_X = 1 generate
       rx(i)(EAST)             <= '0';
       clock_rx(i)(EAST)       <= '0';
       credit_i(i)(EAST)       <= '0';
       data_in(i)(EAST)        <= (others => '0');
     end generate;
 
-    east_connection: if RouterPosition(i) = BL or RouterPosition(i) = CL or RouterPosition(i) = TL  or RouterPosition(i) = BC or RouterPosition(i) = TC or RouterPosition(i) = CC generate
+    east_connection: if (RouterPosition(i) = BL or RouterPosition(i) = CL or RouterPosition(i) = TL  or RouterPosition(i) = BC or RouterPosition(i) = TC or RouterPosition(i) = CC) and NUMBER_PROCESSORS_X /=1 generate
       rx(i)(EAST)             <= tx(i+1)(WEST);
       clock_rx(i)(EAST)       <= clock_tx(i+1)(WEST);
       credit_i(i)(EAST)       <= credit_o(i+1)(WEST);
@@ -179,14 +169,14 @@ begin
     ------------------------------------------------------------------------------
     --- WEST PORT CONNECTIONS ----------------------------------------------------
     ------------------------------------------------------------------------------
-    west_grounding: if RouterPosition(i) = BL or RouterPosition(i) = CL or RouterPosition(i) = TL generate
+    west_grounding: if RouterPosition(i) = BL or RouterPosition(i) = CL or RouterPosition(i) = TL or NUMBER_PROCESSORS_X = 1 generate
       rx(i)(WEST)             <= '0';
       clock_rx(i)(WEST)       <= '0';
       credit_i(i)(WEST)       <= '0';
       data_in(i)(WEST)        <= (others => '0');
     end generate;
 
-    west_connection: if (RouterPosition(i) = BR or RouterPosition(i) = CRX or RouterPosition(i) = TR or  RouterPosition(i) = BC or RouterPosition(i) = TC or RouterPosition(i) = CC) generate
+    west_connection: if (RouterPosition(i) = BR or RouterPosition(i) = CRX or RouterPosition(i) = TR or  RouterPosition(i) = BC or RouterPosition(i) = TC or RouterPosition(i) = CC) and NUMBER_PROCESSORS_X /= 1 generate
       rx(i)(WEST)             <= tx(i-1)(EAST);
       clock_rx(i)(WEST)       <= clock_tx(i-1)(EAST);
       credit_i(i)(WEST)       <= credit_o(i-1)(EAST);
@@ -196,14 +186,14 @@ begin
     -------------------------------------------------------------------------------
     --- NORTH PORT CONNECTIONS ----------------------------------------------------
     -------------------------------------------------------------------------------
-    north_grounding: if RouterPosition(i) = TL or RouterPosition(i) = TC or RouterPosition(i) = TR generate
+    north_grounding: if RouterPosition(i) = TL or RouterPosition(i) = TC or RouterPosition(i) = TR or NUMBER_PROCESSORS_Y = 1 generate
       rx(i)(NORTH)            <= '0';
       clock_rx(i)(NORTH)      <= '0';
       credit_i(i)(NORTH)      <= '0';
       data_in(i)(NORTH)       <= (others => '0');
     end generate;
 
-    north_connection: if RouterPosition(i) = BL or RouterPosition(i) = BC or RouterPosition(i) = BR or RouterPosition(i) = CL or RouterPosition(i) = CRX or RouterPosition(i) = CC generate
+    north_connection: if (RouterPosition(i) = BL or RouterPosition(i) = BC or RouterPosition(i) = BR or RouterPosition(i) = CL or RouterPosition(i) = CRX or RouterPosition(i) = CC) and NUMBER_PROCESSORS_Y /= 1 generate
       rx(i)(NORTH)            <= tx(i+NUMBER_PROCESSORS_X)(SOUTH);
       clock_rx(i)(NORTH)      <= clock_tx(i+NUMBER_PROCESSORS_X)(SOUTH);
       credit_i(i)(NORTH)      <= credit_o(i+NUMBER_PROCESSORS_X)(SOUTH);
@@ -213,14 +203,14 @@ begin
     --------------------------------------------------------------------------------
     --- SOUTH PORT CONNECTIONS -----------------------------------------------------
     ---------------------------------------------------------------------------
-    south_grounding: if RouterPosition(i) = BL or RouterPosition(i) = BC or RouterPosition(i) = BR generate
+    south_grounding: if RouterPosition(i) = BL or RouterPosition(i) = BC or RouterPosition(i) = BR or NUMBER_PROCESSORS_Y = 1 generate
       rx(i)(SOUTH)            <= '0';
       clock_rx(i)(SOUTH)      <= '0';
       credit_i(i)(SOUTH)      <= '0';
       data_in(i)(SOUTH)       <= (others => '0');
     end generate;
 
-    south_connection: if RouterPosition(i) = TL or RouterPosition(i) = TC or RouterPosition(i) = TR or RouterPosition(i) = CL or RouterPosition(i) = CRX or RouterPosition(i) = CC generate
+    south_connection: if (RouterPosition(i) = TL or RouterPosition(i) = TC or RouterPosition(i) = TR or RouterPosition(i) = CL or RouterPosition(i) = CRX or RouterPosition(i) = CC) and NUMBER_PROCESSORS_Y /= 1 generate
       rx(i)(SOUTH)            <= tx(i-NUMBER_PROCESSORS_X)(NORTH);
       clock_rx(i)(SOUTH)      <= clock_tx(i-NUMBER_PROCESSORS_X)(NORTH);
       credit_i(i)(SOUTH)      <= credit_o(i-NUMBER_PROCESSORS_X)(NORTH);

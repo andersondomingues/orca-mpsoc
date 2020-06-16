@@ -53,7 +53,7 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.std_logic_unsigned.all;
-use work.HeMPS_defaults.all;
+use work.orca_defaults.all;
 --use work.HemPS_PKG.all;
 
 entity RouterCC is

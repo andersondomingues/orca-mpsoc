@@ -4,23 +4,14 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 use ieee.numeric_std.all;
-use work.HeMPS_defaults.all;
+use work.orca_defaults.all;
 
 entity orca_communication_tile is
 
   --parameters come from the top level rtl (naming consistency
   --is preserved for all rtl files).
   generic (
-    RAM_WIDTH  : natural; --width of main memory word
-    FLIT_WIDTH : natural;  --width of router word
-    S_INIT_MEM_ADDR : natural; --base addres for memory
-    R_INIT_MEM_ADDR : natural; --base addres for memory
-
-    S_MEM_DEPTH : natural; -- size of internal buffer
-    R_MEM_DEPTH : natural; -- size of internal buffer
-
-    R_ADDRESS : regmetadeflit := x"0000"; --address
-    LOCAL_PORT_NUM : natural := LOCAL
+    R_ADDRESS : regmetadeflit := x"0000" --address
   );
 
   port(
@@ -157,8 +148,8 @@ begin
  -- send memory binding
   send_tile_mem_binding: entity work.single_port_ram
     generic map(
-      RAM_WIDTH => RAM_WIDTH,
-      RAM_DEPTH => S_MEM_DEPTH
+      RAM_WIDTH_I => RAM_WIDTH,
+      RAM_DEPTH_I => SEND_NODE_RAM_DEPTH
     )
     port map(
         clk => clk,
@@ -180,11 +171,6 @@ begin
 
   --sender mod binding
   comm_sender_mod: entity work.orca_comm_send
-    generic map (
-      RAM_WIDTH => RAM_WIDTH,
-      FLIT_WIDTH => FLIT_WIDTH,
-      INIT_MEM_ADDR => S_INIT_MEM_ADDR
-    )
     port map(
       clk  => clk,
       rst  => rst_local,
@@ -195,17 +181,17 @@ begin
       m_addr_o => sc_addr_o,
       m_wb_o => sc_wb_o,
 
-      r_credit_i => r_credit_i(LOCAL_PORT_NUM),
-      r_tx => r_tx(LOCAL_PORT_NUM),
-      r_data_o => r_data_o(LOCAL_PORT_NUM),
-      r_clock_tx => r_clock_tx(LOCAL_PORT_NUM)
+      r_credit_i => r_credit_i(LOCAL),
+      r_tx => r_tx(LOCAL),
+      r_data_o => r_data_o(LOCAL),
+      r_clock_tx => r_clock_tx(LOCAL)
     );
 
  -- recv memory binding
   recv_tile_mem_binding: entity work.single_port_ram
     generic map(
-      RAM_WIDTH => RAM_WIDTH,
-      RAM_DEPTH => R_MEM_DEPTH
+      RAM_WIDTH_I => RAM_WIDTH,
+      RAM_DEPTH_I => RECV_NODE_RAM_DEPTH
     )
     port map(
         clk => clk,
@@ -226,11 +212,6 @@ begin
     
   --recv mod binding
   comm_recv_mod: entity work.orca_comm_recv
-    generic map (
-      RAM_WIDTH => RAM_WIDTH,
-      FLIT_WIDTH => FLIT_WIDTH,
-      INIT_MEM_ADDR => R_INIT_MEM_ADDR
-    )
     port map(
       clk  => clk,
       rst  => rst_local,
@@ -241,10 +222,10 @@ begin
       m_addr_o => rc_addr_o,
       m_wb_o => rc_wb_o,
 
-      r_credit_o => r_credit_o(LOCAL_PORT_NUM),
-      r_rx => r_rx(LOCAL_PORT_NUM),
-      r_data_i => r_data_i(LOCAL_PORT_NUM),
-      r_clock_rx => r_clock_rx(LOCAL_PORT_NUM)
+      r_credit_o => r_credit_o(LOCAL),
+      r_rx => r_rx(LOCAL),
+      r_data_i => r_data_i(LOCAL),
+      r_clock_rx => r_clock_rx(LOCAL)
     );
 
 end orca_communication_tile;

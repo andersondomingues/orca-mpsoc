@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 use ieee.numeric_std.all;
-use work.HeMPS_defaults.all;
+use work.orca_defaults.all;
 
 -- ORCA Processing Tile
 -- A processing consists of  
@@ -13,15 +13,7 @@ use work.HeMPS_defaults.all;
 entity orca_processing_tile is
 
   generic (
-    RAM_WIDTH    : natural := 32;        --width of main memory word
-    RAM_SIZE     : natural := 320000000; -- 4MB
-    
-    FLIT_WIDTH   : natural := 32;  --width of router word
-    BUFFER_DEPTH : natural := 128; --size of internal buffer of recv proc
-    PRELOAD_ADDR : natural := 32;   --address to preload first burst at
-    
-    R_ADDRESS : regmetadeflit := x"0101"; --address
-    LOCAL_PORT_NUM : natural := LOCAL
+    R_ADDRESS : regmetadeflit := x"0101" --address
   );
 
   port (
@@ -36,8 +28,7 @@ entity orca_processing_tile is
     clock_tx: out regNportLONE;
     tx      : out regNportLONE;
     data_o  : out arrayNport_regflitLONE;
-    credit_i: in regNportLONE
-  );
+    credit_i: in regNportLONE  );
 
 end orca_processing_tile;
 
@@ -234,8 +225,8 @@ begin
   --main memory binding
   proc_tile_mem_binding: entity work.single_port_ram
     generic map(
-      RAM_WIDTH => RAM_WIDTH,
-      RAM_DEPTH => RAM_SIZE
+        RAM_WIDTH_I => RAM_WIDTH,
+        RAM_DEPTH_I => RAM_DEPTH
     )
     port map(
         clk => clk,
@@ -249,12 +240,6 @@ begin
     
   -- ni binding
   proc_tile_ni_binding: entity work.orca_ni_top
-    generic map(
-      RAM_WIDTH    => RAM_WIDTH,
-      FLIT_WIDTH   => FLIT_WIDTH,
-      PRELOAD_ADDR => PRELOAD_ADDR,
-      BUFFER_DEPTH => BUFFER_DEPTH
-    )
     port map(
       clk => clk,
       rst => rst_local, 
@@ -267,15 +252,15 @@ begin
       m_wb_o   => n_wb_o,
       m_data_i => m_data_o,
 
-      r_clock_tx => r_clock_rx(LOCAL_PORT_NUM), -- router i/f
-      r_tx => r_rx(LOCAL_PORT_NUM),
-      r_data_o => r_data_i(LOCAL_PORT_NUM),
-      r_credit_i => r_credit_o(LOCAL_PORT_NUM),
+      r_clock_tx => r_clock_rx(LOCAL), -- router i/f
+      r_tx => r_rx(LOCAL),
+      r_data_o => r_data_i(LOCAL),
+      r_credit_i => r_credit_o(LOCAL),
       
-      r_clock_rx => r_clock_tx(LOCAL_PORT_NUM),
-      r_rx  => r_tx(LOCAL_PORT_NUM),
-      r_data_i => r_data_o(LOCAL_PORT_NUM),
-      r_credit_o => r_credit_i(LOCAL_PORT_NUM),
+      r_clock_rx => r_clock_tx(LOCAL),
+      r_rx  => r_tx(LOCAL),
+      r_data_i => r_data_o(LOCAL),
+      r_credit_o => r_credit_i(LOCAL),
 
       recv_reload => recv_reload, -- dma programming
       send_start => send_start, 

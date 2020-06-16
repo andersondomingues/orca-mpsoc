@@ -1,14 +1,16 @@
 ------------------------------------------------------------------------------------------------
 --
---  DISTRIBUTED MEMPHIS  - version 5.0
+--  ORCA MPSoC DEFAULTS  - version 1.0
 --
---  Research group: GAPH-PUCRS    -    contact   fernando.moraes@pucrs.br
+--  Research group: LSA-GAPH-PUCRS    -    contact   alexandre.amory@pucrs.br
 --
---  Distribution:  September 2013
+--  Distribution:  June 2020
 --
---  Source name:  standards.vhd
+--  Source name:  orca_defaults.vhd
 --
---  Brief description:  Functions and constants for NoC generation.
+--  Brief description:  Functions and constants for MPSoC and NoC generation.
+--
+--  based on HeMPS Defaults file (https://www.inf.pucrs.br/hemps/index.html)
 --
 ------------------------------------------------------------------------------------------------
 
@@ -17,39 +19,14 @@ use IEEE.Std_Logic_1164.all;
 use IEEE.std_logic_unsigned.all;
 use IEEE.std_logic_arith.all;
 
-package standards is
+package orca_defaults is
 
 --------------------------------------------------------
--- CONSTANTS
+-- HERMES CONSTANTS
 --------------------------------------------------------
--- Memory map constants.
-		constant DEBUG           : std_logic_vector(31 downto 0) := x"20000000";
-		constant IRQ_MASK        : std_logic_vector(31 downto 0) := x"20000010";
-		constant IRQ_STATUS_ADDR : std_logic_vector(31 downto 0) := x"20000020";
-		constant TIME_SLICE_ADDR : std_logic_vector(31 downto 0) := x"20000060";
-		constant FIFO_AVAIL      : std_logic_vector(31 downto 0) := x"20000040";
-		constant END_SIM         : std_logic_vector(31 downto 0) := x"20000080";
-		constant CLOCK_HOLD      : std_logic_vector(31 downto 0) := x"20000090";
-		constant NET_ADDRESS     : std_logic_vector(31 downto 0) := x"20000140";
-		
-		-- DMNI mapping.
-		constant DMNI_SIZE   : std_logic_vector(31 downto 0) := x"20000200";
-		constant DMNI_ADDR   : std_logic_vector(31 downto 0) := x"20000210";
-		constant DMNI_SIZE_2 : std_logic_vector(31 downto 0) := x"20000204";
-		constant DMNI_ADDR_2 : std_logic_vector(31 downto 0) := x"20000214";
-		constant DMNI_OP     : std_logic_vector(31 downto 0) := x"20000220";
-		constant START_DMNI  : std_logic_vector(31 downto 0) := x"20000230";
-		constant DMNI_ACK    : std_logic_vector(31 downto 0) := x"20000240";
-		
-		constant DMNI_SEND_ACTIVE    	: std_logic_vector(31 downto 0) := x"20000250";
-		constant DMNI_RECEIVE_ACTIVE 	: std_logic_vector(31 downto 0) := x"20000260";
-		constant SCHEDULING_REPORT 		: std_logic_vector(31 downto 0) := x"20000270";
-		constant TICK_COUNTER_ADDR 		: std_logic_vector(31 downto 0) := x"20000300";
-		constant PENDING_SERVICE_INTR 	: std_logic_vector(31 downto 0) := x"20000400";
-		constant SLACK_TIME_MONITOR 	: std_logic_vector(31 downto 0) := x"20000370";
-		constant SLACK_MONITOR_WINDOW 	: integer :=	50000;
+
 --------------------------------------------------------------------------------
--- Router position constants - FIXED - it is not a function of the NoC size
+-- NOC Router position constants - FIXED - it is not a function of the NoC size
 --------------------------------------------------------------------------------
         constant BL: integer := 0;
         constant BC: integer := 1;
@@ -62,36 +39,40 @@ package standards is
         constant TR: integer := 8;
 
 ---------------------------------------------------------
--- CONSTANTS INDEPENDENTES
+-- NOC INDEPENDENT CONSTANTS
 ---------------------------------------------------------
+        constant NPORT: integer := 5;
+
         constant EAST: integer := 0;
         constant WEST: integer := 1;
         constant NORTH : integer := 2;
         constant SOUTH : integer := 3;
         constant LOCAL : integer := 4;
-        constant NPORT: integer := 5;
 
 ---------------------------------------------------------
--- CONSTANT DEPENDENTE DA LARGURA DE BANDA DA REDE - FIXED FOR MEMPHIS
+-- NOC BANDWIDTH DEPENDENT CONSTANTS
 ---------------------------------------------------------
         constant TAM_FLIT : integer range 1 to 64 := 32;
         constant METADEFLIT : integer range 1 to 32 := (TAM_FLIT/2);
         constant QUARTOFLIT : integer range 1 to 16 := (TAM_FLIT/4);
 
 ---------------------------------------------------------
--- CONSTANTS DEPENDENTES DA PROFUNDIDADE DA FILA
+-- NOC DEPTH DEPENDENT CONSTANTS
 ---------------------------------------------------------
-        constant TAM_BUFFER: integer := 16;
-        constant TAM_BUFFER_DMNI: integer := 16;
-        constant TAM_POINTER : integer range 1 to 32 := 4;
+        constant TAM_BUFFER: integer := 4;
+        constant TAM_BUFFER_DMNI: integer := 16; -- not used in the router
+        constant TAM_POINTER : integer range 1 to 32 := 2;
 
+
+--------------------------------------------------------
+-- MPSOC CONSTANTS
+--------------------------------------------------------
 ---------------------------------------------------------
--- CONSTANTS DEPENDENTES DO NUMERO DE ROTEADORES
+-- MPSOC DEPENDENT CONSTANTS
 ---------------------------------------------------------
-        constant NUMBER_PROCESSORS : integer := 1;
-        constant NUMBER_PROCESSORS_X : integer := 1;
+        constant NUMBER_PROCESSORS : integer := 2;
+        constant NUMBER_PROCESSORS_X : integer := 2;
         constant NUMBER_PROCESSORS_Y : integer := 1;
-                
         constant NROT: integer := NUMBER_PROCESSORS;
 
         constant MIN_X : integer := 0;
@@ -99,17 +80,33 @@ package standards is
         constant MAX_X : integer := NUMBER_PROCESSORS_X-1;
         constant MAX_Y : integer := NUMBER_PROCESSORS_Y-1;
 
+
+--------------------------------------------------------
+-- PROCESSOR ELEMENT CONSTANTS
+--------------------------------------------------------
+---------------------------------------------------------
+-- PROCESSOR ELEMENT DEPENDENT CONSTANTS
+---------------------------------------------------------
+        constant RAM_WIDTH : integer := 32;
+        constant RAM_DEPTH : integer := 16386;
+        constant PRELOAD_ADDR : integer := 0;
+        constant BUFFER_DEPTH_NI : integer := 64;
+
+        constant SEND_NODE_RAM_DEPTH : integer := 256; 
+        constant RECV_NODE_RAM_DEPTH : integer := 256;
+ 
 ---------------------------------------------------------
 -- CONSTANT TB
 ---------------------------------------------------------
         constant TAM_LINHA : integer := 2; --4;
 
 ---------------------------------------------------------
--- SUBTIPOS, TIPOS E FUNCOES
+-- SUBTYPES, TYPES AND FUNCTIONS
 ---------------------------------------------------------
 
-
-
+        -- orca only
+        subtype regNportLONE is std_logic_vector((NPORT-2) downto 0); 
+        
         subtype reg3 is std_logic_vector(2 downto 0);
         subtype reg8 is std_logic_vector(7 downto 0);
         subtype reg30 is std_logic_vector(29 downto 0); 
@@ -124,6 +121,9 @@ package standards is
 
         type buff is array(0 to TAM_BUFFER-1) of regflit;
         type buff_dmni is array(0 to TAM_BUFFER_DMNI-1) of regflit;
+
+        -- orca only
+        type arrayNport_regflitLONE is array((NPORT-2) downto 0) of regflit; 
 
         type arrayNport_reg3 is array((NPORT-1) downto 0) of reg3;
         type arrayNport_reg8 is array((NPORT-1) downto 0) of reg8;
@@ -149,15 +149,15 @@ package standards is
         function CONV_STRING_32BITS( dado : std_logic_vector(31 downto 0)) return string;
 
 ---------------------------------------------------------
--- MEMPHIS FUCTIONS
+-- MPSoC FUCTIONS
 ---------------------------------------------------------
         function RouterPosition(router: integer) return integer;
         function RouterAddress(router: integer) return std_logic_vector; 
         function log_filename(i: integer) return string;
 
-end standards;
+end orca_defaults;
 
-package body standards is 
+package body orca_defaults is 
         --
         -- converte um inteiro em um std_logic_vector(2 downto 0) 
         --
@@ -336,14 +336,13 @@ package body standards is
         end RouterAddress;
         
         function log_filename(i: integer) return string is
-                variable filename               : string(1 to 14);
+                variable filename               : string(1 to 17);
                 variable aux_x                  : integer;
                 variable aux_y                  : integer;
         begin
                 aux_x := (i mod NUMBER_PROCESSORS_X);
                 aux_y := (i/NUMBER_PROCESSORS_X);
-                filename := "log/log" & CONV_HEX(aux_x) & "x" & CONV_HEX(aux_y)  & ".txt";
+                filename := "log/output" & CONV_HEX(aux_x) & "x" & CONV_HEX(aux_y)  & ".txt";
                 return filename;
         end log_filename;
-        
-end standards;
+end orca_defaults;

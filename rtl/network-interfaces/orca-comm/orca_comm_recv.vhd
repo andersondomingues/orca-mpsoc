@@ -3,16 +3,9 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
+use work.orca_defaults.all;
 
 entity orca_comm_recv is
-
-  --parameters come from the top level rtl (naming consistency
-  --is preserved for all rtl files).
-  generic (
-    RAM_WIDTH  : natural; --width of main memory word
-    FLIT_WIDTH : natural;  --width of router word
-    INIT_MEM_ADDR : natural --base addres for memory
-  );
 
   port(
     clk : in std_logic;
@@ -28,7 +21,7 @@ entity orca_comm_recv is
     -- router interface (receiving)
     r_clock_rx : in std_logic;
     r_rx       : in std_logic;
-    r_data_i   : in std_logic_vector((FLIT_WIDTH - 1) downto 0);
+    r_data_i   : in std_logic_vector((TAM_FLIT - 1) downto 0);
     r_credit_o : out std_logic
 
   );
@@ -95,7 +88,7 @@ begin
   comm_recv_machine_funct: process(clk, rst) 
   begin 
     if rst = '1' then
-      recv_copy_addr <= conv_std_logic_vector(INIT_MEM_ADDR, 32);
+      recv_copy_addr <= (others => '0');
       recv_copy_size <= (others => '0'); 
       r_credit_o <= '1'; 
       m_wb_o <= (others => '1'); 
@@ -125,7 +118,7 @@ begin
           r_credit_o <= '0';
 	when R_WAIT_FLUSH_FLAG =>
           intr <= '0';
-          recv_copy_addr <= conv_std_logic_vector(INIT_MEM_ADDR, 32);
+          recv_copy_addr <= (others => '0');
           recv_copy_size <= (others => '0');
           if read = '0' then
             m_wb_o <= x"1";

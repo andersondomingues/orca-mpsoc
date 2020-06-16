@@ -3,18 +3,12 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
+use work.orca_defaults.all;
 
 entity orca_ni_recv is
 
   --parameters come from the top level rtl (naming consistency
   --is preserved for all rtl files).
-  generic (
-    RAM_WIDTH  : natural; --width of main memory word
-    FLIT_WIDTH : natural;  --width of router word
-    PRELOAD_ADDR : natural; --base addres for memory preload
-    BUFFER_DEPTH : natural -- size of internal buffer (max pkt size)
-  );
-
   port(
     clk : in std_logic;
     rst : in std_logic;
@@ -30,7 +24,7 @@ entity orca_ni_recv is
     -- router interface (receiving)
     r_clock_rx : in std_logic;
     r_rx       : in std_logic;
-    r_data_i   : in std_logic_vector((FLIT_WIDTH - 1) downto 0);
+    r_data_i   : in std_logic_vector((TAM_FLIT - 1) downto 0);
     r_credit_o : out std_logic;
 
     -- dma programming (must be mapped into memory space)
@@ -81,8 +75,8 @@ begin
   --memory buffer binding
   ni_recv_buffer_mod: entity work.single_port_ram
     generic map(
-        RAM_WIDTH => RAM_WIDTH,
-        RAM_DEPTH => BUFFER_DEPTH
+        RAM_WIDTH_I => RAM_WIDTH,
+        RAM_DEPTH_I => BUFFER_DEPTH_NI
     )
     port map(
         clk => clk,

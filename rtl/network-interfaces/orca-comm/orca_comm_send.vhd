@@ -3,16 +3,9 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
+use work.orca_defaults.all;
 
 entity orca_comm_send is
-
-  --parameters come from the top level rtl (naming consistency
-  --is preserved for all rtl files).
-  generic (
-    RAM_WIDTH  : natural := 32; --width of main memory word
-    FLIT_WIDTH : natural := 32; --width of router word
-    INIT_MEM_ADDR : natural --base addres for memory
-  );
 
   port(
     clk : in std_logic;
@@ -28,7 +21,7 @@ entity orca_comm_send is
     -- router interface (transmiting)
     r_clock_tx  : out std_logic; 
     r_tx        : out std_logic;
-    r_data_o    : out std_logic_vector(FLIT_WIDTH-1 downto 0);
+    r_data_o    : out std_logic_vector(TAM_FLIT-1 downto 0);
     r_credit_i  : in std_logic
 
   );
@@ -96,13 +89,13 @@ begin
   comm_send_machine_func_proc: process(clk, rst)
   begin
     if rst = '1' then
-      send_copy_addr <= conv_std_logic_vector(INIT_MEM_ADDR, 32);
+      send_copy_addr <= (others => '0');
       send_copy_size <= (others => '0');
       r_tx <= '0';
     elsif rising_edge(clk) then
       case comm_send_state is 
         when S_WAIT_PACKAGE =>
-          send_copy_addr <= conv_std_logic_vector(INIT_MEM_ADDR, 32);
+          send_copy_addr <= (others => '0');
           sent <= '0';
           if send = '1' then
             r_tx <= '1';

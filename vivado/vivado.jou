@@ -2,69 +2,19 @@
 # Vivado v2019.2 (64-bit)
 # SW Build 2708876 on Wed Nov  6 21:39:14 MST 2019
 # IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
-# Start of session at: Mon Jun 15 10:39:06 2020
-# Process ID: 6338
+# Start of session at: Tue Jun 16 09:57:45 2020
+# Process ID: 5654
 # Current directory: /home/heckgui/git/orca-mpsoc/vivado
 # Command line: vivado
 # Log file: /home/heckgui/git/orca-mpsoc/vivado/vivado.log
 # Journal file: /home/heckgui/git/orca-mpsoc/vivado/vivado.jou
 #-----------------------------------------------------------
 start_gui
-create_project orca-mpsoc-top /home/heckgui/git/orca-mpsoc/vivado/orca-mpsoc-top -part xc7vx690tffg1761-2
-set_property board_part xilinx.com:vc709:part0:1.8 [current_project]
+create_project orca-mpsoc-top-v2 /home/heckgui/git/orca-mpsoc/vivado/orca-mpsoc-top-v2 -part xc7vx485tffg1157-1
 set_property target_language VHDL [current_project]
 set_property simulator_language VHDL [current_project]
-add_files -norecurse {/home/heckgui/git/orca-mpsoc/rtl/routers/hermes/HeMPS_defaults.vhd /home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/cpu.vhd /home/heckgui/git/orca-mpsoc/rtl/routers/hermes/Hermes_switchcontrol.vhd /home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/bshifter.vhd /home/heckgui/git/orca-mpsoc/rtl/orca-minimal-soc.vhd /home/heckgui/git/orca-mpsoc/rtl/routers/hermes/RouterCC.vhd /home/heckgui/git/orca-mpsoc/rtl/orca-tile-proc.vhd /home/heckgui/git/orca-mpsoc/rtl/orca-top.vhd /home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/reg_bank.vhd /home/heckgui/git/orca-mpsoc/rtl/network-interfaces/orca-comm/orca_comm_recv.vhd /home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/datapath.vhd /home/heckgui/git/orca-mpsoc/rtl/routers/hermes/Hermes_buffer.vhd /home/heckgui/git/orca-mpsoc/rtl/routers/hermes/standards.vhd /home/heckgui/git/orca-mpsoc/rtl/storage/single-port-ram-orca/ram.vhd /home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/int_control.vhd /home/heckgui/git/orca-mpsoc/rtl/orca-tile-comm.vhd /home/heckgui/git/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-send.vhd /home/heckgui/git/orca-mpsoc/rtl/network-interfaces/orca-comm/orca_comm_send.vhd /home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/alu.vhd /home/heckgui/git/orca-mpsoc/rtl/storage/single-port-ram-orca/single_port_ram.vhd /home/heckgui/git/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-recv.vhd /home/heckgui/git/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-top.vhd /home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/control.vhd /home/heckgui/git/orca-mpsoc/rtl/routers/hermes/Hermes_crossbar.vhd}
+add_files -norecurse {/home/heckgui/git/orca-mpsoc/rtl/routers/hermes/HeMPS_defaults.vhd /home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/cpu.vhd /home/heckgui/git/orca-mpsoc/rtl/routers/hermes/Hermes_switchcontrol.vhd /home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/bshifter.vhd /home/heckgui/git/orca-mpsoc/rtl/orca-minimal-soc.vhd /home/heckgui/git/orca-mpsoc/rtl/routers/hermes/RouterCC.vhd /home/heckgui/git/orca-mpsoc/rtl/orca-tile-proc.vhd /home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/reg_bank.vhd /home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/datapath.vhd /home/heckgui/git/orca-mpsoc/rtl/routers/hermes/Hermes_buffer.vhd /home/heckgui/git/orca-mpsoc/rtl/orca-top-v2.vhd /home/heckgui/git/orca-mpsoc/rtl/routers/hermes/standards.vhd /home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/int_control.vhd /home/heckgui/git/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-send.vhd /home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/alu.vhd /home/heckgui/git/orca-mpsoc/rtl/storage/single-port-ram-orca/single_port_ram.vhd /home/heckgui/git/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-recv.vhd /home/heckgui/git/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-top.vhd /home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/control.vhd /home/heckgui/git/orca-mpsoc/rtl/routers/hermes/Hermes_crossbar.vhd}
 update_compile_order -fileset sources_1
-update_compile_order -fileset sources_1
-launch_runs synth_1 -jobs 6
-wait_on_run synth_1
-reset_run synth_1
-launch_runs synth_1 -jobs 6
-wait_on_run synth_1
-reset_run synth_1
-launch_runs synth_1 -jobs 6
-wait_on_run synth_1
-reset_run synth_1
-launch_runs synth_1 -jobs 6
-wait_on_run synth_1
-reset_run synth_1
-launch_runs synth_1 -jobs 6
-wait_on_run synth_1
-reset_run synth_1
-launch_runs synth_1 -jobs 6
-wait_on_run synth_1
-reset_run synth_1
-launch_runs synth_1 -jobs 6
-wait_on_run synth_1
-reset_run synth_1
-launch_runs synth_1 -jobs 6
-wait_on_run synth_1
-reset_run synth_1
-launch_runs synth_1 -jobs 6
-wait_on_run synth_1
-reset_run synth_1
-launch_runs synth_1 -jobs 6
-wait_on_run synth_1
-reset_run synth_1
-launch_runs synth_1 -jobs 6
-wait_on_run synth_1
-reset_run synth_1
-launch_runs synth_1 -jobs 6
-wait_on_run synth_1
-reset_run synth_1
-launch_runs synth_1 -jobs 6
-wait_on_run synth_1
-reset_run synth_1
-launch_runs synth_1 -jobs 6
-wait_on_run synth_1
-reset_run synth_1
-launch_runs synth_1 -jobs 6
-wait_on_run synth_1
-reset_run synth_1
-launch_runs synth_1 -jobs 6
-wait_on_run synth_1
-reset_run synth_1
 launch_runs synth_1 -jobs 6
 wait_on_run synth_1
 reset_run synth_1
@@ -78,12 +28,6 @@ launch_runs synth_1 -jobs 6
 wait_on_run synth_1
 launch_runs impl_1 -jobs 6
 wait_on_run impl_1
-reset_run synth_1
-launch_runs synth_1 -jobs 6
-wait_on_run synth_1
-reset_run synth_1
-launch_runs synth_1 -jobs 6
-wait_on_run synth_1
-launch_runs impl_1 -jobs 6
-wait_on_run impl_1
-synth_design -rtl -name rtl_1
+open_run synth_1 -name synth_1
+close_design
+open_run impl_1

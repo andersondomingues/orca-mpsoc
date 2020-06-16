@@ -50,11 +50,13 @@ architecture orca_processing_tile of orca_processing_tile is
   signal rst_i      : std_logic;
   signal rcff1      : std_logic;
   signal rlff1      : std_logic;
-  signal rst_i      : std_logic;
 
   -- interruptions
   signal ni_intr  : std_logic;
   signal stall : std_logic;
+
+  -- mem delay
+  signal periph_dly : std_logic;
 
   -- interface to the memory mux
   signal m_addr_i : std_logic_vector((RAM_WIDTH - 1) downto 0);
@@ -75,10 +77,14 @@ architecture orca_processing_tile of orca_processing_tile is
   signal n_data_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal n_wb_o   : std_logic_vector(3 downto 0);
 
+
   -- proc i/f
   signal p_addr_o: std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal p_data_o: std_logic_vector((RAM_WIDTH - 1) downto 0);
+  signal p_data_i: std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal p_wb_o:   std_logic_vector(3 downto 0);
+  signal c_en_wb_o: std_logic_vector(3 downto 0);
+
 
   signal p_data_mode_o: std_logic_vector(2 downto 0);
   signal p_extio_in: std_logic_vector(7 downto 0);
@@ -137,20 +143,18 @@ begin
 	end process;
 
 
-	process (rst_local, clk, ext_irq, ram_enable_n)
+	process (rst_local, clk, periph_irq)
 	begin
 		if rst_local = '1' then
-			ram_dly <= '0';
 			periph_dly <= '0';
 		elsif clk'event and clk = '1' then
-			ram_dly <= not ram_enable_n;
 			periph_dly <= periph;
 		end if;
 	end process;
 
-	boot_enable_n <= '0' when address(31 downto 28) = "0000" else '1';
-	ram_enable_n <= '0' when address(31 downto 28) = "0100" else '1';
-	data_read <= data_read_periph when periph = '1' or periph_dly = '1' else data_read_boot when address(31 downto 28) = "0000" and ram_dly = '0' else data_read_ram;
+--	ram_enable_n <= '0' when address(31 downto 28) = "0100" else '1';
+	c_en_wb_o <= "0000" when periph = '1' else p_wb_o;
+	p_data_i <= data_read_periph when periph = '1' or periph_dly = '1' else m_data_o;
 --	data_w_n_ram <= not data_we;
 	p_extio_in <= "0000000" & periph_irq;
 
@@ -165,7 +169,7 @@ begin
       data_o => p_data_o,
       data_w_o => p_wb_o,
 
-      data_i => m_data_o,
+      data_i => p_data_i,
 
       data_mode_o => p_data_mode_o,
       extio_in => p_extio_in,
@@ -195,7 +199,7 @@ begin
       
       gpioa_in  => dummy_gpioa_in,
       gpioa_out => dummy_gpioa_out,
-      gpioa_ddr => dummy_gpioa_ddr
+      gpioa_ddr => dummy_gpioa_ddr,
 
       ni_reload => recv_reload,
       ni_send_start => send_start,
@@ -231,7 +235,7 @@ begin
   proc_tile_mem_binding: entity work.single_port_ram
     generic map(
       RAM_WIDTH => RAM_WIDTH,
-      RAM_DEPTH => BUFFER_DEPTH
+      RAM_DEPTH => RAM_SIZE
     )
     port map(
         clk => clk,
@@ -285,7 +289,7 @@ begin
     -- memory mux (m_data_o done via port mapping)
     m_addr_i <= n_addr_o when stall = '1' else p_addr_o;
     m_data_i <= n_data_o when stall = '1' else p_data_o;
-    m_wb_i <= n_wb_o when stall = '1' else p_wb_o;
+    m_wb_i <= n_wb_o when stall = '1' else c_en_wb_o;
 
     -- external routers (pass-through)
     r_clock_rx(3 downto 0) <= clock_rx;

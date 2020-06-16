@@ -9,17 +9,17 @@ entity orca_top is
 
   generic (
     RAM_WIDTH    : natural := 32;        --width of main memory word
-    RAM_SIZE     : natural := 8388608; -- 4MB
+    RAM_SIZE     : natural := 16384; -- 64kb --8388608; -- 4MB
     
     FLIT_WIDTH   : natural := 32;  --width of router word
-    BUFFER_DEPTH : natural := 128; --size of internal buffer of recv proc
+    BUFFER_DEPTH : natural := 64; --size of internal buffer of recv proc
     PRELOAD_ADDR : natural := 0;   --address to preload first burst at
 
     S_INIT_MEM_ADDR : natural := 0; --base addres for memory
     R_INIT_MEM_ADDR : natural := 0; --base addres for memory
 
-    S_MEM_DEPTH : natural := 2048; -- size of send comm buffer
-    R_MEM_DEPTH : natural := 2048; -- size of recv comm buffer
+    S_MEM_DEPTH : natural := 256; -- size of send comm buffer
+    R_MEM_DEPTH : natural := 256 -- size of recv comm buffer
   );
 
   port (
@@ -59,9 +59,9 @@ architecture orca_top of orca_top is
   signal credit_i : credit_iNPORT;
   type credit_oNport is array (NUMBER_PROCESSORS - 1 downto 0) of std_logic_vector(3 downto 0);
   signal credit_o : credit_oNPORT;
-  type data_inNport is array (NUMBER_PROCESSORS - 1 downto 0) of arrayNPORT_1_regflit;
+  type data_inNport is array (NUMBER_PROCESSORS - 1 downto 0) of arrayNport_regflitLONE;
   signal data_in : data_inNPORT;
-  type data_outNport is array (NUMBER_PROCESSORS - 1 downto 0) of arrayNPORT_1_regflit;
+  type data_outNport is array (NUMBER_PROCESSORS - 1 downto 0) of arrayNport_regflitLONE;
   signal data_out       : data_outNPORT;
   signal address_router : std_logic_vector(7 downto 0);
   type router_position is array (NUMBER_PROCESSORS - 1 downto 0) of integer range 0 to TR;
@@ -107,12 +107,12 @@ begin
 
     clock_rx => clock_rx(0),
     rx => rx(0),
-    data_i => data_i(0),
+    data_i => data_in(0),
     credit_o => credit_o(0),
 
     clock_tx => clock_tx(0),
     tx => tx(0),
-    data_o => data_o(0),
+    data_o => data_out(0),
     credit_i => credit_i(0)
   );
 
@@ -143,7 +143,7 @@ begin
       BUFFER_DEPTH => BUFFER_DEPTH,
       PRELOAD_ADDR => PRELOAD_ADDR,
     
-      R_ADDRESS => RouterAddress(i),
+      R_ADDRESS => RouterAddress(i)
     )
     port map(
       clk      => clk,
@@ -151,11 +151,11 @@ begin
       -- NoC
       clock_tx => clock_tx(i),
       tx       => tx(i),
-      data_out => data_out(i),
+      data_o => data_out(i),
       credit_i => credit_i(i),
       clock_rx => clock_rx(i),
       rx       => rx(i),
-      data_in  => data_in(i),
+      data_i  => data_in(i),
       credit_o => credit_o(i)                        
     );
                 

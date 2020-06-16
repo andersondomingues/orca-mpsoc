@@ -46,7 +46,8 @@ end single_port_ram;
 
 
 architecture single_port_ram of single_port_ram is
-    type ram_type is array (0 to (2 ** addr_i'length) -1) of std_logic_vector(data_i'range);
+--    type ram_type is array (0 to (2 ** addr_i'length) -1) of std_logic_vector(data_i'range);
+    type ram_type is array (0 to RAM_DEPTH -1) of std_logic_vector(data_i'range);
     signal ram : ram_type;
     signal c_read : std_logic_vector(addr_i'range);
 begin

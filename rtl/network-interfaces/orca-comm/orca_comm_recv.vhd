@@ -11,7 +11,7 @@ entity orca_comm_recv is
   generic (
     RAM_WIDTH  : natural; --width of main memory word
     FLIT_WIDTH : natural;  --width of router word
-    INIT_MEM_ADDR : natural; --base addres for memory
+    INIT_MEM_ADDR : natural --base addres for memory
   );
 
   port(
@@ -101,7 +101,7 @@ begin
       m_wb_o <= (others => '1'); 
       intr <= '0'; 
     elsif rising_edge(clk) then
-      case recv_state is 
+      case comm_recv_state is 
         when R_WAIT_HEADER => 
           intr <= '0';
           r_credit_o <= '1';

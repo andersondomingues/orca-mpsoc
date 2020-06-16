@@ -54,8 +54,8 @@ end orca_ni_top;
 
 architecture orca_ni_top of orca_ni_top is
 
-  signal recv_status_r : std_logic_vector(31 downto 0);
-  signal send_status_s : std_logic_vector(31 downto 0);
+  signal recv_status_r : std_logic_vector(15 downto 0);
+  signal send_status_s : std_logic;
 
   signal stall_r : std_logic;
   signal stall_s : std_logic; 

@@ -66,22 +66,25 @@ architecture orca_communication_tile of orca_communication_tile is
   signal sm_data_i : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal sm_wb_i   : std_logic_vector(3 downto 0);
   signal sc_addr_i : std_logic_vector((RAM_WIDTH - 1) downto 0);
+  signal sc_addr_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal sc_data_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal sc_data_i : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal sc_wb_i   : std_logic_vector(3 downto 0);
+  signal sc_wb_o   : std_logic_vector(3 downto 0);
   signal rm_addr_i : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal rm_data_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal rm_data_i : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal rm_wb_i   : std_logic_vector(3 downto 0);
   signal rc_addr_i : std_logic_vector((RAM_WIDTH - 1) downto 0);
+  signal rc_addr_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal rc_data_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal rc_data_i : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal rc_wb_i   : std_logic_vector(3 downto 0);
-
-  signal intr : std_logic;
-  signal send : std_logic;
+  signal rc_wb_o   : std_logic_vector(3 downto 0);
 
   signal rlff1, rst_local : std_logic;
+  
+  signal s_intr : std_logic;
 
   -- router i/f
   signal r_clock_rx : regNport;
@@ -95,6 +98,8 @@ architecture orca_communication_tile of orca_communication_tile is
   signal r_credit_i : regNport;
 
 begin
+
+  intr <= s_intr;
 
 	-- tile reset synchronizer
   process (clk, rst)
@@ -190,10 +195,10 @@ begin
       m_addr_o => sc_addr_o,
       m_wb_o => sc_wb_o,
 
-      s_credit_i => r_credit_i(LOCAL_PORT_NUM),
-      s_tx => r_tx(LOCAL_PORT_NUM),
-      s_data_o => r_data_o(LOCAL_PORT_NUM),
-      s_clock_tx => r_clock_tx(LOCAL_PORT_NUM)
+      r_credit_i => r_credit_i(LOCAL_PORT_NUM),
+      r_tx => r_tx(LOCAL_PORT_NUM),
+      r_data_o => r_data_o(LOCAL_PORT_NUM),
+      r_clock_tx => r_clock_tx(LOCAL_PORT_NUM)
     );
 
  -- recv memory binding
@@ -213,9 +218,9 @@ begin
     );
 
     -- recv memory mux
-    rm_addr_i <= rc_addr_o when intr = '0' else recv_addr_i;
-    rm_data_i <= rc_data_o when intr = '0' else recv_data_i;
-    rm_wb_i <= rc_wb_o when intr = '0' else recv_wb_i;
+    rm_addr_i <= rc_addr_o when s_intr = '0' else recv_addr_i;
+    rm_data_i <= rc_data_o when s_intr = '0' else recv_data_i;
+    rm_wb_i <= rc_wb_o when s_intr = '0' else recv_wb_i;
     recv_data_o <= rm_data_o;
 
     
@@ -229,7 +234,7 @@ begin
     port map(
       clk  => clk,
       rst  => rst_local,
-      intr => intr,
+      intr => s_intr,
       read => read,
 
       m_data_o => rc_data_o,
@@ -239,7 +244,7 @@ begin
       r_credit_o => r_credit_o(LOCAL_PORT_NUM),
       r_rx => r_rx(LOCAL_PORT_NUM),
       r_data_i => r_data_i(LOCAL_PORT_NUM),
-      r_clock_rx => r_clock_rx(LOCAL_PORT_NUM),
+      r_clock_rx => r_clock_rx(LOCAL_PORT_NUM)
     );
 
 end orca_communication_tile;

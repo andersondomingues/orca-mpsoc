@@ -10,8 +10,8 @@ entity orca_comm_send is
   --is preserved for all rtl files).
   generic (
     RAM_WIDTH  : natural := 32; --width of main memory word
-    FLIT_WIDTH : natural := 32 --width of router word
-    INIT_MEM_ADDR : natural; --base addres for memory
+    FLIT_WIDTH : natural := 32; --width of router word
+    INIT_MEM_ADDR : natural --base addres for memory
   );
 
   port(
@@ -26,10 +26,10 @@ entity orca_comm_send is
     m_wb_o   : out std_logic_vector(3 downto 0);
 
     -- router interface (transmiting)
-    s_clock_tx  : out std_logic; 
-    s_tx        : out std_logic;
-    s_data_o    : out std_logic_vector(FLIT_WIDTH-1 downto 0);
-    s_credit_i  : in std_logic
+    r_clock_tx  : out std_logic; 
+    r_tx        : out std_logic;
+    r_data_o    : out std_logic_vector(FLIT_WIDTH-1 downto 0);
+    r_credit_i  : in std_logic
 
   );
 
@@ -55,7 +55,7 @@ architecture orca_comm_send of orca_comm_send is
 begin
 
   -- transmitting clock stays the same as for the ni
-  s_clock_tx <= clk;
+  r_clock_tx <= clk;
 
   -- mem interface
   r_data_o <= m_data_i;
@@ -73,14 +73,15 @@ begin
             comm_send_state <= S_SEND_HEADER;
           end if;
         when S_SEND_HEADER =>
-          if s_credit_i = '1' then
+          if r_credit_i = '1' then
             comm_send_state <= S_SEND_SIZE;
+          end if;
         when S_SEND_SIZE =>
-          if s_credit_i = '1' then
+          if r_credit_i = '1' then
             comm_send_state <= S_SEND_PAYLOAD;
           end if;
         when S_SEND_PAYLOAD =>
-          if send_copy_size = send_copy_size'low and s_credit_i = '1' then
+          if send_copy_size = send_copy_size'low and r_credit_i = '1' then
             comm_send_state <= S_WAIT_FLAG;
           end if;
 	when S_WAIT_FLAG =>
@@ -99,22 +100,23 @@ begin
       send_copy_size <= (others => '0');
       r_tx <= '0';
     elsif rising_edge(clk) then
-      case send_state is 
+      case comm_send_state is 
         when S_WAIT_PACKAGE =>
           send_copy_addr <= conv_std_logic_vector(INIT_MEM_ADDR, 32);
           sent <= '0';
           if send = '1' then
             r_tx <= '1';
           end if;
-        when S_WAIT_HEADER =>
-          if s_credit_i = '1' then
+        when S_SEND_HEADER =>
+          if r_credit_i = '1' then
             send_copy_addr <= send_copy_addr + 4;
-        when S_WAIT_SIZE =>
+          end if;
+        when S_SEND_SIZE =>
           send_copy_size <= m_data_i;
-          if s_credit_i = '1' then
+          if r_credit_i = '1' then
             send_copy_addr <= send_copy_addr + 4;
-          end if
-        when S_WAIT_PAYLOAD => --copy from memory to the output buffer
+          end if;
+        when S_SEND_PAYLOAD => --copy from memory to the output buffer
           if r_credit_i = '1' then
             send_copy_size <= send_copy_size - 1;
             send_copy_addr <= send_copy_addr + 4;

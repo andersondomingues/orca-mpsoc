@@ -18,7 +18,7 @@ entity orca_ni_recv is
   port(
     clk : in std_logic;
     rst : in std_logic;
-    rst_reload : out std_logic -- reset cpu for reload app
+    rst_reload : out std_logic; -- reset cpu for reload app
     stall : out std_logic; -- holds the cpu and takes control on memory i/f
     intr  : out std_logic; -- interruption flag
 
@@ -52,6 +52,7 @@ architecture orca_ni_recv of orca_ni_recv is
     R_RELOAD_WAIT, -- initial state, happens once as long as "load" stays low
     R_RELOAD_SIZE, -- receive the second flit and stores burst lenght
     R_RELOAD_COPY, -- copy raw data from input to the memory
+    R_RELOAD_FLUSH,
 
     -- these states relate to usual ni functioning (recv-irq-release)
     R_WAIT_FLIT_ADDR, --wait for the leading flit (should have the address flit)
@@ -197,7 +198,6 @@ begin
         when R_RELOAD_FLUSH =>
           m_wb_o <= x"0"; -- disable mem write for until next packet
           stall <= '0';
-          end if;
 
 
 

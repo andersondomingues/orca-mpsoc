@@ -2,88 +2,47 @@
 # Vivado v2019.2 (64-bit)
 # SW Build 2708876 on Wed Nov  6 21:39:14 MST 2019
 # IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
-# Start of session at: Tue Jun 16 15:48:06 2020
-# Process ID: 19764
+# Start of session at: Wed Jun 17 14:35:46 2020
+# Process ID: 9246
 # Current directory: /home/heckgui/git/orca-mpsoc/vivado
 # Command line: vivado
 # Log file: /home/heckgui/git/orca-mpsoc/vivado/vivado.log
 # Journal file: /home/heckgui/git/orca-mpsoc/vivado/vivado.jou
 #-----------------------------------------------------------
 start_gui
-open_project /home/heckgui/git/orca-mpsoc/vivado/orca-mpsoc-top/orca-mpsoc-top.xpr
-CRITICAL WARNING: [Project 1-19] Could not find the file '/home/heckgui/git/orca-mpsoc/rtl/routers/hermes/HeMPS_defaults.vhd'.
-CRITICAL WARNING: [Project 1-19] Could not find the file '/home/heckgui/git/orca-mpsoc/rtl/routers/hermes/standards.vhd'.
+open_project /home/heckgui/git/orca-mpsoc/vivado/orca-mpsoc-top-v2/orca-mpsoc-top-v2.xpr
 Scanning sources...
 Finished scanning sources
 WARNING: [Project 1-509] GeneratedRun file for 'synth_1' not found
 WARNING: [Project 1-509] GeneratedRun file for 'impl_1' not found
-WARNING: [filemgmt 56-3] IPUserFilesDir: Could not find the directory '/home/heckgui/git/orca-mpsoc/vivado/orca-mpsoc-top/orca-mpsoc-top.ip_user_files'.
+WARNING: [filemgmt 56-3] IPUserFilesDir: Could not find the directory '/home/heckgui/git/orca-mpsoc/vivado/orca-mpsoc-top-v2/orca-mpsoc-top-v2.ip_user_files'.
 INFO: [IP_Flow 19-234] Refreshing IP repositories
 INFO: [IP_Flow 19-1704] No user IP repositories specified
 INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/soft64/xilinx/ferramentas/Vivado/2019.2/Vivado/2019.2/data/ip'.
-open_project: Time (s): cpu = 00:00:11 ; elapsed = 00:00:11 . Memory (MB): peak = 6606.125 ; gain = 134.895 ; free physical = 7213 ; free virtual = 15100
-update_compile_order -fileset sources_1
-export_ip_user_files -of_objects  [get_files /home/heckgui/git/orca-mpsoc/rtl/storage/single-port-ram-orca/ram.vhd] -no_script -reset -force -quiet
-remove_files  /home/heckgui/git/orca-mpsoc/rtl/storage/single-port-ram-orca/ram.vhd
-export_ip_user_files -of_objects  [get_files /home/heckgui/git/orca-mpsoc/rtl/routers/hermes/HeMPS_defaults.vhd] -no_script -reset -force -quiet
-remove_files  /home/heckgui/git/orca-mpsoc/rtl/routers/hermes/HeMPS_defaults.vhd
-export_ip_user_files -of_objects  [get_files /home/heckgui/git/orca-mpsoc/rtl/routers/hermes/standards.vhd] -no_script -reset -force -quiet
-remove_files  /home/heckgui/git/orca-mpsoc/rtl/routers/hermes/standards.vhd
-add_files -norecurse /home/heckgui/git/orca-mpsoc/rtl/orca_defaults.vhd
+open_project: Time (s): cpu = 00:00:12 ; elapsed = 00:00:16 . Memory (MB): peak = 6632.078 ; gain = 136.672 ; free physical = 7359 ; free virtual = 15014
 update_compile_order -fileset sources_1
 synth_design -rtl -name rtl_1
 Command: synth_design -rtl -name rtl_1
 Starting synth_design
-Using part: xc7vx690tffg1761-2
-Top: orca_top
-INFO: [Device 21-403] Loading part xc7vx690tffg1761-2
+Using part: xc7vx485tffg1157-1
+Top: orca_top_v2
+INFO: [Device 21-403] Loading part xc7vx485tffg1157-1
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 7290.461 ; gain = 204.586 ; free physical = 6644 ; free virtual = 14526
+Starting RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:06 . Memory (MB): peak = 7204.340 ; gain = 199.852 ; free physical = 6726 ; free virtual = 14494
 ---------------------------------------------------------------------------------
-ERROR: [Synth 8-2032] formal ram_width is not declared [/home/heckgui/git/orca-mpsoc/rtl/orca-top.vhd:135]
-INFO: [Synth 8-2810] unit orca_top ignored due to previous errors [/home/heckgui/git/orca-mpsoc/rtl/orca-top.vhd:31]
----------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 7347.242 ; gain = 261.367 ; free physical = 6682 ; free virtual = 14568
----------------------------------------------------------------------------------
-RTL Elaboration failed
-2 Infos, 0 Warnings, 0 Critical Warnings and 2 Errors encountered.
-synth_design failed
-ERROR: [Vivado_Tcl 4-5] Elaboration failed - please see the console for details
-synth_design -rtl -name rtl_1
-Command: synth_design -rtl -name rtl_1
-Starting synth_design
-Using part: xc7vx690tffg1761-2
-Top: orca_top
----------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 7380.395 ; gain = 0.000 ; free physical = 6634 ; free virtual = 14517
----------------------------------------------------------------------------------
-INFO: [Synth 8-638] synthesizing module 'orca_top' [/home/heckgui/git/orca-mpsoc/rtl/orca-top.vhd:31]
-INFO: [Synth 8-638] synthesizing module 'orca_communication_tile' [/home/heckgui/git/orca-mpsoc/rtl/orca-tile-comm.vhd:52]
-	Parameter R_ADDRESS bound to: 16'b0000000000000000 
+INFO: [Synth 8-638] synthesizing module 'orca_top_v2' [/home/heckgui/git/orca-mpsoc/rtl/orca-top-v2.vhd:26]
 INFO: [Synth 8-638] synthesizing module 'RouterCC' [/home/heckgui/git/orca-mpsoc/rtl/routers/hermes/RouterCC.vhd:74]
 	Parameter address bound to: 16'b0000000000000000 
 INFO: [Synth 8-638] synthesizing module 'Hermes_buffer' [/home/heckgui/git/orca-mpsoc/rtl/routers/hermes/Hermes_buffer.vhd:64]
 INFO: [Synth 8-256] done synthesizing module 'Hermes_buffer' (1#1) [/home/heckgui/git/orca-mpsoc/rtl/routers/hermes/Hermes_buffer.vhd:64]
 INFO: [Synth 8-638] synthesizing module 'SwitchControl' [/home/heckgui/git/orca-mpsoc/rtl/routers/hermes/Hermes_switchcontrol.vhd:35]
-INFO: [Synth 8-226] default block is never used [/home/heckgui/git/orca-mpsoc/rtl/orca_defaults.vhd:167]
-INFO: [Synth 8-226] default block is never used [/home/heckgui/git/orca-mpsoc/rtl/orca_defaults.vhd:167]
-INFO: [Synth 8-226] default block is never used [/home/heckgui/git/orca-mpsoc/rtl/orca_defaults.vhd:167]
+INFO: [Synth 8-226] default block is never used [/home/heckgui/git/orca-mpsoc/rtl/orca_defaults.vhd:170]
+INFO: [Synth 8-226] default block is never used [/home/heckgui/git/orca-mpsoc/rtl/orca_defaults.vhd:170]
+INFO: [Synth 8-226] default block is never used [/home/heckgui/git/orca-mpsoc/rtl/orca_defaults.vhd:170]
 INFO: [Synth 8-256] done synthesizing module 'SwitchControl' (2#1) [/home/heckgui/git/orca-mpsoc/rtl/routers/hermes/Hermes_switchcontrol.vhd:35]
 INFO: [Synth 8-638] synthesizing module 'Hermes_crossbar' [/home/heckgui/git/orca-mpsoc/rtl/routers/hermes/Hermes_crossbar.vhd:46]
 INFO: [Synth 8-256] done synthesizing module 'Hermes_crossbar' (3#1) [/home/heckgui/git/orca-mpsoc/rtl/routers/hermes/Hermes_crossbar.vhd:46]
 INFO: [Synth 8-256] done synthesizing module 'RouterCC' (4#1) [/home/heckgui/git/orca-mpsoc/rtl/routers/hermes/RouterCC.vhd:74]
-INFO: [Synth 8-638] synthesizing module 'single_port_ram' [/home/heckgui/git/orca-mpsoc/rtl/storage/single-port-ram-orca/single_port_ram.vhd:48]
-	Parameter RAM_WIDTH_I bound to: 32 - type: integer 
-	Parameter RAM_DEPTH_I bound to: 256 - type: integer 
-INFO: [Synth 8-256] done synthesizing module 'single_port_ram' (5#1) [/home/heckgui/git/orca-mpsoc/rtl/storage/single-port-ram-orca/single_port_ram.vhd:48]
-INFO: [Synth 8-638] synthesizing module 'orca_comm_send' [/home/heckgui/git/orca-mpsoc/rtl/network-interfaces/orca-comm/orca_comm_send.vhd:31]
-WARNING: [Synth 8-6014] Unused sequential element send_copy_addr_reg was removed.  [/home/heckgui/git/orca-mpsoc/rtl/network-interfaces/orca-comm/orca_comm_send.vhd:92]
-WARNING: [Synth 8-3848] Net m_addr_o in module/entity orca_comm_send does not have driver. [/home/heckgui/git/orca-mpsoc/rtl/network-interfaces/orca-comm/orca_comm_send.vhd:18]
-INFO: [Synth 8-256] done synthesizing module 'orca_comm_send' (6#1) [/home/heckgui/git/orca-mpsoc/rtl/network-interfaces/orca-comm/orca_comm_send.vhd:31]
-INFO: [Synth 8-638] synthesizing module 'orca_comm_recv' [/home/heckgui/git/orca-mpsoc/rtl/network-interfaces/orca-comm/orca_comm_recv.vhd:31]
-INFO: [Synth 8-256] done synthesizing module 'orca_comm_recv' (7#1) [/home/heckgui/git/orca-mpsoc/rtl/network-interfaces/orca-comm/orca_comm_recv.vhd:31]
-WARNING: [Synth 8-3848] Net r_data_i[4] in module/entity orca_communication_tile does not have driver. [/home/heckgui/git/orca-mpsoc/rtl/orca-tile-comm.vhd:83]
-INFO: [Synth 8-256] done synthesizing module 'orca_communication_tile' (8#1) [/home/heckgui/git/orca-mpsoc/rtl/orca-tile-comm.vhd:52]
 INFO: [Synth 8-638] synthesizing module 'orca_processing_tile' [/home/heckgui/git/orca-mpsoc/rtl/orca-tile-proc.vhd:35]
 	Parameter R_ADDRESS bound to: 16'b0000000100000000 
 INFO: [Synth 8-638] synthesizing module 'processor' [/home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/cpu.vhd:24]
@@ -91,67 +50,39 @@ INFO: [Synth 8-638] synthesizing module 'datapath' [/home/heckgui/git/orca-mpsoc
 INFO: [Synth 8-638] synthesizing module 'control' [/home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/control.vhd:41]
 INFO: [Synth 8-226] default block is never used [/home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/control.vhd:266]
 INFO: [Synth 8-226] default block is never used [/home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/control.vhd:382]
-INFO: [Synth 8-256] done synthesizing module 'control' (9#1) [/home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/control.vhd:41]
+INFO: [Synth 8-256] done synthesizing module 'control' (5#1) [/home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/control.vhd:41]
 INFO: [Synth 8-638] synthesizing module 'reg_bank' [/home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/reg_bank.vhd:17]
-INFO: [Synth 8-256] done synthesizing module 'reg_bank' (10#1) [/home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/reg_bank.vhd:17]
+INFO: [Synth 8-256] done synthesizing module 'reg_bank' (6#1) [/home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/reg_bank.vhd:17]
 INFO: [Synth 8-638] synthesizing module 'alu' [/home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/alu.vhd:15]
 INFO: [Synth 8-638] synthesizing module 'bshift' [/home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/bshifter.vhd:13]
-INFO: [Synth 8-256] done synthesizing module 'bshift' (11#1) [/home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/bshifter.vhd:13]
-INFO: [Synth 8-256] done synthesizing module 'alu' (12#1) [/home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/alu.vhd:15]
-INFO: [Synth 8-256] done synthesizing module 'datapath' (13#1) [/home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/datapath.vhd:27]
+INFO: [Synth 8-256] done synthesizing module 'bshift' (7#1) [/home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/bshifter.vhd:13]
+INFO: [Synth 8-256] done synthesizing module 'alu' (8#1) [/home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/alu.vhd:15]
+INFO: [Synth 8-256] done synthesizing module 'datapath' (9#1) [/home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/datapath.vhd:27]
 INFO: [Synth 8-638] synthesizing module 'interrupt_controller' [/home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/int_control.vhd:32]
-INFO: [Synth 8-256] done synthesizing module 'interrupt_controller' (14#1) [/home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/int_control.vhd:32]
-INFO: [Synth 8-256] done synthesizing module 'processor' (15#1) [/home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/cpu.vhd:24]
+INFO: [Synth 8-256] done synthesizing module 'interrupt_controller' (10#1) [/home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/int_control.vhd:32]
+INFO: [Synth 8-256] done synthesizing module 'processor' (11#1) [/home/heckgui/git/orca-mpsoc/rtl/processors/hfriscv-2020/cpu.vhd:24]
 INFO: [Synth 8-638] synthesizing module 'peripherals' [/home/heckgui/git/orca-mpsoc/rtl/orca-minimal-soc.vhd:42]
-INFO: [Synth 8-256] done synthesizing module 'peripherals' (16#1) [/home/heckgui/git/orca-mpsoc/rtl/orca-minimal-soc.vhd:42]
+INFO: [Synth 8-256] done synthesizing module 'peripherals' (12#1) [/home/heckgui/git/orca-mpsoc/rtl/orca-minimal-soc.vhd:42]
 INFO: [Synth 8-638] synthesizing module 'RouterCC__parameterized0' [/home/heckgui/git/orca-mpsoc/rtl/routers/hermes/RouterCC.vhd:74]
 	Parameter address bound to: 16'b0000000100000000 
-INFO: [Synth 8-256] done synthesizing module 'RouterCC__parameterized0' (16#1) [/home/heckgui/git/orca-mpsoc/rtl/routers/hermes/RouterCC.vhd:74]
-INFO: [Synth 8-638] synthesizing module 'single_port_ram__parameterized0' [/home/heckgui/git/orca-mpsoc/rtl/storage/single-port-ram-orca/single_port_ram.vhd:48]
+INFO: [Synth 8-256] done synthesizing module 'RouterCC__parameterized0' (12#1) [/home/heckgui/git/orca-mpsoc/rtl/routers/hermes/RouterCC.vhd:74]
+INFO: [Synth 8-638] synthesizing module 'single_port_ram' [/home/heckgui/git/orca-mpsoc/rtl/storage/single-port-ram-orca/single_port_ram.vhd:48]
 	Parameter RAM_WIDTH_I bound to: 32 - type: integer 
 	Parameter RAM_DEPTH_I bound to: 16386 - type: integer 
-INFO: [Synth 8-256] done synthesizing module 'single_port_ram__parameterized0' (16#1) [/home/heckgui/git/orca-mpsoc/rtl/storage/single-port-ram-orca/single_port_ram.vhd:48]
+INFO: [Synth 8-256] done synthesizing module 'single_port_ram' (13#1) [/home/heckgui/git/orca-mpsoc/rtl/storage/single-port-ram-orca/single_port_ram.vhd:48]
 INFO: [Synth 8-638] synthesizing module 'orca_ni_top' [/home/heckgui/git/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-top.vhd:47]
 INFO: [Synth 8-638] synthesizing module 'orca_ni_send' [/home/heckgui/git/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-send.vhd:35]
-INFO: [Synth 8-256] done synthesizing module 'orca_ni_send' (17#1) [/home/heckgui/git/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-send.vhd:35]
+INFO: [Synth 8-256] done synthesizing module 'orca_ni_send' (14#1) [/home/heckgui/git/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-send.vhd:35]
 INFO: [Synth 8-638] synthesizing module 'orca_ni_recv' [/home/heckgui/git/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-recv.vhd:40]
-INFO: [Synth 8-638] synthesizing module 'single_port_ram__parameterized1' [/home/heckgui/git/orca-mpsoc/rtl/storage/single-port-ram-orca/single_port_ram.vhd:48]
+INFO: [Synth 8-638] synthesizing module 'single_port_ram__parameterized0' [/home/heckgui/git/orca-mpsoc/rtl/storage/single-port-ram-orca/single_port_ram.vhd:48]
 	Parameter RAM_WIDTH_I bound to: 32 - type: integer 
 	Parameter RAM_DEPTH_I bound to: 64 - type: integer 
-INFO: [Synth 8-256] done synthesizing module 'single_port_ram__parameterized1' (17#1) [/home/heckgui/git/orca-mpsoc/rtl/storage/single-port-ram-orca/single_port_ram.vhd:48]
-INFO: [Synth 8-256] done synthesizing module 'orca_ni_recv' (18#1) [/home/heckgui/git/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-recv.vhd:40]
-INFO: [Synth 8-256] done synthesizing module 'orca_ni_top' (19#1) [/home/heckgui/git/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-top.vhd:47]
+INFO: [Synth 8-256] done synthesizing module 'single_port_ram__parameterized0' (14#1) [/home/heckgui/git/orca-mpsoc/rtl/storage/single-port-ram-orca/single_port_ram.vhd:48]
+INFO: [Synth 8-256] done synthesizing module 'orca_ni_recv' (15#1) [/home/heckgui/git/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-recv.vhd:40]
+INFO: [Synth 8-256] done synthesizing module 'orca_ni_top' (16#1) [/home/heckgui/git/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-top.vhd:47]
 WARNING: [Synth 8-3848] Net dummy_gpioa_in in module/entity orca_processing_tile does not have driver. [/home/heckgui/git/orca-mpsoc/rtl/orca-tile-proc.vhd:104]
-INFO: [Synth 8-256] done synthesizing module 'orca_processing_tile' (20#1) [/home/heckgui/git/orca-mpsoc/rtl/orca-tile-proc.vhd:35]
-INFO: [Synth 8-256] done synthesizing module 'orca_top' (21#1) [/home/heckgui/git/orca-mpsoc/rtl/orca-top.vhd:31]
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port rst
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port addr_i[31]
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port addr_i[30]
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port addr_i[29]
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port addr_i[28]
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port addr_i[27]
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port addr_i[26]
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port addr_i[25]
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port addr_i[24]
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port addr_i[23]
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port addr_i[22]
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port addr_i[21]
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port addr_i[20]
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port addr_i[19]
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port addr_i[18]
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port addr_i[17]
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port addr_i[16]
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port addr_i[15]
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port addr_i[14]
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port addr_i[13]
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port addr_i[12]
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port addr_i[11]
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port addr_i[10]
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port addr_i[9]
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port addr_i[8]
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port addr_i[7]
-WARNING: [Synth 8-3331] design single_port_ram__parameterized1 has unconnected port addr_i[6]
-WARNING: [Synth 8-3331] design orca_ni_recv has unconnected port r_clock_rx
+INFO: [Synth 8-256] done synthesizing module 'orca_processing_tile' (17#1) [/home/heckgui/git/orca-mpsoc/rtl/orca-tile-proc.vhd:35]
+INFO: [Synth 8-256] done synthesizing module 'orca_top_v2' (18#1) [/home/heckgui/git/orca-mpsoc/rtl/orca-top-v2.vhd:26]
 WARNING: [Synth 8-3331] design single_port_ram__parameterized0 has unconnected port rst
 WARNING: [Synth 8-3331] design single_port_ram__parameterized0 has unconnected port addr_i[31]
 WARNING: [Synth 8-3331] design single_port_ram__parameterized0 has unconnected port addr_i[30]
@@ -170,6 +101,34 @@ WARNING: [Synth 8-3331] design single_port_ram__parameterized0 has unconnected p
 WARNING: [Synth 8-3331] design single_port_ram__parameterized0 has unconnected port addr_i[17]
 WARNING: [Synth 8-3331] design single_port_ram__parameterized0 has unconnected port addr_i[16]
 WARNING: [Synth 8-3331] design single_port_ram__parameterized0 has unconnected port addr_i[15]
+WARNING: [Synth 8-3331] design single_port_ram__parameterized0 has unconnected port addr_i[14]
+WARNING: [Synth 8-3331] design single_port_ram__parameterized0 has unconnected port addr_i[13]
+WARNING: [Synth 8-3331] design single_port_ram__parameterized0 has unconnected port addr_i[12]
+WARNING: [Synth 8-3331] design single_port_ram__parameterized0 has unconnected port addr_i[11]
+WARNING: [Synth 8-3331] design single_port_ram__parameterized0 has unconnected port addr_i[10]
+WARNING: [Synth 8-3331] design single_port_ram__parameterized0 has unconnected port addr_i[9]
+WARNING: [Synth 8-3331] design single_port_ram__parameterized0 has unconnected port addr_i[8]
+WARNING: [Synth 8-3331] design single_port_ram__parameterized0 has unconnected port addr_i[7]
+WARNING: [Synth 8-3331] design single_port_ram__parameterized0 has unconnected port addr_i[6]
+WARNING: [Synth 8-3331] design orca_ni_recv has unconnected port r_clock_rx
+WARNING: [Synth 8-3331] design single_port_ram has unconnected port rst
+WARNING: [Synth 8-3331] design single_port_ram has unconnected port addr_i[31]
+WARNING: [Synth 8-3331] design single_port_ram has unconnected port addr_i[30]
+WARNING: [Synth 8-3331] design single_port_ram has unconnected port addr_i[29]
+WARNING: [Synth 8-3331] design single_port_ram has unconnected port addr_i[28]
+WARNING: [Synth 8-3331] design single_port_ram has unconnected port addr_i[27]
+WARNING: [Synth 8-3331] design single_port_ram has unconnected port addr_i[26]
+WARNING: [Synth 8-3331] design single_port_ram has unconnected port addr_i[25]
+WARNING: [Synth 8-3331] design single_port_ram has unconnected port addr_i[24]
+WARNING: [Synth 8-3331] design single_port_ram has unconnected port addr_i[23]
+WARNING: [Synth 8-3331] design single_port_ram has unconnected port addr_i[22]
+WARNING: [Synth 8-3331] design single_port_ram has unconnected port addr_i[21]
+WARNING: [Synth 8-3331] design single_port_ram has unconnected port addr_i[20]
+WARNING: [Synth 8-3331] design single_port_ram has unconnected port addr_i[19]
+WARNING: [Synth 8-3331] design single_port_ram has unconnected port addr_i[18]
+WARNING: [Synth 8-3331] design single_port_ram has unconnected port addr_i[17]
+WARNING: [Synth 8-3331] design single_port_ram has unconnected port addr_i[16]
+WARNING: [Synth 8-3331] design single_port_ram has unconnected port addr_i[15]
 WARNING: [Synth 8-3331] design Hermes_crossbar has unconnected port sender[4]
 WARNING: [Synth 8-3331] design Hermes_crossbar has unconnected port sender[3]
 WARNING: [Synth 8-3331] design Hermes_crossbar has unconnected port sender[2]
@@ -226,7 +185,7 @@ WARNING: [Synth 8-3331] design SwitchControl has unconnected port data[2][16]
 WARNING: [Synth 8-3331] design SwitchControl has unconnected port data[1][31]
 INFO: [Common 17-14] Message 'Synth 8-3331' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 7388.293 ; gain = 7.898 ; free physical = 6662 ; free virtual = 14546
+Finished RTL Elaboration : Time (s): cpu = 00:00:06 ; elapsed = 00:00:08 . Memory (MB): peak = 7262.105 ; gain = 257.617 ; free physical = 6759 ; free virtual = 14503
 ---------------------------------------------------------------------------------
 
 Report Check Netlist: 
@@ -239,33 +198,55 @@ Report Check Netlist:
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 7400.168 ; gain = 19.773 ; free physical = 6659 ; free virtual = 14542
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:07 ; elapsed = 00:00:09 . Memory (MB): peak = 7273.980 ; gain = 269.492 ; free physical = 6747 ; free virtual = 14491
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 7400.168 ; gain = 19.773 ; free physical = 6659 ; free virtual = 14542
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:07 ; elapsed = 00:00:09 . Memory (MB): peak = 7273.980 ; gain = 269.492 ; free physical = 6747 ; free virtual = 14491
 ---------------------------------------------------------------------------------
-Netlist sorting complete. Time (s): cpu = 00:00:00.06 ; elapsed = 00:00:00.06 . Memory (MB): peak = 7400.168 ; gain = 0.000 ; free physical = 6650 ; free virtual = 14534
+Netlist sorting complete. Time (s): cpu = 00:00:00.05 ; elapsed = 00:00:00.06 . Memory (MB): peak = 7273.980 ; gain = 0.000 ; free physical = 6736 ; free virtual = 14480
 INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-141] Inserted 1 OBUFs to IO ports without IO buffers.
 
 Processing XDC Constraints
 Initializing timing engine
 Completed Processing XDC Constraints
 
+INFO: [Opt 31-140] Inserted 1 IBUFs to IO ports without IO buffers.
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00 . Memory (MB): peak = 7573.887 ; gain = 0.000 ; free physical = 6557 ; free virtual = 14442
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 7440.730 ; gain = 0.000 ; free physical = 6658 ; free virtual = 14420
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-RTL Elaboration Complete:  : Time (s): cpu = 00:00:21 ; elapsed = 00:00:14 . Memory (MB): peak = 7670.734 ; gain = 290.340 ; free physical = 6463 ; free virtual = 14356
-57 Infos, 104 Warnings, 0 Critical Warnings and 0 Errors encountered.
+RTL Elaboration Complete:  : Time (s): cpu = 00:00:21 ; elapsed = 00:00:18 . Memory (MB): peak = 7503.188 ; gain = 498.699 ; free physical = 6487 ; free virtual = 14253
+52 Infos, 101 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:21 ; elapsed = 00:00:14 . Memory (MB): peak = 7670.734 ; gain = 290.340 ; free physical = 6463 ; free virtual = 14356
+synth_design: Time (s): cpu = 00:00:33 ; elapsed = 00:01:13 . Memory (MB): peak = 7503.188 ; gain = 841.227 ; free physical = 6487 ; free virtual = 14253
 launch_runs synth_1 -jobs 6
-[Tue Jun 16 15:55:47 2020] Launched synth_1...
-Run output will be captured here: /home/heckgui/git/orca-mpsoc/vivado/orca-mpsoc-top/orca-mpsoc-top.runs/synth_1/runme.log
-launch_runs: Time (s): cpu = 00:00:02 ; elapsed = 00:00:10 . Memory (MB): peak = 7670.734 ; gain = 0.000 ; free physical = 6358 ; free virtual = 14243
+[Wed Jun 17 14:41:13 2020] Launched synth_1...
+Run output will be captured here: /home/heckgui/git/orca-mpsoc/vivado/orca-mpsoc-top-v2/orca-mpsoc-top-v2.runs/synth_1/runme.log
+launch_runs: Time (s): cpu = 00:00:02 ; elapsed = 00:00:11 . Memory (MB): peak = 7505.188 ; gain = 0.000 ; free physical = 6401 ; free virtual = 14166
 launch_runs impl_1 -jobs 6
-[Tue Jun 16 15:57:49 2020] Launched impl_1...
-Run output will be captured here: /home/heckgui/git/orca-mpsoc/vivado/orca-mpsoc-top/orca-mpsoc-top.runs/impl_1/runme.log
+[Wed Jun 17 14:43:18 2020] Launched impl_1...
+Run output will be captured here: /home/heckgui/git/orca-mpsoc/vivado/orca-mpsoc-top-v2/orca-mpsoc-top-v2.runs/impl_1/runme.log
+close_design
+open_run impl_1
+Netlist sorting complete. Time (s): cpu = 00:00:00.04 ; elapsed = 00:00:00.03 . Memory (MB): peak = 7505.188 ; gain = 0.000 ; free physical = 6574 ; free virtual = 14361
+INFO: [Netlist 29-17] Analyzing 257 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2019.2
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Reading XDEF placement.
+Reading placer database...
+Reading XDEF routing.
+Read XDEF File: Time (s): cpu = 00:00:00.33 ; elapsed = 00:00:00.33 . Memory (MB): peak = 7505.188 ; gain = 0.000 ; free physical = 6493 ; free virtual = 14276
+Restored from archive | CPU: 0.330000 secs | Memory: 5.870552 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:00.33 ; elapsed = 00:00:00.33 . Memory (MB): peak = 7505.188 ; gain = 0.000 ; free physical = 6493 ; free virtual = 14276
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 7505.188 ; gain = 0.000 ; free physical = 6493 ; free virtual = 14276
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 72 instances were transformed.
+  RAM32M => RAM32M (RAMD32(x6), RAMS32(x2)): 48 instances
+  RAM32M => RAM32M (inverted pins: WCLK) (RAMD32(x6), RAMS32(x2)): 24 instances
+
+WARNING: [Timing 38-313] There are no user specified timing constraints. Timing constraints are needed for proper timing analysis.
 exit
-INFO: [Common 17-206] Exiting Vivado at Tue Jun 16 16:00:01 2020...
+INFO: [Common 17-206] Exiting Vivado at Wed Jun 17 14:53:03 2020...

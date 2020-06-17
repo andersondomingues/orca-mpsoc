@@ -92,6 +92,9 @@ package orca_defaults is
         constant PRELOAD_ADDR : integer := 0;
         constant BUFFER_DEPTH_NI : integer := 64;
 
+
+-- IF COMMUNICATION TILE
+
         constant SEND_NODE_RAM_DEPTH : integer := 256; 
         constant RECV_NODE_RAM_DEPTH : integer := 256;
  

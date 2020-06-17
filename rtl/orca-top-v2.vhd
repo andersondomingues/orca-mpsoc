@@ -57,14 +57,21 @@ architecture orca_top_v2 of orca_top_v2 is
   signal data_out_00 : arrayNport_regflit;
   signal credit_i_00 : regNport;
 
-		
-  type repo_address_t is array (NUMBER_PROCESSORS - 1 downto 0) of std_logic_vector(29 downto 0);
-  signal repo_address_sig 	: repo_address_t;
-  signal repo_data_sig     	: arrayNPe_reg32;
-  signal ack_app_sig        	: regNPe;
-  signal req_app_sig     		: arrayNPe_reg32;
+  -- reset synchornizer
+  signal rff1,rst_sync : std_logic;
 
 begin
+
+  process (clk, rst)
+  begin
+    if (rst = '1') then
+      rff1 <= '1';
+      rst_sync <= '1';
+    elsif (clk'event and clk = '1') then
+      rff1 <= '0';
+      rst_sync <= rff1;
+    end if;
+  end process;
 
   router_binding : entity work.RouterCC
     generic map(
@@ -72,7 +79,7 @@ begin
     )
     port map(
       clock => clk,
-      reset => rst,
+      reset => rst_sync,
 
     clock_rx => clock_rx_00,
     rx => rx_00,

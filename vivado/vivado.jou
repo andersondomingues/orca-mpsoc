@@ -2,20 +2,20 @@
 # Vivado v2019.2 (64-bit)
 # SW Build 2708876 on Wed Nov  6 21:39:14 MST 2019
 # IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
-# Start of session at: Wed Jun 17 14:35:46 2020
-# Process ID: 9246
+# Start of session at: Fri Jun 19 17:06:53 2020
+# Process ID: 14810
 # Current directory: /home/heckgui/git/orca-mpsoc/vivado
 # Command line: vivado
 # Log file: /home/heckgui/git/orca-mpsoc/vivado/vivado.log
 # Journal file: /home/heckgui/git/orca-mpsoc/vivado/vivado.jou
 #-----------------------------------------------------------
 start_gui
-open_project /home/heckgui/git/orca-mpsoc/vivado/orca-mpsoc-top-v2/orca-mpsoc-top-v2.xpr
+open_project /home/heckgui/git/orca-mpsoc/vivado/zynqberry/zynqberry.xpr
 update_compile_order -fileset sources_1
 synth_design -rtl -name rtl_1
+reset_run synth_1
 launch_runs synth_1 -jobs 6
 wait_on_run synth_1
 launch_runs impl_1 -jobs 6
 wait_on_run impl_1
-close_design
-open_run impl_1
+set_property ADV_USEFUL_SKEW 1 [get_cells clk_IBUF_inst]

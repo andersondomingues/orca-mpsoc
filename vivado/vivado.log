@@ -2,33 +2,30 @@
 # Vivado v2019.2 (64-bit)
 # SW Build 2708876 on Wed Nov  6 21:39:14 MST 2019
 # IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
-# Start of session at: Wed Jun 17 14:35:46 2020
-# Process ID: 9246
+# Start of session at: Fri Jun 19 17:06:53 2020
+# Process ID: 14810
 # Current directory: /home/heckgui/git/orca-mpsoc/vivado
 # Command line: vivado
 # Log file: /home/heckgui/git/orca-mpsoc/vivado/vivado.log
 # Journal file: /home/heckgui/git/orca-mpsoc/vivado/vivado.jou
 #-----------------------------------------------------------
 start_gui
-open_project /home/heckgui/git/orca-mpsoc/vivado/orca-mpsoc-top-v2/orca-mpsoc-top-v2.xpr
+open_project /home/heckgui/git/orca-mpsoc/vivado/zynqberry/zynqberry.xpr
 Scanning sources...
 Finished scanning sources
-WARNING: [Project 1-509] GeneratedRun file for 'synth_1' not found
-WARNING: [Project 1-509] GeneratedRun file for 'impl_1' not found
-WARNING: [filemgmt 56-3] IPUserFilesDir: Could not find the directory '/home/heckgui/git/orca-mpsoc/vivado/orca-mpsoc-top-v2/orca-mpsoc-top-v2.ip_user_files'.
 INFO: [IP_Flow 19-234] Refreshing IP repositories
 INFO: [IP_Flow 19-1704] No user IP repositories specified
 INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/soft64/xilinx/ferramentas/Vivado/2019.2/Vivado/2019.2/data/ip'.
-open_project: Time (s): cpu = 00:00:12 ; elapsed = 00:00:16 . Memory (MB): peak = 6632.078 ; gain = 136.672 ; free physical = 7359 ; free virtual = 15014
+open_project: Time (s): cpu = 00:00:12 ; elapsed = 00:00:08 . Memory (MB): peak = 6663.039 ; gain = 181.715 ; free physical = 5720 ; free virtual = 14533
 update_compile_order -fileset sources_1
 synth_design -rtl -name rtl_1
 Command: synth_design -rtl -name rtl_1
 Starting synth_design
-Using part: xc7vx485tffg1157-1
+Using part: xc7z010clg225-1
 Top: orca_top_v2
-INFO: [Device 21-403] Loading part xc7vx485tffg1157-1
+INFO: [Device 21-403] Loading part xc7z010clg225-1
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:06 . Memory (MB): peak = 7204.340 ; gain = 199.852 ; free physical = 6726 ; free virtual = 14494
+Starting RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 7072.680 ; gain = 201.109 ; free physical = 5012 ; free virtual = 14133
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-638] synthesizing module 'orca_top_v2' [/home/heckgui/git/orca-mpsoc/rtl/orca-top-v2.vhd:26]
 INFO: [Synth 8-638] synthesizing module 'RouterCC' [/home/heckgui/git/orca-mpsoc/rtl/routers/hermes/RouterCC.vhd:74]
@@ -82,6 +79,13 @@ INFO: [Synth 8-256] done synthesizing module 'orca_ni_recv' (15#1) [/home/heckgu
 INFO: [Synth 8-256] done synthesizing module 'orca_ni_top' (16#1) [/home/heckgui/git/orca-mpsoc/rtl/network-interfaces/orca-ni/orca-ni-top.vhd:47]
 WARNING: [Synth 8-3848] Net dummy_gpioa_in in module/entity orca_processing_tile does not have driver. [/home/heckgui/git/orca-mpsoc/rtl/orca-tile-proc.vhd:104]
 INFO: [Synth 8-256] done synthesizing module 'orca_processing_tile' (17#1) [/home/heckgui/git/orca-mpsoc/rtl/orca-tile-proc.vhd:35]
+INFO: [Synth 8-638] synthesizing module 'orca_processing_tile__parameterized0' [/home/heckgui/git/orca-mpsoc/rtl/orca-tile-proc.vhd:35]
+	Parameter R_ADDRESS bound to: 16'b0000001000000000 
+INFO: [Synth 8-638] synthesizing module 'RouterCC__parameterized1' [/home/heckgui/git/orca-mpsoc/rtl/routers/hermes/RouterCC.vhd:74]
+	Parameter address bound to: 16'b0000001000000000 
+INFO: [Synth 8-256] done synthesizing module 'RouterCC__parameterized1' (17#1) [/home/heckgui/git/orca-mpsoc/rtl/routers/hermes/RouterCC.vhd:74]
+WARNING: [Synth 8-3848] Net dummy_gpioa_in in module/entity orca_processing_tile__parameterized0 does not have driver. [/home/heckgui/git/orca-mpsoc/rtl/orca-tile-proc.vhd:104]
+INFO: [Synth 8-256] done synthesizing module 'orca_processing_tile__parameterized0' (17#1) [/home/heckgui/git/orca-mpsoc/rtl/orca-tile-proc.vhd:35]
 INFO: [Synth 8-256] done synthesizing module 'orca_top_v2' (18#1) [/home/heckgui/git/orca-mpsoc/rtl/orca-top-v2.vhd:26]
 WARNING: [Synth 8-3331] design single_port_ram__parameterized0 has unconnected port rst
 WARNING: [Synth 8-3331] design single_port_ram__parameterized0 has unconnected port addr_i[31]
@@ -185,7 +189,7 @@ WARNING: [Synth 8-3331] design SwitchControl has unconnected port data[2][16]
 WARNING: [Synth 8-3331] design SwitchControl has unconnected port data[1][31]
 INFO: [Common 17-14] Message 'Synth 8-3331' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:06 ; elapsed = 00:00:08 . Memory (MB): peak = 7262.105 ; gain = 257.617 ; free physical = 6759 ; free virtual = 14503
+Finished RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:07 . Memory (MB): peak = 7133.656 ; gain = 262.086 ; free physical = 5030 ; free virtual = 14160
 ---------------------------------------------------------------------------------
 
 Report Check Netlist: 
@@ -198,12 +202,12 @@ Report Check Netlist:
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:07 ; elapsed = 00:00:09 . Memory (MB): peak = 7273.980 ; gain = 269.492 ; free physical = 6747 ; free virtual = 14491
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 7145.531 ; gain = 273.961 ; free physical = 5027 ; free virtual = 14159
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:07 ; elapsed = 00:00:09 . Memory (MB): peak = 7273.980 ; gain = 269.492 ; free physical = 6747 ; free virtual = 14491
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 7145.531 ; gain = 273.961 ; free physical = 5027 ; free virtual = 14159
 ---------------------------------------------------------------------------------
-Netlist sorting complete. Time (s): cpu = 00:00:00.05 ; elapsed = 00:00:00.06 . Memory (MB): peak = 7273.980 ; gain = 0.000 ; free physical = 6736 ; free virtual = 14480
+Netlist sorting complete. Time (s): cpu = 00:00:00.09 ; elapsed = 00:00:00.09 . Memory (MB): peak = 7145.531 ; gain = 0.000 ; free physical = 5016 ; free virtual = 14150
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-141] Inserted 1 OBUFs to IO ports without IO buffers.
 
@@ -213,40 +217,25 @@ Completed Processing XDC Constraints
 
 INFO: [Opt 31-140] Inserted 1 IBUFs to IO ports without IO buffers.
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 7440.730 ; gain = 0.000 ; free physical = 6658 ; free virtual = 14420
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 7305.375 ; gain = 0.000 ; free physical = 4927 ; free virtual = 14067
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-RTL Elaboration Complete:  : Time (s): cpu = 00:00:21 ; elapsed = 00:00:18 . Memory (MB): peak = 7503.188 ; gain = 498.699 ; free physical = 6487 ; free virtual = 14253
-52 Infos, 101 Warnings, 0 Critical Warnings and 0 Errors encountered.
+RTL Elaboration Complete:  : Time (s): cpu = 00:00:17 ; elapsed = 00:00:12 . Memory (MB): peak = 7363.402 ; gain = 491.832 ; free physical = 4825 ; free virtual = 13980
+56 Infos, 102 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:33 ; elapsed = 00:01:13 . Memory (MB): peak = 7503.188 ; gain = 841.227 ; free physical = 6487 ; free virtual = 14253
+synth_design: Time (s): cpu = 00:00:23 ; elapsed = 00:01:00 . Memory (MB): peak = 7363.402 ; gain = 642.312 ; free physical = 4825 ; free virtual = 13980
+reset_run synth_1
 launch_runs synth_1 -jobs 6
-[Wed Jun 17 14:41:13 2020] Launched synth_1...
-Run output will be captured here: /home/heckgui/git/orca-mpsoc/vivado/orca-mpsoc-top-v2/orca-mpsoc-top-v2.runs/synth_1/runme.log
-launch_runs: Time (s): cpu = 00:00:02 ; elapsed = 00:00:11 . Memory (MB): peak = 7505.188 ; gain = 0.000 ; free physical = 6401 ; free virtual = 14166
+[Fri Jun 19 17:11:03 2020] Launched synth_1...
+Run output will be captured here: /home/heckgui/git/orca-mpsoc/vivado/zynqberry/zynqberry.runs/synth_1/runme.log
+launch_runs: Time (s): cpu = 00:00:05 ; elapsed = 00:01:00 . Memory (MB): peak = 7363.402 ; gain = 0.000 ; free physical = 3850 ; free virtual = 13090
 launch_runs impl_1 -jobs 6
-[Wed Jun 17 14:43:18 2020] Launched impl_1...
-Run output will be captured here: /home/heckgui/git/orca-mpsoc/vivado/orca-mpsoc-top-v2/orca-mpsoc-top-v2.runs/impl_1/runme.log
-close_design
-open_run impl_1
-Netlist sorting complete. Time (s): cpu = 00:00:00.04 ; elapsed = 00:00:00.03 . Memory (MB): peak = 7505.188 ; gain = 0.000 ; free physical = 6574 ; free virtual = 14361
-INFO: [Netlist 29-17] Analyzing 257 Unisim elements for replacement
-INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
-INFO: [Project 1-479] Netlist was created with Vivado 2019.2
-INFO: [Project 1-570] Preparing netlist for logic optimization
-Reading XDEF placement.
-Reading placer database...
-Reading XDEF routing.
-Read XDEF File: Time (s): cpu = 00:00:00.33 ; elapsed = 00:00:00.33 . Memory (MB): peak = 7505.188 ; gain = 0.000 ; free physical = 6493 ; free virtual = 14276
-Restored from archive | CPU: 0.330000 secs | Memory: 5.870552 MB |
-Finished XDEF File Restore: Time (s): cpu = 00:00:00.33 ; elapsed = 00:00:00.33 . Memory (MB): peak = 7505.188 ; gain = 0.000 ; free physical = 6493 ; free virtual = 14276
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 7505.188 ; gain = 0.000 ; free physical = 6493 ; free virtual = 14276
-INFO: [Project 1-111] Unisim Transformation Summary:
-  A total of 72 instances were transformed.
-  RAM32M => RAM32M (RAMD32(x6), RAMS32(x2)): 48 instances
-  RAM32M => RAM32M (inverted pins: WCLK) (RAMD32(x6), RAMS32(x2)): 24 instances
-
-WARNING: [Timing 38-313] There are no user specified timing constraints. Timing constraints are needed for proper timing analysis.
+[Fri Jun 19 17:14:04 2020] Launched impl_1...
+Run output will be captured here: /home/heckgui/git/orca-mpsoc/vivado/zynqberry/zynqberry.runs/impl_1/runme.log
+launch_runs: Time (s): cpu = 00:00:03 ; elapsed = 00:01:00 . Memory (MB): peak = 7363.402 ; gain = 0.000 ; free physical = 4124 ; free virtual = 13371
+WARNING: [IP_Flow 19-3899] Cannot get the environment domain name variable for the component vendor name. Setting the vendor name to 'user.org'.
+set_property ADV_USEFUL_SKEW 1 [get_cells clk_IBUF_inst]
+ERROR: [Common 17-69] Command failed: ADV_USEFUL_SKEW can not be set 'true' from TCL, only false (to clear the value set by route_design).
 exit
-INFO: [Common 17-206] Exiting Vivado at Wed Jun 17 14:53:03 2020...
+INFO: [Common 17-206] Exiting Vivado at Fri Jun 19 17:38:56 2020...

@@ -3,6 +3,8 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 use ieee.numeric_std.all;
+use ieee.math_real.log2;
+use ieee.math_real.ceil;
 use work.orca_defaults.all;
 
 -- ORCA Processing Tile
@@ -50,6 +52,7 @@ architecture orca_processing_tile of orca_processing_tile is
   signal periph_dly : std_logic;
 
   -- interface to the memory mux
+  signal shift_m_addr_i : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal m_addr_i : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal m_data_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal m_data_i : std_logic_vector((RAM_WIDTH - 1) downto 0);
@@ -222,6 +225,8 @@ begin
       credit_i => r_credit_i
     );
 
+
+  shift_m_addr_i <= "00" & m_addr_i(31 downto 2);
   --main memory binding
   proc_tile_mem_binding: entity work.single_port_ram
     generic map(
@@ -232,7 +237,7 @@ begin
         clk => clk,
         rst => rst_local,
 
-        addr_i => m_addr_i,
+        addr_i => shift_m_addr_i((INTEGER(CEIL(LOG2(REAL(RAM_DEPTH)))))-1 downto 0),
         data_o => m_data_o,
         data_i => m_data_i,
         wb_i => m_wb_i

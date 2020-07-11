@@ -25,6 +25,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.Numeric_Std.all;
+use ieee.math_real.log2;
+use ieee.math_real.ceil;
 
 
 entity single_port_ram is 
@@ -37,7 +39,7 @@ entity single_port_ram is
         clk : in std_logic;
         rst : in std_logic;
 
-        addr_i :  in std_logic_vector((RAM_WIDTH_I - 1) downto 0);
+        addr_i :  in std_logic_vector(((INTEGER(CEIL(LOG2(REAL(RAM_DEPTH_I))))) - 1) downto 0);
         data_o : out std_logic_vector((RAM_WIDTH_I - 1) downto 0);
         data_i :  in std_logic_vector((RAM_WIDTH_I - 1) downto 0);
         wb_i   :  in std_logic_vector(3 downto 0)
@@ -64,6 +66,7 @@ begin
         end if;
     
     end process ram_process;
+
 
 end single_port_ram;
 

@@ -70,8 +70,8 @@ package orca_defaults is
 ---------------------------------------------------------
 -- MPSOC DEPENDENT CONSTANTS
 ---------------------------------------------------------
-        constant NUMBER_PROCESSORS : integer := 2;
-        constant NUMBER_PROCESSORS_X : integer := 2;
+        constant NUMBER_PROCESSORS : integer := 3;
+        constant NUMBER_PROCESSORS_X : integer := 3;
         constant NUMBER_PROCESSORS_Y : integer := 1;
         constant NROT: integer := NUMBER_PROCESSORS;
 

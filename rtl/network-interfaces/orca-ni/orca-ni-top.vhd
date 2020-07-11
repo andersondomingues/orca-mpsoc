@@ -113,7 +113,7 @@ begin
     recv_status <= recv_status_r;
     send_status <= send_status_s;
 
-    m_addr_o <= m_addr_o_r when recv_status_r /= 0 else m_addr_o_s;
-    m_wb_o <= m_wb_o_r when recv_status_r /= 0 else m_wb_o_s;
+    m_addr_o <= m_addr_o_s when stall_s = '1' else m_addr_o_r;
+    m_wb_o <= m_wb_o_s when stall_s = '1' else m_wb_o_r;
   
 end orca_ni_top;

@@ -47,13 +47,25 @@ architecture orca_ni_send of orca_ni_send is
   signal send_state : send_state_type;
 
   --temporary data
-  signal send_copy_addr : std_logic_vector(31 downto 0);
-  signal send_copy_size : std_logic_vector(31 downto 0);
+  signal send_copy_addr, send_copy_addr_dly : std_logic_vector(31 downto 0);
+  signal send_copy_size, send_copy_size_dly : std_logic_vector(31 downto 0);
+  signal previous_data : std_logic_vector(31 downto 0);
+  signal r_stall, credit_i_dly : std_logic;
 
 begin
 
   -- transmitting clock stays the same as for the ni
   r_clock_tx <= clk;
+
+process(clk, rst)
+  begin
+    if rst = '1' then
+        credit_i_dly <= '0';
+    elsif rising_edge(clk) then
+        credit_i_dly <= r_credit_i;
+    end if;
+end process;
+
 
   -- send proc, state control
   send_state_control_proc: process(clk, rst)
@@ -71,7 +83,7 @@ begin
         when S_CONFIG_STALL => --stays for one cycle
           send_state <= S_COPY_AND_RELEASE;
         when S_COPY_AND_RELEASE =>  -- all flits have been copied
-          if send_copy_size = 0 then
+          if send_copy_size_dly = send_copy_size_dly'low and r_credit_i = '1' then
             send_state <= S_FLUSH;
           end if;
         when S_FLUSH =>
@@ -85,37 +97,53 @@ begin
   end process;
   
   -- send proc, machine functioning
-  send_machine_func_proc: process(clk)
+  send_machine_func_proc: process(clk,rst)
   begin
-    if rising_edge(clk) then
+    if rst = '1' then
+      send_status <= '0';
+      r_stall <= '0'; --start with the cpu on control
+      send_copy_addr <= (others => '0');
+      send_copy_addr_dly <= (others => '0');
+      send_copy_size <= (others => '0');
+      send_copy_size_dly <= (others => '0');
+      r_tx <= '0'; -- make sure the router is not receiving anything
+    elsif rising_edge(clk) then
     --clk'event and clk = '1' then
       case send_state is 
         when S_WAIT_CONFIG_STALL =>
-          stall <= '0'; --start with the cpu on control
+          r_stall <= '0'; --start with the cpu on control
           send_copy_addr <= (others => '0');
           send_copy_size <= (others => '0');
+          send_copy_size_dly <= (others => '0');
           r_tx <= '0'; -- make sure the router is not receiving anything
 
         when S_CONFIG_STALL => 
-          stall <= '1'; -- stall cpu here
+          r_stall <= '1'; -- stall cpu here
           send_status <= '1'; --set status to busy
           send_copy_addr <= prog_address; --copy dma info
           send_copy_size <= prog_size;
+          send_copy_size_dly <= prog_size;
+          previous_data <= m_data_i;
         
         when S_COPY_AND_RELEASE => --copy from memory to the output buffer
           if r_credit_i = '1' then
             --mem read
-            m_addr_o <= send_copy_addr; --origin of data
             --push to noc
-            r_tx <= '1'; --!!NOTE: clock_tx being ignored
-            send_copy_size <= send_copy_size - 1;
-            send_copy_addr <= send_copy_addr + 4;
-          --else
-          --  r_tx <= '0';
+--            r_tx <= '1'; --!!NOTE: clock_tx being ignored
+            send_copy_size_dly <= send_copy_size;
+            send_copy_addr_dly <= send_copy_addr;
+            if send_copy_size /= send_copy_size'low then
+               send_copy_size <= send_copy_size - 1;
+               send_copy_addr <= send_copy_addr + 4;
+            end if;
+            if send_copy_size = send_copy_size'low then
+               r_tx <= '0';
+            else
+               r_tx <= '1';
+            end if;
           end if;
-        
         when S_FLUSH =>
-          stall <= '0';		  
+          r_stall <= '0';		  
           r_tx <= '0';
           if send_start = '0' then
             send_status <= '0'; -- lowers busy signal
@@ -124,10 +152,13 @@ begin
   	end if;	
   end process;
 
-  --buffer output always comes from memory 
+--  r_data_o <= m_data_i when r_stall = '1' and r_credit_i = '1' and credit_i_dly = '1' else previous_data when r_stall = '1' and (r_credit_i = '0' or credit_i_dly = '0') else (others => '0');
   r_data_o <= m_data_i;
+
+  stall <= r_stall;  
 
   -- sending does not requires the main memory to be in write mode
   m_wb_o <= (others => '0');
+  m_addr_o <= send_copy_addr when r_credit_i = '1' else send_copy_addr_dly; --origin of data
 
 end orca_ni_send;

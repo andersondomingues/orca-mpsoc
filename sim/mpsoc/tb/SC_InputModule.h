@@ -63,7 +63,7 @@ void inline inputmodule::TrafficGenerator(){
 	int n_active = 0;
 	packet=false;
 //	printf("\n\n\n\t\t\t******** Send APP ****************\n\n\n\n");
-	sprintf(temp,"./mpsoc/rtl/app.txt");
+	sprintf(temp,"./mpsoc/app/app.txt");
 	numlines=numberoflines(temp);
 	printf("\n\n\n\t\t\t******** Number of lines in APP.TXT: %d ****************\n\n\n\n",numlines);
 	Input = fopen(temp,"r");
@@ -137,6 +137,12 @@ void inline inputmodule::TrafficGenerator(){
 							outTx = SC_LOGIC_1;
 							outData = BigPacket[FlitNumber];
 							FlitNumber++;
+                                                        if(FlitNumber == 1000){
+                                                            outTx = SC_LOGIC_0;
+                                                            wait(1,SC_US);
+                                                            outTx = SC_LOGIC_1;
+                                                        }
+
 						}
 					}
 				}
@@ -148,7 +154,7 @@ void inline inputmodule::TrafficGenerator(){
 					outData = 0;
 //					printf("\n\n\n\t\t\t******** Wait to send packet ****************\n\n\n\n");
 					wait(3,SC_US);
-					sprintf(temp,"./mpsoc/rtl/packet.txt");
+					sprintf(temp,"./mpsoc/app/packet.txt");
 					numlines=numberoflines(temp);
 					printf("\n\n\n\t\t\t******** Number of lines in PACKET.TXT: %d ****************\n\n\n\n",numlines);
 					Input = fopen(temp,"r");

@@ -5,9 +5,9 @@
 # model sim or questa tools.
 
 # To load quest, type the command below.
-# $module load questa
+# $module load questa/modelsim
 
-vsim -c -do sim.do
+vsim -do sim.do
 
 #cleanup
-rm -rf transcript modelsim.ini work
+rm -rf vsim.wlf transcript modelsim.ini work

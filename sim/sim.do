@@ -45,9 +45,15 @@ sccom
 #sim source
 vsim -novopt -t 10ps work.tbench
 
-force -freeze sim:/tbench/u1_orca/proc(1)/orca_tile/proc_tile_ni_binding/ni_recv_mod/recv_reload 0 16us
-force -freeze sim:/tbench/u1_orca/proc(1)/orca_tile/proc_tile_ni_binding/ni_recv_mod/prog_size 32'h00000008 21us
-force -freeze sim:/tbench/u1_orca/proc(1)/orca_tile/proc_tile_ni_binding/ni_recv_mod/recv_start 1 22us
-force -freeze sim:/tbench/u1_orca/proc(1)/orca_tile/proc_tile_ni_binding/ni_recv_mod/recv_start 0 23us
-force -freeze sim:/tbench/u1_orca/proc(1)/orca_tile/proc_tile_mem_binding/ram(0) 32'h00000000 25us
-force -freeze sim:/tbench/u1_orca/proc(1)/orca_tile/proc_tile_ni_binding/ni_sender_mod/send_start 1 25us
+force -freeze sim:/tbench/u1_orca/proc(1)/orca_tile/proc_tile_ni_binding/ni_recv_mod/recv_reload 0 17us
+force -freeze sim:/tbench/u1_orca/proc(1)/orca_tile/proc_tile_ni_binding/ni_recv_mod/prog_size 32'h00000008 22us
+force -freeze sim:/tbench/u1_orca/proc(1)/orca_tile/proc_tile_ni_binding/ni_recv_mod/recv_start 1 23us
+force -freeze sim:/tbench/u1_orca/proc(1)/orca_tile/proc_tile_ni_binding/ni_recv_mod/recv_start 0 24us
+force -freeze sim:/tbench/u1_orca/proc(1)/orca_tile/proc_tile_ni_binding/ni_recv_mod/prog_size 32'h00000009 25us
+force -freeze sim:/tbench/u1_orca/proc(1)/orca_tile/proc_tile_mem_binding/ram(0) 32'h00000000 26us
+force -freeze sim:/tbench/u1_orca/proc(1)/orca_tile/proc_tile_mem_binding/ram(1) 32'h00000007 26us
+force -freeze sim:/tbench/u1_orca/proc(1)/orca_tile/proc_tile_ni_binding/ni_sender_mod/send_start 1 26us
+
+do wave.do
+
+run 27us

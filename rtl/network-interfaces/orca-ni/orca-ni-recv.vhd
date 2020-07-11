@@ -65,7 +65,7 @@ architecture orca_ni_recv of orca_ni_recv is
   --temporary data
   signal recv_copy_addr : std_logic_vector(31 downto 0);
   signal recv_copy_size : std_logic_vector(31 downto 0);
-  signal cpu_copy_addr_dly1, cpu_copy_addr_dly2 : std_logic_vector(31 downto 0);
+  signal cpu_copy_addr : std_logic_vector(31 downto 0);
   signal cpu_copy_size : std_logic_vector(31 downto 0);
   
   --buffer i/f
@@ -138,7 +138,7 @@ begin
             recv_state <= R_COPY_RELEASE;
           end if;
         when R_COPY_RELEASE =>
-          if cpu_copy_addr_dly2 = cpu_copy_addr_dly2'low then
+          if cpu_copy_addr = cpu_copy_addr'low then
             recv_state <= R_FLUSH;
           end if;
         when R_FLUSH =>
@@ -158,14 +158,9 @@ begin
       recv_copy_size <= (others => '1'); --reset internals
       recv_copy_addr <= (others => '0');
       cpu_copy_size <= (others => '0');
-      cpu_copy_addr_dly1 <= (others => '0');
-      cpu_copy_addr_dly2 <= (others => '0');
+      cpu_copy_addr <= (others => '0');
       stall <= '1'; -- cpu gets stalled until the end of reload
       rst_reload <= '1'; -- cpu reset for reload app
-      m_wb_o <= (others => '0'); --set memory to read mode
-      b_data_o <= (others => '0'); -- write first flit to buffer
-      b_addr_o <= (others => '0');
-      b_wb_o <= (others => '0'); --set buffer to read mode
       recv_status <= (others => '0'); -- no memory space has been requested yet
       intr <= '0'; -- interruption starts lowered
     elsif rising_edge(clk) then
@@ -189,20 +184,10 @@ begin
         -- copy flits directly to the main memory
         when R_RELOAD_COPY =>
           if r_rx = '1' then
-            m_addr_o <= recv_copy_addr;
-            m_data_o <= r_data_i;
-            m_wb_o <= (others => '1');
-            
             recv_copy_size <= recv_copy_size - 1;
             recv_copy_addr <= recv_copy_addr + 4; -- << care mem. width!
-            if recv_copy_size = recv_copy_size'low then
-              m_wb_o <= (others => '0');
-            end if;
-          else
-            m_wb_o <= (others => '0'); --prevent memory from being written during slack time
           end if ;
         when R_RELOAD_FLUSH =>
-          m_wb_o <= (others => '0'); -- disable mem write for until next packet
           stall <= '0';
 
 
@@ -214,77 +199,42 @@ begin
           stall <= '0'; --enable cpu to use memory until next packet arrival
           recv_copy_addr <= (others => '0');
           if r_rx = '1' then
-
-            b_data_o <= r_data_i; -- write first flit to buffer
-            b_wb_o <= (others => '1');
-            b_addr_o <= recv_copy_addr;
-            
             recv_copy_addr <= recv_copy_addr + 1; --advance mem. to 2nd position
-          else
-            b_wb_o <= (others => '0');
           end if;
           
         -- wait for the size flit to arrive
         when R_WAIT_FLIT_SIZE => 
           if r_rx = '1' then
-            b_data_o <= r_data_i; -- write to the 2nd position
-            b_wb_o <= (others => '1');
-            b_addr_o <= recv_copy_addr;
-            
             recv_copy_addr <= recv_copy_addr + 1; --advances mem ptr.
             recv_copy_size <= r_data_i;
             recv_status <= r_data_i(15 downto 0); -- notify recv flits to cpu
-          else 
-            b_wb_o <= (others => '0');
           end if;
         
         --copy flits until no more payload is available
         when R_WAIT_PAYLOAD =>
           if r_rx = '1' then 
-            b_data_o <= r_data_i; -- write to the 3nd position and beyond
-            b_wb_o <= (others => '1');
-            b_addr_o <= recv_copy_addr;
-            
             recv_copy_addr <= recv_copy_addr + 1; --advances mem ptr.
             recv_copy_size <= recv_copy_size - 1;
-          else
-            b_wb_o <= (others => '0');
           end if;
           
         -- raises interruption and wait the cpu to treat the request
         when R_WAIT_CONFIG_STALL =>
-          b_wb_o <= (others => '0');
           intr <= '1'; -- raise interruption flag
           recv_copy_addr <= prog_address; --copy dma info
           cpu_copy_size <= prog_size - 1;
-          b_addr_o <= cpu_copy_size; -- copy from the last to the first
-          m_wb_o <= (others => '1');
-          cpu_copy_addr_dly1 <= cpu_copy_size;
-          cpu_copy_addr_dly2 <= cpu_copy_addr_dly1;
-          m_addr_o <= recv_copy_addr + (cpu_copy_addr_dly2(29 downto 0) & "00");
-          m_data_o <= b_data_i;
+          cpu_copy_addr <= recv_copy_addr + (cpu_copy_size(29 downto 0) & "00");
           if recv_start = '1' then
             stall <= '1';
-            cpu_copy_addr_dly1 <= cpu_copy_size;
-            cpu_copy_addr_dly2 <= cpu_copy_addr_dly1;
+            cpu_copy_addr <= recv_copy_addr + (cpu_copy_size(29 downto 0) & "00");
             cpu_copy_size <= cpu_copy_size - 1;
           end if;
         when R_COPY_RELEASE =>
           stall <= '1'; -- stall cpu during copy
-          b_wb_o <= (others => '0'); --read from buffer
-          b_addr_o <= cpu_copy_size; -- copy from the last to the first
-            
-          cpu_copy_addr_dly1 <= cpu_copy_size;
-          cpu_copy_addr_dly2 <= cpu_copy_addr_dly1;
-          m_wb_o <= (others => '1');
-          m_addr_o <= recv_copy_addr + (cpu_copy_addr_dly2(29 downto 0) & "00");
-          m_data_o <= b_data_i;
-          
+          cpu_copy_addr <= recv_copy_addr + (cpu_copy_size(29 downto 0) & "00");
           if cpu_copy_size /= cpu_copy_size'low then
             cpu_copy_size <= cpu_copy_size - 1;
           end if;
         when R_FLUSH =>
-          m_wb_o <= (others => '0'); -- disable mem write for until next packet
           stall <= '0';
           if recv_start = '0' then
             intr <= '0'; --low interruption 
@@ -295,5 +245,14 @@ begin
   end process;
 
 r_credit_o <= '0' when recv_copy_size = recv_copy_size'low else '1';
+
+b_wb_o <= (others => '1') when (recv_state = R_WAIT_FLIT_ADDR or recv_state = R_WAIT_FLIT_SIZE or recv_state = R_WAIT_PAYLOAD) and r_rx = '1' else (others => '0');
+b_addr_o <= recv_copy_addr when recv_state = R_WAIT_FLIT_ADDR or recv_state = R_WAIT_FLIT_SIZE or recv_state = R_WAIT_PAYLOAD else cpu_copy_size;
+b_data_o <= r_data_i when recv_state = R_WAIT_FLIT_ADDR or recv_state = R_WAIT_FLIT_SIZE or recv_state = R_WAIT_PAYLOAD else (others => '0');
+
+
+m_wb_o <= (others => '1') when (recv_state = R_RELOAD_COPY and r_rx = '1') or recv_state = R_WAIT_CONFIG_STALL or recv_state = R_COPY_RELEASE else (others => '0');
+m_addr_o <= cpu_copy_addr when recv_state = R_WAIT_CONFIG_STALL or recv_state = R_COPY_RELEASE else recv_copy_addr;
+m_data_o <= b_data_i when recv_state = R_WAIT_CONFIG_STALL or recv_state = R_COPY_RELEASE else r_data_i;
 
 end orca_ni_recv;

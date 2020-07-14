@@ -35,7 +35,7 @@ end SwitchControl;
 architecture XY of SwitchControl is
 
 type state is (S0,S1,S2,S3,S4,S5,S6,S7);
-signal ES, PES: state;
+signal ES: state;
 
 -- sinais do arbitro
 signal ask: std_logic := '0';
@@ -102,15 +102,6 @@ begin
         dirx <= WEST when lx > tx else EAST;
         diry <= NORTH when ly < ty else SOUTH;
 
-        process(reset,clock)
-        begin
-                if reset='1' then
-                        ES<=S0;
-                elsif clock'event and clock='0' then
-                        ES<=PES;
-                end if;
-        end process;
-
         ------------------------------------------------------------------------------------------------------
         -- PARTE COMBINACIONAL PARA DEFINIR O PRÓXIMO ESTADO DA MÁQUINA.
         --
@@ -138,21 +129,40 @@ begin
         -- S7 -> O estado S7 é necessário para que a porta selecionada para roteamento baixe o sinal
         --       h.
         --
-        process(ES,ask,h,lx,ly,tx,ty,auxfree,dirx,diry)
+        process(reset, clock)
         begin
-                case ES is
-                        when S0 => PES <= S1;
-                        when S1 => if ask='1' then PES <= S2; else PES <= S1; end if;
-                        when S2 => PES <= S3;
-                        when S3 => if lx = tx and ly = ty and auxfree(LOCAL)='1' then PES<=S4;
-                                        elsif lx /= tx and auxfree(dirx)='1' then PES<=S5;
-                                        elsif lx = tx and ly /= ty and auxfree(diry)='1' then PES<=S6;
-                                        else PES<=S1; end if;
-                        when S4 => PES<=S7;
-                        when S5 => PES<=S7;
-                        when S6 => PES<=S7;
-                        when S7 => PES<=S1;
-                end case;
+                if reset='1' then
+                        ES<=S0;
+                elsif clock'event and clock='1' then
+                        case ES is
+				when S0 =>
+					ES <= S1;
+				when S1 =>
+					if ask='1' then
+						ES <= S2;
+					end if;
+				when S2 =>
+					ES <= S3;
+				when S3 =>
+					if lx = tx and ly = ty and auxfree(LOCAL) = '1' then
+						ES <= S4;
+					elsif lx /= tx and auxfree(dirx) = '1' then
+						ES <= S5;
+					elsif lx = tx and ly /= ty and auxfree(diry) = '1' then
+						ES <= S6;
+					else
+						ES <= S1;
+					end if;
+				when S4 =>
+					ES <= S7;
+				when S5 =>
+					ES <= S7;
+				when S6 =>
+					ES <= S7;
+				when S7 =>
+					ES <= S1; 
+			end case;
+                end if;
         end process;
 
         ------------------------------------------------------------------------------------------------------

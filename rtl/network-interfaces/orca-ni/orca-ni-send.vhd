@@ -25,8 +25,8 @@ entity orca_ni_send is
 
     -- dma programming (must be mapped into memory space)
     send_start : in std_logic;
-    prog_address : in std_logic_vector(31 downto 0);
-    prog_size    : in std_logic_vector(31 downto 0);
+    prog_address : in std_logic_vector((RAM_WIDTH - 1) downto 0);
+    prog_size    : in std_logic_vector((RAM_WIDTH - 1) downto 0);
     send_status : out std_logic
   );
 
@@ -47,9 +47,9 @@ architecture orca_ni_send of orca_ni_send is
   signal send_state : send_state_type;
 
   --temporary data
-  signal send_copy_addr, send_copy_addr_dly : std_logic_vector(31 downto 0);
-  signal send_copy_size : std_logic_vector(31 downto 0);
-  signal previous_data : std_logic_vector(31 downto 0);
+  signal send_copy_addr, send_copy_addr_dly : std_logic_vector((RAM_WIDTH - 1) downto 0);
+  signal send_copy_size : std_logic_vector((RAM_WIDTH - 1) downto 0);
+  signal previous_data : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal r_stall, credit_i_dly : std_logic;
 
 begin
@@ -146,7 +146,7 @@ end process;
   	end if;	
   end process;
 
-  r_data_o <= m_data_i;
+  r_data_o <= m_data_i(TAM_FLIT-1 downto 0);
 
   stall <= r_stall;  
 

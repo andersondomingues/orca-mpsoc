@@ -13,14 +13,15 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
+use work.orca_defaults.all;
 
 entity peripherals is
 	port (
 		clk_i: in std_logic;
 		rst_i: in std_logic;
-		addr_i: in std_logic_vector(31 downto 0);
-		data_i: in std_logic_vector(31 downto 0);
-		data_o: out std_logic_vector(31 downto 0);
+		addr_i: in std_logic_vector((RAM_WIDTH - 1) downto 0);
+		data_i: in std_logic_vector((RAM_WIDTH - 1) downto 0);
+		data_o: out std_logic_vector((RAM_WIDTH - 1) downto 0);
 		sel_i: in std_logic;
 		wr_i: in std_logic;
 		irq_o: out std_logic;
@@ -33,9 +34,9 @@ entity peripherals is
 		ni_recv_start : out std_logic;
 		ni_send_status : in std_logic;
 		ni_intr : in std_logic;
-		ni_recv_size : in std_logic_vector(15 downto 0);
-		ni_mem_addr : out std_logic_vector(31 downto 0);
-		ni_pct_size : out std_logic_vector(31 downto 0)
+		ni_recv_size : in std_logic_vector((RAM_WIDTH/2 - 1) downto 0);
+		ni_mem_addr : out std_logic_vector((RAM_WIDTH - 1) downto 0);
+		ni_pct_size : out std_logic_vector((RAM_WIDTH - 1) downto 0)
 	);
 end peripherals;
 

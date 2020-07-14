@@ -75,7 +75,7 @@ begin
 
   router_binding : entity work.RouterCC
     generic map(
-      address => x"0000"
+      address => RouterAddress(0)
     )
     port map(
       clock => clk,

@@ -57,7 +57,7 @@ use work.orca_defaults.all;
 --use work.HemPS_PKG.all;
 
 entity RouterCC is
-generic( address: regmetadeflit := x"0101");
+generic( address: regmetadeflit );
 port(
         clock:     in  std_logic;
         reset:     in  std_logic;

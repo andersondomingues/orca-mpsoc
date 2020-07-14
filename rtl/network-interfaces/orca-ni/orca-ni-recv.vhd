@@ -32,9 +32,9 @@ entity orca_ni_recv is
     -- dma programming (must be mapped into memory space)
     recv_reload : in std_logic;
     recv_start : in std_logic;
-    recv_status : out std_logic_vector(15 downto 0);
-    prog_address : in std_logic_vector(31 downto 0);
-    prog_size    : in std_logic_vector(31 downto 0)
+    recv_status : out std_logic_vector((RAM_WIDTH/2 - 1) downto 0);
+    prog_address : in std_logic_vector((RAM_WIDTH - 1) downto 0);
+    prog_size    : in std_logic_vector((RAM_WIDTH - 1) downto 0)
   );
 
 end orca_ni_recv;
@@ -63,23 +63,29 @@ architecture orca_ni_recv of orca_ni_recv is
   signal recv_state : recv_state_type;
 
   --temporary data
-  signal recv_copy_addr : std_logic_vector(31 downto 0);
-  signal recv_copy_size : std_logic_vector(31 downto 0);
-  signal cpu_copy_addr : std_logic_vector(31 downto 0);
-  signal cpu_copy_size : std_logic_vector(31 downto 0);
+  signal data_temp : std_logic_vector((RAM_WIDTH - 1) downto 0);
+  signal shift : std_logic_vector((INTEGER(CEIL(LOG2(REAL(RAM_WIDTH/TAM_FLIT)))))-1 downto 0);
+  signal recv_copy_addr : std_logic_vector((RAM_WIDTH - 1) downto 0);
+  signal recv_copy_size : std_logic_vector((TAM_FLIT - 1) downto 0);
+  signal cpu_copy_addr : std_logic_vector((RAM_WIDTH - 1) downto 0);
+  signal cpu_copy_size : std_logic_vector((TAM_FLIT - 1) downto 0);
   
   --buffer i/f
   signal b_addr_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
-  signal b_data_i : std_logic_vector((RAM_WIDTH - 1) downto 0);
-  signal b_data_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
+  signal b_data_i : std_logic_vector((TAM_FLIT - 1) downto 0);
+  signal b_data_o : std_logic_vector((TAM_FLIT - 1) downto 0);
   signal b_wb_o   : std_logic_vector(3 downto 0);
+  signal m_data_o_internal : std_logic_vector(TAM_FLIT-1 downto 0);
+  signal m_data_complement : std_logic_vector(RAM_WIDTH - 1 downto TAM_FLIT);
 
 begin
+
+  m_data_complement <= (others => '0');
 
   --memory buffer binding
   ni_recv_buffer_mod: entity work.single_port_ram
     generic map(
-        RAM_WIDTH_I => RAM_WIDTH,
+        RAM_WIDTH_I => TAM_FLIT,
         RAM_DEPTH_I => BUFFER_DEPTH_NI
     )
     port map(
@@ -159,6 +165,8 @@ begin
       recv_copy_addr <= (others => '0');
       cpu_copy_size <= (others => '0');
       cpu_copy_addr <= (others => '0');
+      data_temp <= (others => '0');
+      shift <= (others => '0');
       stall <= '1'; -- cpu gets stalled until the end of reload
       rst_reload <= '1'; -- cpu reset for reload app
       recv_status <= (others => '0'); -- no memory space has been requested yet
@@ -174,7 +182,7 @@ begin
           recv_copy_size <= (others => '1');
           if r_rx = '1' then
             rst_reload <= '0';
-            recv_copy_addr <= conv_std_logic_vector(PRELOAD_ADDR, 32);
+            recv_copy_addr <= conv_std_logic_vector(PRELOAD_ADDR, RAM_WIDTH);
           end if;
         -- drop second flit and store size info.
         when R_RELOAD_SIZE =>
@@ -221,16 +229,16 @@ begin
         when R_WAIT_CONFIG_STALL =>
           intr <= '1'; -- raise interruption flag
           recv_copy_addr <= prog_address; --copy dma info
-          cpu_copy_size <= prog_size - 1;
-          cpu_copy_addr <= recv_copy_addr + (cpu_copy_size(29 downto 0) & "00");
+          cpu_copy_size <= prog_size(TAM_FLIT-1 downto 0) - 1;
+          cpu_copy_addr <= recv_copy_addr + (cpu_copy_size(TAM_FLIT - 3) & "00");
           if recv_start = '1' then
             stall <= '1';
-            cpu_copy_addr <= recv_copy_addr + (cpu_copy_size(29 downto 0) & "00");
+            cpu_copy_addr <= recv_copy_addr + (cpu_copy_size((TAM_FLIT - 3) downto 0) & "00");
             cpu_copy_size <= cpu_copy_size - 1;
           end if;
         when R_COPY_RELEASE =>
           stall <= '1'; -- stall cpu during copy
-          cpu_copy_addr <= recv_copy_addr + (cpu_copy_size(29 downto 0) & "00");
+          cpu_copy_addr <= recv_copy_addr + (cpu_copy_size((TAM_FLIT - 3) downto 0) & "00");
           if cpu_copy_size /= cpu_copy_size'low then
             cpu_copy_size <= cpu_copy_size - 1;
           end if;
@@ -247,12 +255,12 @@ begin
 r_credit_o <= '0' when recv_copy_size = recv_copy_size'low else '1';
 
 b_wb_o <= (others => '1') when (recv_state = R_WAIT_FLIT_ADDR or recv_state = R_WAIT_FLIT_SIZE or recv_state = R_WAIT_PAYLOAD) and r_rx = '1' else (others => '0');
-b_addr_o <= recv_copy_addr when recv_state = R_WAIT_FLIT_ADDR or recv_state = R_WAIT_FLIT_SIZE or recv_state = R_WAIT_PAYLOAD else cpu_copy_size;
+b_addr_o <= recv_copy_addr when recv_state = R_WAIT_FLIT_ADDR or recv_state = R_WAIT_FLIT_SIZE or recv_state = R_WAIT_PAYLOAD else m_data_complement & cpu_copy_size;
 b_data_o <= r_data_i when recv_state = R_WAIT_FLIT_ADDR or recv_state = R_WAIT_FLIT_SIZE or recv_state = R_WAIT_PAYLOAD else (others => '0');
 
 
 m_wb_o <= (others => '1') when (recv_state = R_RELOAD_COPY and r_rx = '1') or recv_state = R_WAIT_CONFIG_STALL or recv_state = R_COPY_RELEASE else (others => '0');
 m_addr_o <= cpu_copy_addr when recv_state = R_WAIT_CONFIG_STALL or recv_state = R_COPY_RELEASE else recv_copy_addr;
-m_data_o <= b_data_i when recv_state = R_WAIT_CONFIG_STALL or recv_state = R_COPY_RELEASE else r_data_i;
-
+m_data_o_internal <= b_data_i when recv_state = R_WAIT_CONFIG_STALL or recv_state = R_COPY_RELEASE else r_data_i;
+m_data_o <= m_data_complement & m_data_o_internal;
 end orca_ni_recv;

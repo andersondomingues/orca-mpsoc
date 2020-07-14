@@ -37,16 +37,16 @@ entity orca_ni_top is
     send_start : in std_logic;
     recv_start : in std_logic;
     send_status : out std_logic;
-    recv_status : out std_logic_vector(15 downto 0);
-    prog_address : in std_logic_vector(31 downto 0);
-    prog_size    : in std_logic_vector(31 downto 0)
+    recv_status : out std_logic_vector((RAM_WIDTH/2 - 1) downto 0);
+    prog_address : in std_logic_vector((RAM_WIDTH - 1) downto 0);
+    prog_size    : in std_logic_vector((RAM_WIDTH - 1) downto 0)
 
   );
 end orca_ni_top;
 
 architecture orca_ni_top of orca_ni_top is
 
-  signal recv_status_r : std_logic_vector(15 downto 0);
+  signal recv_status_r : std_logic_vector((RAM_WIDTH/2 - 1) downto 0);
   signal send_status_s : std_logic;
 
   signal stall_r : std_logic;

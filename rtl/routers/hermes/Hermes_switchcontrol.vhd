@@ -1,10 +1,12 @@
 ------------------------------------------------------------------------------------------------
 --
---  DISTRIBUTED HEMPS  - version 5.0
+--  ORCA-MPSoC
 --
 --  Research group: GAPH-PUCRS    -    contact   fernando.moraes@pucrs.br
 --
---  Distribution:  September 2013
+--  Distribution: July 2020
+--  Adapted from original Hermes Switchcontrol available at https://github.com/GaphGroup
+--  by Guilherme Heck - guilherme.heck@acad.pucrs.br
 --
 --  Source name:  Hermes_switchcontrol.vhd
 --
@@ -16,7 +18,6 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use IEEE.STD_LOGIC_unsigned.all;
 use work.orca_defaults.all;
---use work.HemPS_PKG.all;
 
 entity SwitchControl is
 port(

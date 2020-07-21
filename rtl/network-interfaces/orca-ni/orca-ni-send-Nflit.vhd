@@ -56,13 +56,11 @@ architecture orca_ni_send of orca_ni_send is
   --temporary data
   signal send_copy_addr, send_copy_addr_dly : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal send_copy_size : std_logic_vector((RAM_WIDTH - 1) downto 0);
-  signal previous_data : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal r_stall, credit_i_dly : std_logic;
   signal shift : std_logic_vector(INTEGER(CEIL(LOG2(REAL(RAM_WIDTH/TAM_FLIT))))-1 downto 0);
   signal shift_high : std_logic_vector(INTEGER(CEIL(LOG2(REAL(RAM_WIDTH/TAM_FLIT))))-1 downto 0);
   signal quarter_flit_complement : std_logic_vector(QUARTOFLIT-1 downto 0);
   signal half_flit_complement : std_logic_vector(TAM_FLIT-1 downto TAM_FLIT/2);
-  signal test : std_logic_vector(0 downto 0);
 
 begin
 
@@ -205,10 +203,10 @@ end process;
   end process;
 
   GEN : for i in 0 to (INTEGER(RAM_WIDTH/TAM_FLIT)-1) generate
-    mux(i) <= m_data_i((TAM_FLIT*(i+1)) - 1 downto (TAM_FLIT*i));
+    mux(i) <= m_data_i((TAM_FLIT*(i+1)) - 1 downto (TAM_FLIT*i)) when send_state = S_PAYLOAD else (others => '0');
   end generate;
 
-  r_data_o <= half_flit_complement & mux(0)(RAM_WIDTH/4+TAM_FLIT/4-1 downto RAM_WIDTH/4) & mux(0)(TAM_FLIT/4-1 downto 0) when previous_state = S_SEND_DESTINY else mux(0)(TAM_FLIT-INTEGER(CEIL(LOG2(REAL(RAM_WIDTH/TAM_FLIT))))-1 downto 0) & shift when previous_state = S_SEND_SIZE else mux(to_integer(unsigned(shift)));
+  r_data_o <= half_flit_complement & mux(0)(RAM_WIDTH/4+TAM_FLIT/4-1 downto RAM_WIDTH/4) & mux(0)(TAM_FLIT/4-1 downto 0) when previous_state = S_SEND_DESTINY else mux(0)(TAM_FLIT-INTEGER(CEIL(LOG2(REAL(RAM_WIDTH/TAM_FLIT))))-1 downto 0) & shift when previous_state = S_SEND_SIZE else mux(to_integer(unsigned(shift))) when previous_state = S_PAYLOAD else (others => '0');
 
   stall <= r_stall;  
 

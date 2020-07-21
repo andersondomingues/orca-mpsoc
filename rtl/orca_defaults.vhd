@@ -18,6 +18,8 @@ library IEEE;
 use IEEE.Std_Logic_1164.all;
 use IEEE.std_logic_unsigned.all;
 use IEEE.std_logic_arith.all;
+use ieee.math_real.log2;
+use ieee.math_real.ceil;
 
 package orca_defaults is
 
@@ -61,7 +63,7 @@ package orca_defaults is
 ---------------------------------------------------------
         constant TAM_BUFFER: integer := 4;
         constant TAM_BUFFER_DMNI: integer := 16; -- not used in the router
-        constant TAM_POINTER : integer range 1 to 32 := 2;
+        constant TAM_POINTER : integer range 1 to 32 := INTEGER(CEIL(LOG2(REAL(TAM_BUFFER))));
 
 
 --------------------------------------------------------

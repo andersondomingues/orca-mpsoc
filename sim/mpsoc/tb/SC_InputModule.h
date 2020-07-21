@@ -27,9 +27,11 @@ SC_MODULE(inputmodule)
 {
 	sc_in<sc_logic> clock;
 	sc_in<sc_logic> reset;
-	sc_in<sc_lv<16> > address_ip;
+//	sc_in<sc_lv<16> > address_ip;
+	sc_in<sc_lv<8> > address_ip;
 	sc_out<sc_logic> outTx;
-	sc_out<sc_lv<32> > outData;
+//	sc_out<sc_lv<32> > outData;
+	sc_out<sc_lv<16> > outData;
 	sc_in<sc_logic> inCredit;
 	void inline TrafficGenerator();
 
@@ -106,7 +108,8 @@ void inline inputmodule::TrafficGenerator(){
 					Target = address_ip.read().to_int();
 					FlitNumber++;
 					//Size capture
-					Size = numlines;
+//					Size = numlines;
+					Size = numlines*2;
 					NumberofFlits = Size + 2; //2 = header + size
 					BigPacket=(unsigned long int*)calloc( sizeof(unsigned long int) , NumberofFlits);
 					BigPacket[0] = Target;
@@ -114,9 +117,13 @@ void inline inputmodule::TrafficGenerator(){
 					FlitNumber++;
 					///Payload capture
 					while(FlitNumber < NumberofFlits){
-						fscanf(Input, "%8X", &CurrentFlit);
+//						fscanf(Input, "%8X", &CurrentFlit);
+						fscanf(Input, "%4X", &CurrentFlit);
+						BigPacket[FlitNumber+1] = CurrentFlit;
+						fscanf(Input, "%4X", &CurrentFlit);
 						BigPacket[FlitNumber] = CurrentFlit;
-						FlitNumber++;
+//						FlitNumber++;
+						FlitNumber+=2;
 					}
 					CurrentState = S3;
 					FlitNumber = 0;

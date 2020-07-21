@@ -52,7 +52,7 @@ package orca_defaults is
 ---------------------------------------------------------
 -- NOC BANDWIDTH DEPENDENT CONSTANTS
 ---------------------------------------------------------
-        constant TAM_FLIT : integer range 1 to 64 := 32;
+        constant TAM_FLIT : integer range 1 to 64 := 16;
         constant METADEFLIT : integer range 1 to 32 := (TAM_FLIT/2);
         constant QUARTOFLIT : integer range 1 to 16 := (TAM_FLIT/4);
 
@@ -88,7 +88,7 @@ package orca_defaults is
 -- PROCESSOR ELEMENT DEPENDENT CONSTANTS
 ---------------------------------------------------------
         constant RAM_WIDTH : integer := 32;
-        constant RAM_DEPTH : integer := 16386;
+        constant RAM_DEPTH : integer := 16384;
         constant PRELOAD_ADDR : integer := 0;
         constant BUFFER_DEPTH_NI : integer := 64;
 

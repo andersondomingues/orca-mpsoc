@@ -11,7 +11,7 @@ add wave -noupdate /tbench/u1_orca/tx_local
 add wave -noupdate /tbench/u1_orca/data_out_local
 add wave -noupdate /tbench/u1_orca/credit_i_local
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {26999340 ps} 0}
+WaveRestoreCursors {{Cursor 1} {26166910 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 100
@@ -27,4 +27,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {26039550 ps} {26295550 ps}
+WaveRestoreZoom {26032 ns} {26288 ns}

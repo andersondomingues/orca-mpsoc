@@ -44,7 +44,7 @@ architecture logic of tbench is
 begin  
    clock <= not clock after 4 ns;
    reset <= '1', '0' after 50 ns;
-   address_ip <= x"0100";
+   address_ip <= x"10";
    credit_i <= '1';
    
 	u1_orca: entity work.orca_top_v2

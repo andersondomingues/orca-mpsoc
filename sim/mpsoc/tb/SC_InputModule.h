@@ -29,9 +29,11 @@ SC_MODULE(inputmodule)
 	sc_in<sc_logic> reset;
 //	sc_in<sc_lv<16> > address_ip;
 	sc_in<sc_lv<8> > address_ip;
+//	sc_in<sc_lv<4> > address_ip;
 	sc_out<sc_logic> outTx;
 //	sc_out<sc_lv<32> > outData;
 	sc_out<sc_lv<16> > outData;
+//	sc_out<sc_lv<8> > outData;
 	sc_in<sc_logic> inCredit;
 	void inline TrafficGenerator();
 
@@ -110,6 +112,7 @@ void inline inputmodule::TrafficGenerator(){
 					//Size capture
 //					Size = numlines;
 					Size = numlines*2;
+//					Size = numlines*4;
 					NumberofFlits = Size + 2; //2 = header + size
 					BigPacket=(unsigned long int*)calloc( sizeof(unsigned long int) , NumberofFlits);
 					BigPacket[0] = Target;
@@ -122,8 +125,17 @@ void inline inputmodule::TrafficGenerator(){
 						BigPacket[FlitNumber+1] = CurrentFlit;
 						fscanf(Input, "%4X", &CurrentFlit);
 						BigPacket[FlitNumber] = CurrentFlit;
+//						fscanf(Input, "%2X", &CurrentFlit);
+//						BigPacket[FlitNumber+3] = CurrentFlit;
+//						fscanf(Input, "%2X", &CurrentFlit);
+//						BigPacket[FlitNumber+2] = CurrentFlit;
+//						fscanf(Input, "%2X", &CurrentFlit);
+//						BigPacket[FlitNumber+1] = CurrentFlit;
+//						fscanf(Input, "%2X", &CurrentFlit);
+//						BigPacket[FlitNumber] = CurrentFlit;
 //						FlitNumber++;
 						FlitNumber+=2;
+//						FlitNumber+=4;
 					}
 					CurrentState = S3;
 					FlitNumber = 0;

@@ -43,7 +43,7 @@ vcom -work work ./mpsoc/tb/tbench.vhd
 
 sccom 
 #sim source
-vsim -novopt -t 10ps work.tbench
+vsim -novopt -t ps work.tbench
 
 #force -freeze sim:/tbench/u1_orca/proc(1)/orca_tile/proc_tile_ni_binding/ni_recv_mod/recv_reload 0 17us
 #force -freeze sim:/tbench/u1_orca/proc(1)/orca_tile/proc_tile_ni_binding/ni_recv_mod/prog_size 32'h00000008 22us

@@ -195,6 +195,7 @@ begin
       gpioa_out => dummy_gpioa_out,
       gpioa_ddr => dummy_gpioa_ddr,
 
+      ni_address => R_ADDRESS,
       ni_reload => recv_reload,
       ni_send_start => send_start,
       ni_recv_start => recv_start,

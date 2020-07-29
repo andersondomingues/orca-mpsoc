@@ -1,11 +1,12 @@
--- file:          minimal_soc.vhd
--- description:   basic SoC with peripherals
--- date:          01/2019
--- author:        Sergio Johann Filho <sergio.filho@pucrs.br>
+-- file:          orca-minimal-soc.vhd
+-- description:   basic SoC with peripherals including network interface
+-- date:          07/2020
+-- author:        Guilherme Heck <guilherme.heck@acad.pucrs.br>
+-- adapted from:  Sergio Johann Filho <sergio.filho@pucrs.br> - https://github.com/sjohann81/hf-risc
 --
 -- Very simple configuration for a minimal SoC. Only a single GPIO port
 -- a counter and timer are included in this version.
--- NI: registradores: NI_STATUS (0xe0ff8000), NI_MEM_ADDR (0xe0ff8010), NI_PCT_SIZE (0xe0ff8020)
+-- NI: registradores: NI_ADDRESS (0xe0ff8000), NI_STATUS (0xe0ff8010), NI_MEM_ADDR (0xe0ff8020), NI_PCT_SIZE (0xe0ff8030)
 
 
 
@@ -28,7 +29,8 @@ entity peripherals is
 		gpioa_in: in std_logic_vector(7 downto 0);
 		gpioa_out: out std_logic_vector(7 downto 0);
 		gpioa_ddr: out std_logic_vector(7 downto 0);
-		
+
+		ni_address : in regmetadeflit;		
 		ni_reload : out std_logic;
 		ni_send_start : out std_logic;
 		ni_recv_start : out std_logic;
@@ -56,8 +58,13 @@ architecture peripherals_arch of peripherals is
 	signal int_gpioa, int_timer1_ocr, int_timer1_ctc, tmr1_pulse, tmr1_dly, tmr1_dly2: std_logic;
 	signal paalt0: std_logic;
 	signal ni_send_strt, ni_recv_strt, ni_reld : std_logic;
+	signal half_mem_complement : std_logic_vector((RAM_WIDTH/2 - 1) downto 0);
+	signal quarter_flit_complement : std_logic_vector(RAM_WIDTH/4 - 1 downto QUARTOFLIT);
 
 begin
+	half_mem_complement <= (others => '0');
+	quarter_flit_complement <= (others => '0');
+
 	segment <= addr_i(27 downto 24);
 	class <= addr_i(19 downto 16);
 	device <= addr_i(15 downto 10);
@@ -100,10 +107,12 @@ begin
 						when "100000" =>
 							case funct is
 							when "0000" =>
-								data_o <= ni_reld & ni_send_strt & ni_recv_strt & ni_send_status & x"000" & ni_recv_size;	-- NI_STATUS		(RW+RO)
+								data_o <= half_mem_complement & quarter_flit_complement & ni_address(METADEFLIT-1 downto QUARTOFLIT) & quarter_flit_complement & ni_address(QUARTOFLIT-1 downto 0);
 							when "0001" =>
-								data_o <= ni_addr;										-- NI_MEM_ADDR		(RW)
+								data_o <= ni_reld & ni_send_strt & ni_recv_strt & ni_send_status & x"000" & ni_recv_size;	-- NI_STATUS		(RW+RO)
 							when "0010" =>
+								data_o <= ni_addr;										-- NI_MEM_ADDR		(RW)
+							when "0011" =>
 								data_o <= ni_size;										-- NI_PCT_SIZE		(RW)
 							when others =>
 								data_o <= (others => '0');
@@ -221,13 +230,13 @@ begin
 						case device is
 						when "100000" =>
 							case funct is
-							when "0000" =>
+							when "0001" =>
 								ni_reld <= data_i(31);			-- NI_RELOAD_FLAG	(RW)
                                                                 ni_send_strt <= data_i(30);		-- NI_SEND_START_FLAG	(RW)
                                                                 ni_recv_strt <= data_i(29);		-- NI_RECV_START_FLAG	(RW)
-							when "0001" =>
-								ni_addr <= data_i;			-- NI_MEM_ADDR		(RW)
 							when "0010" =>
+								ni_addr <= data_i;			-- NI_MEM_ADDR		(RW)
+							when "0011" =>
 								ni_size <= data_i;			-- NI_PCT_SIZE		(RW)
 							when others =>
 							end case;

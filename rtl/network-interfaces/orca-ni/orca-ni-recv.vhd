@@ -75,8 +75,8 @@ architecture orca_ni_recv of orca_ni_recv is
   signal b_addr_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal b_data_i : std_logic_vector((TAM_FLIT - 1) downto 0);
   signal b_data_o : std_logic_vector((TAM_FLIT - 1) downto 0);
-  signal b_cs_o   : std_logic_vector(3 downto 0);
-  signal b_wb_o   : std_logic_vector(3 downto 0);
+  signal b_cs_n_o   : std_logic_vector(3 downto 0);
+  signal b_wb_n_o   : std_logic_vector(3 downto 0);
   signal m_data_o_internal : std_logic_vector(TAM_FLIT-1 downto 0);
   signal m_data_complement : std_logic_vector(RAM_WIDTH - 1 downto TAM_FLIT);
 
@@ -84,7 +84,7 @@ begin
 
   m_data_complement <= (others => '0');
 
-  b_cs_o <= (others => '1');
+  b_cs_n_o <= (others => '0');
   --memory buffer binding
   ni_recv_buffer_mod: entity work.single_port_ram_32bits
     generic map(
@@ -97,8 +97,8 @@ begin
         addr_i => b_addr_o((INTEGER(CEIL(LOG2(REAL(BUFFER_DEPTH_NI)))))-1 downto 0),
         data_o => b_data_i,
         data_i => b_data_o,
-        cs_i => b_cs_o,
-        wb_i => b_wb_o
+        cs_n_i => b_cs_n_o,
+        wb_n_i => b_wb_n_o
     );
 
   -- recv proc, state control
@@ -260,7 +260,7 @@ begin
 
 r_credit_o <= '0' when recv_copy_size = recv_copy_size'low else '1';
 
-b_wb_o <= (others => '1') when (recv_state = R_WAIT_FLIT_ADDR or recv_state = R_WAIT_FLIT_SIZE or recv_state = R_WAIT_PAYLOAD) and r_rx = '1' else (others => '0');
+b_wb_n_o <= (others => '0') when (recv_state = R_WAIT_FLIT_ADDR or recv_state = R_WAIT_FLIT_SIZE or recv_state = R_WAIT_PAYLOAD) and r_rx = '1' else (others => '1');
 b_addr_o <= recv_copy_addr when recv_state = R_WAIT_FLIT_ADDR or recv_state = R_WAIT_FLIT_SIZE or recv_state = R_WAIT_PAYLOAD else m_data_complement & cpu_copy_size;
 b_data_o <= r_data_i when recv_state = R_WAIT_FLIT_ADDR or recv_state = R_WAIT_FLIT_SIZE or recv_state = R_WAIT_PAYLOAD else (others => '0');
 

@@ -74,6 +74,7 @@ architecture orca_ni_recv of orca_ni_recv is
   signal b_addr_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal b_data_i : std_logic_vector((TAM_FLIT - 1) downto 0);
   signal b_data_o : std_logic_vector((TAM_FLIT - 1) downto 0);
+  signal b_cs_o   : std_logic_vector(3 downto 0);
   signal b_wb_o   : std_logic_vector(3 downto 0);
   signal m_data_o_internal : std_logic_vector(TAM_FLIT-1 downto 0);
   signal m_data_complement : std_logic_vector(RAM_WIDTH - 1 downto TAM_FLIT);
@@ -82,10 +83,10 @@ begin
 
   m_data_complement <= (others => '0');
 
+  b_cs_o <= (others => '1');
   --memory buffer binding
-  ni_recv_buffer_mod: entity work.single_port_ram
+  ni_recv_buffer_mod: entity work.single_port_ram_32bits
     generic map(
-        RAM_WIDTH_I => TAM_FLIT,
         RAM_DEPTH_I => BUFFER_DEPTH_NI
     )
     port map(
@@ -95,6 +96,7 @@ begin
         addr_i => b_addr_o((INTEGER(CEIL(LOG2(REAL(BUFFER_DEPTH_NI)))))-1 downto 0),
         data_o => b_data_i,
         data_i => b_data_o,
+        cs_i => b_cs_o,
         wb_i => b_wb_o
     );
 

@@ -56,7 +56,8 @@ architecture orca_processing_tile of orca_processing_tile is
   signal m_addr_i : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal m_data_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal m_data_i : std_logic_vector((RAM_WIDTH - 1) downto 0);
-  signal m_wb_i   : std_logic_vector(3 downto 0);
+  signal m_cs_n_i   : std_logic_vector(3 downto 0);
+  signal m_wb_n_i   : std_logic_vector(3 downto 0);
 
   -- dma programming (must be mapped into memory space)
   signal recv_reload : std_logic;
@@ -69,7 +70,9 @@ architecture orca_processing_tile of orca_processing_tile is
   
   signal n_addr_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal n_data_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
+  signal n_m_data_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal n_wb_o   : std_logic_vector(3 downto 0);
+  signal n_wb_n_o   : std_logic_vector(3 downto 0);
 
 
   -- proc i/f
@@ -77,7 +80,7 @@ architecture orca_processing_tile of orca_processing_tile is
   signal p_data_o: std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal p_data_i: std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal p_wb_o:   std_logic_vector(3 downto 0);
-  signal c_en_wb_o: std_logic_vector(3 downto 0);
+  signal p_wb_n_o:   std_logic_vector(3 downto 0);
 
 
   signal p_data_mode_o: std_logic_vector(2 downto 0);
@@ -146,8 +149,6 @@ begin
 		end if;
 	end process;
 
---	ram_enable_n <= '0' when address(31 downto 28) = "0100" else '1';
-	c_en_wb_o <= "0000" when periph = '1' else p_wb_o;
 	p_data_i <= data_read_periph when periph = '1' or periph_dly = '1' else m_data_o;
 --	data_w_n_ram <= not data_we;
 	p_extio_in <= "0000000" & periph_irq;
@@ -227,11 +228,12 @@ begin
     );
 
 
+  m_cs_n_i <= "1111" when periph = '1' else "0000";
+  p_wb_n_o <= "1111" when periph = '1' else not p_wb_o;
   shift_m_addr_i <= "00" & m_addr_i(31 downto 2);
   --main memory binding
-  proc_tile_mem_binding: entity work.single_port_ram
+  proc_tile_mem_binding: entity work.single_port_ram_32bits
     generic map(
-        RAM_WIDTH_I => RAM_WIDTH,
         RAM_DEPTH_I => RAM_DEPTH
     )
     port map(
@@ -241,9 +243,12 @@ begin
         addr_i => shift_m_addr_i((INTEGER(CEIL(LOG2(REAL(RAM_DEPTH)))))-1 downto 0),
         data_o => m_data_o,
         data_i => m_data_i,
-        wb_i => m_wb_i
+        cs_n_i => m_cs_n_i,
+        wb_n_i => m_wb_n_i
     );
     
+  n_wb_n_o <= not n_wb_o;
+  n_m_data_o <= m_data_o(7 downto 0) & m_data_o(15 downto 8) & m_data_o(23 downto 16) & m_data_o(31 downto 24);
   -- ni binding
   proc_tile_ni_binding: entity work.orca_ni_top
     port map(
@@ -256,7 +261,7 @@ begin
       m_addr_o => n_addr_o, -- interface to the memory mux
       m_data_o => n_data_o, -- output is driven to both modules
       m_wb_o   => n_wb_o,
-      m_data_i => m_data_o,
+      m_data_i => n_m_data_o,
 
       r_clock_tx => r_clock_rx(LOCAL), -- router i/f
       r_tx => r_rx(LOCAL),
@@ -279,8 +284,8 @@ begin
     
     -- memory mux (m_data_o done via port mapping)
     m_addr_i <= n_addr_o when stall = '1' else p_addr_o;
-    m_data_i <= n_data_o when stall = '1' else p_data_o;
-    m_wb_i <= n_wb_o when stall = '1' else c_en_wb_o;
+    m_data_i <= n_data_o(7 downto 0) & n_data_o(15 downto 8) & n_data_o(23 downto 16) & n_data_o(31 downto 24) when stall = '1' else p_data_o;
+    m_wb_n_i <= n_wb_n_o when stall = '1' else p_wb_n_o;
 
     -- external routers (pass-through)
     r_clock_rx(3 downto 0) <= clock_rx;

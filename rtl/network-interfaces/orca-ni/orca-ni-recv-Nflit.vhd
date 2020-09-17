@@ -69,13 +69,15 @@ architecture orca_ni_recv of orca_ni_recv is
   signal recv_copy_size : std_logic_vector((TAM_FLIT - 1) downto 0);
   signal cpu_copy_addr : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal cpu_copy_size : std_logic_vector((RAM_WIDTH/2 - 1) downto 0);
+  signal cpu_copy_size_dly : std_logic_vector((RAM_WIDTH/2 - 1) downto 0);
   signal copy_size_complement : std_logic_vector(RAM_WIDTH-1 downto RAM_WIDTH/2);
   signal size : std_logic_vector((RAM_WIDTH - 1) downto 0);
   --buffer i/f
   signal b_addr_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal b_data_i : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal b_data_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
-  signal b_wb_o   : std_logic_vector(3 downto 0);
+  signal b_cs_n_o   : std_logic_vector(3 downto 0);
+  signal b_wb_n_o   : std_logic_vector(3 downto 0);
   signal quarter_flit_complement : std_logic_vector(RAM_WIDTH/4 - 1 downto QUARTOFLIT);
   signal m_data_complement : std_logic_vector(RAM_WIDTH - 1 downto TAM_FLIT);
   signal half_mem_complement : std_logic_vector((RAM_WIDTH/2 - 1) downto 0);
@@ -88,10 +90,10 @@ begin
   half_mem_complement <= (others => '0');
   size <= m_data_complement & shift(INTEGER(CEIL(LOG2(REAL(RAM_WIDTH/TAM_FLIT))))-1 downto 0) & r_data_i(TAM_FLIT - 1 downto INTEGER(CEIL(LOG2(REAL(RAM_WIDTH/TAM_FLIT)))));
 
+  b_cs_n_o <= (others => '0');
   --memory buffer binding
-  ni_recv_buffer_mod: entity work.single_port_ram
+  ni_recv_buffer_mod: entity work.single_port_ram_32bits
     generic map(
-        RAM_WIDTH_I => RAM_WIDTH,
         RAM_DEPTH_I => BUFFER_DEPTH_NI
     )
     port map(
@@ -101,7 +103,8 @@ begin
         addr_i => b_addr_o((INTEGER(CEIL(LOG2(REAL(BUFFER_DEPTH_NI)))))-1 downto 0),
         data_o => b_data_i,
         data_i => b_data_o,
-        wb_i => b_wb_o
+        cs_n_i => b_cs_n_o,
+        wb_n_i => b_wb_n_o
     );
 
   -- recv proc, state control
@@ -150,7 +153,7 @@ begin
             recv_state <= R_COPY_RELEASE;
           end if;
         when R_COPY_RELEASE =>
-          if cpu_copy_addr = cpu_copy_addr'low then
+          if cpu_copy_size_dly = cpu_copy_size_dly'low then
             recv_state <= R_FLUSH;
           end if;
         when R_FLUSH =>
@@ -170,6 +173,7 @@ begin
       recv_copy_size <= (others => '1'); --reset internals
       recv_copy_addr <= (others => '0');
       cpu_copy_size <= (others => '0');
+      cpu_copy_size_dly <= (others => '0');
       cpu_copy_addr <= (others => '0');
       data_temp <= (others => '0');
       shift <= (others => '0');
@@ -268,17 +272,20 @@ begin
           cpu_copy_addr <= recv_copy_addr + (cpu_copy_size((RAM_WIDTH/2 - 3) downto 0) & "00");
           if recv_start = '1' then
             stall <= '1';
+            cpu_copy_size_dly <= cpu_copy_size;
             cpu_copy_addr <= recv_copy_addr + (cpu_copy_size((RAM_WIDTH/2 - 3) downto 0) & "00");
             cpu_copy_size <= cpu_copy_size - 1;
           end if;
         when R_COPY_RELEASE =>
           stall <= '1'; -- stall cpu during copy
           cpu_copy_addr <= recv_copy_addr + (cpu_copy_size((RAM_WIDTH/2 - 3) downto 0) & "00");
+          cpu_copy_size_dly <= cpu_copy_size;
           if cpu_copy_size /= cpu_copy_size'low then
             cpu_copy_size <= cpu_copy_size - 1;
           end if;
         when R_FLUSH =>
           stall <= '0';
+          recv_status <= (others => '0');
           if recv_start = '0' then
             intr <= '0'; --low interruption 
           end if;
@@ -289,7 +296,7 @@ begin
 
 r_credit_o <= '0' when recv_copy_size = recv_copy_size'low and shift(INTEGER(CEIL(LOG2(REAL(RAM_WIDTH/TAM_FLIT))))) = '1' else '1';
 
-b_wb_o <= (others => '1') when recv_state = R_WAIT_FLIT_ADDR or recv_state = R_WAIT_FLIT_SIZE or recv_state = R_WAIT_PAYLOAD else (others => '0');
+b_wb_n_o <= (others => '0') when recv_state = R_WAIT_FLIT_ADDR or recv_state = R_WAIT_FLIT_SIZE or recv_state = R_WAIT_PAYLOAD else (others => '1');
 b_addr_o <= recv_copy_addr when recv_state = R_WAIT_FLIT_ADDR or recv_state = R_WAIT_FLIT_SIZE or recv_state = R_WAIT_PAYLOAD else copy_size_complement & cpu_copy_size;
 b_data_o <= half_mem_complement & quarter_flit_complement & r_data_i(METADEFLIT-1 downto QUARTOFLIT) & quarter_flit_complement & r_data_i(QUARTOFLIT-1 downto 0) when recv_state = R_WAIT_FLIT_ADDR else m_data_complement & shift(INTEGER(CEIL(LOG2(REAL(RAM_WIDTH/TAM_FLIT))))-1 downto 0) & r_data_i(TAM_FLIT - 1 downto INTEGER(CEIL(LOG2(REAL(RAM_WIDTH/TAM_FLIT))))) when recv_state = R_WAIT_FLIT_SIZE else data_temp when recv_state = R_WAIT_PAYLOAD else (others => '0');
 

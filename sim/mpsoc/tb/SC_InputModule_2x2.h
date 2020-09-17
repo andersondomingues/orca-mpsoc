@@ -70,7 +70,7 @@ void inline inputmodule::TrafficGenerator(){
 	int node=0;
 	packet=false;
 //	printf("\n\n\n\t\t\t******** Send APP ****************\n\n\n\n");
-	sprintf(temp,"./mpsoc/app/app.txt");
+	sprintf(temp,"./mpsoc/app/app_endianness.txt");
 	numlines=numberoflines(temp);
 	printf("\n\n\n\t\t\t******** Number of lines in APP.TXT: %d ****************\n\n\n\n",numlines);
 	Input = fopen(temp,"r");
@@ -188,7 +188,7 @@ void inline inputmodule::TrafficGenerator(){
 					outData = 0;
 //					printf("\n\n\n\t\t\t******** Wait to send packet ****************\n\n\n\n");
 					wait(3,SC_US);
-					sprintf(temp,"./mpsoc/app/packet.txt");
+					sprintf(temp,"./mpsoc/app/packet_endianness.txt");
 					numlines=numberoflines(temp);
 					printf("\n\n\n\t\t\t******** Number of lines in PACKET.TXT: %d ****************\n\n\n\n",numlines);
 					Input = fopen(temp,"r");

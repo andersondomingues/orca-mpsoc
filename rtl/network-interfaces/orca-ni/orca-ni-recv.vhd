@@ -69,6 +69,7 @@ architecture orca_ni_recv of orca_ni_recv is
   signal recv_copy_size : std_logic_vector((TAM_FLIT - 1) downto 0);
   signal cpu_copy_addr : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal cpu_copy_size : std_logic_vector((TAM_FLIT - 1) downto 0);
+  signal cpu_copy_size_dly : std_logic_vector((TAM_FLIT - 1) downto 0);
   
   --buffer i/f
   signal b_addr_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
@@ -146,7 +147,7 @@ begin
             recv_state <= R_COPY_RELEASE;
           end if;
         when R_COPY_RELEASE =>
-          if cpu_copy_addr = cpu_copy_addr'low then
+          if cpu_copy_size_dly = cpu_copy_size_dly'low then
             recv_state <= R_FLUSH;
           end if;
         when R_FLUSH =>
@@ -166,6 +167,7 @@ begin
       recv_copy_size <= (others => '1'); --reset internals
       recv_copy_addr <= (others => '0');
       cpu_copy_size <= (others => '0');
+      cpu_copy_size_dly <= (others => '0');
       cpu_copy_addr <= (others => '0');
       data_temp <= (others => '0');
       shift <= (others => '0');
@@ -235,12 +237,14 @@ begin
           cpu_copy_addr <= recv_copy_addr + (cpu_copy_size(TAM_FLIT - 3) & "00");
           if recv_start = '1' then
             stall <= '1';
+            cpu_copy_size_dly <= cpu_copy_size;
             cpu_copy_addr <= recv_copy_addr + (cpu_copy_size((TAM_FLIT - 3) downto 0) & "00");
             cpu_copy_size <= cpu_copy_size - 1;
           end if;
         when R_COPY_RELEASE =>
           stall <= '1'; -- stall cpu during copy
           cpu_copy_addr <= recv_copy_addr + (cpu_copy_size((TAM_FLIT - 3) downto 0) & "00");
+          cpu_copy_size_dly <= cpu_copy_size;
           if cpu_copy_size /= cpu_copy_size'low then
             cpu_copy_size <= cpu_copy_size - 1;
           end if;

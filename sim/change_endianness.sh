@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Convert endinannes from a files with strings
+# Adapted by Leandro Heck (github.com/leoheck)
 
 # Usage 
 # change_endiannes.sh [file]

@@ -25,7 +25,7 @@ vcom -work work ../rtl/routers/hermes/Hermes_switchcontrol.vhd
 vcom -work work ../rtl/routers/hermes/RouterCC.vhd
 
 #memory core sources
-vcom -work work ../rtl/storage/single-port-ram-orca/single_port_ram_8bits.vhd
+vcom -work work ../rtl/storage/single-port-ram-orca/single_port_ram_8bits_reset.vhd
 vcom -work work ../rtl/storage/single-port-ram-orca/single_port_ram_32bits.vhd
 
 #network interface sources

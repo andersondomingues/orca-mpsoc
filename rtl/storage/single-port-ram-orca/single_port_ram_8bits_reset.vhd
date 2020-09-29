@@ -56,7 +56,10 @@ begin
 
     ram_process: process(clk) is 
     begin
-        if rising_edge(clk) then
+        if rst = '1' then
+            ram <= (others => (others => '1'));     
+
+        elsif rising_edge(clk) then
             if cs_n_i = '0' then
                 if wb_n_i = '0' then
                     ram(to_integer(unsigned(addr_i))) <= data_i;

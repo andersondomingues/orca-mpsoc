@@ -6,7 +6,7 @@
 --
 -- Very simple configuration for a minimal SoC. Only a single GPIO port
 -- a counter and timer are included in this version.
--- NI: registradores: NI_ADDRESS (0xe0ff8000), NI_STATUS (0xe0ff8010), NI_MEM_ADDR (0xe0ff8020), NI_PCT_SIZE (0xe0ff8030)
+-- NI: registradores: NI_ADDRESS (0xe0ff8000), NI_STATUS (0xe0ff8010), NI_MEM_ADDR (0xe0ff8020), NI_PCT_SIZE (0xe0ff8030), NI_PCT_DEST (0xe0ff8040)
 
 
 
@@ -38,7 +38,8 @@ entity peripherals is
 		ni_intr : in std_logic;
 		ni_recv_size : in std_logic_vector((RAM_WIDTH/2 - 1) downto 0);
 		ni_mem_addr : out std_logic_vector((RAM_WIDTH - 1) downto 0);
-		ni_pct_size : out std_logic_vector((RAM_WIDTH - 1) downto 0)
+		ni_pct_size : out std_logic_vector((RAM_WIDTH - 1) downto 0);
+		ni_pct_dest : out std_logic_vector((RAM_WIDTH - 1) downto 0)
 	);
 end peripherals;
 
@@ -50,7 +51,7 @@ architecture peripherals_arch of peripherals is
 
 	signal paaltcfg0, s0cause, gpiocause, gpiocause_inv, gpiomask, timercause, timercause_inv, timermask: std_logic_vector(3 downto 0);
 	signal paddr, paout, pain, pain_inv, pain_mask: std_logic_vector(7 downto 0);
-	signal timer0, ni_addr, ni_size : std_logic_vector(31 downto 0);
+	signal timer0, ni_addr, ni_size, ni_dest : std_logic_vector(31 downto 0);
 	signal timer1, timer1_ctc, timer1_ocr: std_logic_vector(15 downto 0);
 	signal timer1_pre: std_logic_vector(2 downto 0);
 	signal timer1_set: std_logic;
@@ -91,6 +92,7 @@ begin
 	ni_reload <= ni_reld;
 	ni_mem_addr <= ni_addr;
 	ni_pct_size <= ni_size;
+	ni_pct_dest <= ni_dest;
 
 	-- address decoder, read from peripheral registers
 	process(clk_i, rst_i, segment, class, device, funct)
@@ -114,6 +116,8 @@ begin
 								data_o <= ni_addr;										-- NI_MEM_ADDR		(RW)
 							when "0011" =>
 								data_o <= ni_size;										-- NI_PCT_SIZE		(RW)
+							when "0100" =>
+								data_o <= ni_dest;										-- NI_PCT_DEST		(RW)
 							when others =>
 								data_o <= (others => '0');
 							end case;
@@ -221,6 +225,7 @@ begin
 			ni_recv_strt <= '0';
 			ni_addr <= (others => '0');
 			ni_size <= (others => '0');
+			ni_dest <= (others => '0');
 		elsif clk_i'event and clk_i = '1' then
 			if sel_i = '1' and wr_i = '1' then
 				case segment is
@@ -238,6 +243,8 @@ begin
 								ni_addr <= data_i;			-- NI_MEM_ADDR		(RW)
 							when "0011" =>
 								ni_size <= data_i;			-- NI_PCT_SIZE		(RW)
+							when "0100" =>
+								ni_dest <= data_i;			-- NI_PCT_DEST		(RW)
 							when others =>
 							end case;
 						when others =>

@@ -188,7 +188,7 @@ void inline inputmodule::TrafficGenerator(){
 					outData = 0;
 //					printf("\n\n\n\t\t\t******** Wait to send packet ****************\n\n\n\n");
 					wait(3,SC_US);
-					sprintf(temp,"./mpsoc/app/packet_endianness.txt");
+					sprintf(temp,"./mpsoc/app/packet.txt");
 					numlines=numberoflines(temp);
 					printf("\n\n\n\t\t\t******** Number of lines in PACKET.TXT: %d ****************\n\n\n\n",numlines);
 					Input = fopen(temp,"r");

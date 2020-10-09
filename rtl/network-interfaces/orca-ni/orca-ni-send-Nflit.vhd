@@ -28,6 +28,7 @@ entity orca_ni_send is
     -- dma programming (must be mapped into memory space)
     send_start : in std_logic;
     prog_address : in std_logic_vector((RAM_WIDTH - 1) downto 0);
+    prog_dest    : in std_logic_vector((RAM_WIDTH - 1) downto 0);
     prog_size    : in std_logic_vector((RAM_WIDTH - 1) downto 0);
     send_status : out std_logic
   );
@@ -152,16 +153,16 @@ end process;
         when S_SEND_DESTINY => 
           if r_credit_i = '1' then
              r_tx <= '1';
-             send_copy_size <= send_copy_size - 1;
-             send_copy_addr <= send_copy_addr + 4;
-             send_copy_addr_dly <= send_copy_addr;
+--             send_copy_size <= send_copy_size - 1;
+--             send_copy_addr <= send_copy_addr + 4;
+--             send_copy_addr_dly <= send_copy_addr;
           end if;
 
         when S_SEND_SIZE => 
           if r_credit_i = '1' then
-             send_copy_size <= send_copy_size - 1;
-             send_copy_addr <= send_copy_addr + 4;
-             send_copy_addr_dly <= send_copy_addr;
+--             send_copy_size <= send_copy_size - 1;
+--             send_copy_addr <= send_copy_addr + 4;
+--             send_copy_addr_dly <= send_copy_addr;
           end if;
         
         when S_PAYLOAD => --copy from memory to the output buffer
@@ -206,7 +207,7 @@ end process;
     mux(i) <= m_data_i((TAM_FLIT*(i+1)) - 1 downto (TAM_FLIT*i)) when send_state = S_PAYLOAD else (others => '0');
   end generate;
 
-  r_data_o <= half_flit_complement & m_data_i(RAM_WIDTH/4+TAM_FLIT/4-1 downto RAM_WIDTH/4) & m_data_i(TAM_FLIT/4-1 downto 0) when previous_state = S_SEND_DESTINY else m_data_i(TAM_FLIT-INTEGER(CEIL(LOG2(REAL(RAM_WIDTH/TAM_FLIT))))-1 downto 0) & shift when previous_state = S_SEND_SIZE else mux(to_integer(unsigned(shift))) when previous_state = S_PAYLOAD else (others => '0');
+  r_data_o <= half_flit_complement & prog_dest(RAM_WIDTH/4+TAM_FLIT/4-1 downto RAM_WIDTH/4) & prog_dest(TAM_FLIT/4-1 downto 0) when previous_state = S_SEND_DESTINY else prog_size(TAM_FLIT-INTEGER(CEIL(LOG2(REAL(RAM_WIDTH/TAM_FLIT))))-1 downto 0) & shift when previous_state = S_SEND_SIZE else mux(to_integer(unsigned(shift))) when previous_state = S_PAYLOAD else (others => '0');
 
   stall <= r_stall;  
 

@@ -232,14 +232,14 @@ begin
           recv_copy_size <= (others => '1');
           stall <= '0'; --enable cpu to use memory until next packet arrival
           recv_copy_addr <= (others => '0');
-          if r_rx = '1' then
-            recv_copy_addr <= recv_copy_addr + 1; --advance mem. to 2nd position
-          end if;
+--          if r_rx = '1' then
+--            recv_copy_addr <= recv_copy_addr + 1; --advance mem. to 2nd position
+--          end if;
           
         -- wait for the size flit to arrive
         when R_WAIT_FLIT_SIZE => 
           if r_rx = '1' then
-            recv_copy_addr <= recv_copy_addr + 1; --advances mem ptr.
+--            recv_copy_addr <= recv_copy_addr + 1; --advances mem ptr.
             recv_copy_size <= size(TAM_FLIT-1 downto 0) - 1;
             recv_status <= size(RAM_WIDTH/2 - 1 downto 0); -- notify recv flits to cpu
           end if;

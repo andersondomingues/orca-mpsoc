@@ -38,6 +38,7 @@ entity orca_ni_top is
     recv_start : in std_logic;
     send_status : out std_logic;
     recv_status : out std_logic_vector((RAM_WIDTH/2 - 1) downto 0);
+    prog_dest    : in std_logic_vector((RAM_WIDTH - 1) downto 0);
     prog_address : in std_logic_vector((RAM_WIDTH - 1) downto 0);
     prog_size    : in std_logic_vector((RAM_WIDTH - 1) downto 0)
 
@@ -80,6 +81,7 @@ begin
       send_status => send_status_s,
       
       prog_address => prog_address,
+      prog_dest => prog_dest,
       prog_size => prog_size
     );
 

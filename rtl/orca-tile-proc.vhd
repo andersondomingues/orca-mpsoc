@@ -67,6 +67,7 @@ architecture orca_processing_tile of orca_processing_tile is
   signal recv_status :  std_logic_vector(((RAM_WIDTH/2) - 1) downto 0);
   signal prog_address : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal prog_size    : std_logic_vector((RAM_WIDTH - 1) downto 0);
+  signal prog_dest    : std_logic_vector((RAM_WIDTH - 1) downto 0);
   
   signal n_addr_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal n_data_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
@@ -204,7 +205,8 @@ begin
       ni_intr => ni_intr,
       ni_recv_size => recv_status,
       ni_mem_addr => prog_address,
-      ni_pct_size => prog_size
+      ni_pct_size => prog_size,
+      ni_pct_dest => prog_dest
       
     );
 
@@ -279,6 +281,7 @@ begin
       send_status => send_status,
       recv_status => recv_status,
       prog_address => prog_address,
+      prog_dest => prog_dest,
       prog_size => prog_size
     );
     

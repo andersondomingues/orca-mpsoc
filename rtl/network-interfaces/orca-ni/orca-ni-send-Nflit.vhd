@@ -55,6 +55,8 @@ architecture orca_ni_send of orca_ni_send is
   signal mux : mux_inputs;
 
   --temporary data
+  -- TODO probably about 90% of the silicon area is to implemente these 3 32bits registers and their counters.
+  -- double check if it is possible to eliminate or reduce some of these registers to save area.
   signal send_copy_addr, send_copy_addr_dly : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal send_copy_size : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal r_stall: std_logic;
@@ -129,6 +131,7 @@ begin
     if rst = '1' then
       send_status <= '0';
       r_stall <= '0'; --start with the cpu on control
+      -- TODO it is using 3 32 bits register for temporary data. optimise it ! 
       send_copy_addr <= (others => '0');
       send_copy_addr_dly <= (others => '0');
       send_copy_size <= (others => '0');
@@ -175,6 +178,7 @@ begin
                 shift <= shift + 1;
                 if shift+1 = shift_high then
                    if send_copy_size /= send_copy_size'low then
+                      -- TODO two large 32 bits adders. optimise it ! 
                       send_copy_size <= send_copy_size - 1;
                       send_copy_addr <= send_copy_addr + 4;
                       send_copy_addr_dly <= send_copy_addr;
@@ -208,7 +212,11 @@ begin
     mux(i) <= m_data_i((TAM_FLIT*(i+1)) - 1 downto (TAM_FLIT*i)) when send_state = S_PAYLOAD else (others => '0');
   end generate;
 
-  r_data_o <= half_flit_complement & prog_dest(RAM_WIDTH/4+TAM_FLIT/4-1 downto RAM_WIDTH/4) & prog_dest(TAM_FLIT/4-1 downto 0) when previous_state = S_SEND_DESTINY else prog_size(TAM_FLIT-INTEGER(CEIL(LOG2(REAL(RAM_WIDTH/TAM_FLIT))))-1 downto 0) & shift when previous_state = S_SEND_SIZE else mux(to_integer(unsigned(shift))) when previous_state = S_PAYLOAD else (others => '0');
+  r_data_o <= half_flit_complement & prog_dest(RAM_WIDTH/4+TAM_FLIT/4-1 downto RAM_WIDTH/4) & prog_dest(TAM_FLIT/4-1 downto 0) when previous_state = S_SEND_DESTINY else 
+              prog_size(TAM_FLIT-INTEGER(CEIL(LOG2(REAL(RAM_WIDTH/TAM_FLIT))))-1 downto 0) & shift when previous_state = S_SEND_SIZE else
+              -- TODO This mux must can be quite big in area. optimize it 
+              mux(to_integer(unsigned(shift))) when previous_state = S_PAYLOAD else 
+              (others => '0');
 
   stall <= r_stall;  
 

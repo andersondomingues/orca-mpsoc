@@ -170,6 +170,7 @@ begin
   recv_machine_funct: process(clk, rst) 
   begin 
     if rst = '1' then
+    -- TODO huge number of wide registers (32 bits and 16 bits). optimize it
       recv_copy_size <= (others => '1'); --reset internals
       recv_copy_addr <= (others => '0');
       cpu_copy_size <= (others => '0');
@@ -298,7 +299,10 @@ r_credit_o <= '0' when recv_copy_size = recv_copy_size'low and shift(INTEGER(CEI
 
 b_wb_n_o <= (others => '0') when recv_state = R_WAIT_FLIT_ADDR or recv_state = R_WAIT_FLIT_SIZE or recv_state = R_WAIT_PAYLOAD else (others => '1');
 b_addr_o <= recv_copy_addr when recv_state = R_WAIT_FLIT_ADDR or recv_state = R_WAIT_FLIT_SIZE or recv_state = R_WAIT_PAYLOAD else copy_size_complement & cpu_copy_size;
-b_data_o <= half_mem_complement & quarter_flit_complement & r_data_i(METADEFLIT-1 downto QUARTOFLIT) & quarter_flit_complement & r_data_i(QUARTOFLIT-1 downto 0) when recv_state = R_WAIT_FLIT_ADDR else m_data_complement & shift(INTEGER(CEIL(LOG2(REAL(RAM_WIDTH/TAM_FLIT))))-1 downto 0) & r_data_i(TAM_FLIT - 1 downto INTEGER(CEIL(LOG2(REAL(RAM_WIDTH/TAM_FLIT))))) when recv_state = R_WAIT_FLIT_SIZE else data_temp when recv_state = R_WAIT_PAYLOAD else (others => '0');
+b_data_o <= half_mem_complement & quarter_flit_complement & r_data_i(METADEFLIT-1 downto QUARTOFLIT) & quarter_flit_complement & r_data_i(QUARTOFLIT-1 downto 0) when recv_state = R_WAIT_FLIT_ADDR else 
+            m_data_complement & shift(INTEGER(CEIL(LOG2(REAL(RAM_WIDTH/TAM_FLIT))))-1 downto 0) & r_data_i(TAM_FLIT - 1 downto INTEGER(CEIL(LOG2(REAL(RAM_WIDTH/TAM_FLIT))))) when recv_state = R_WAIT_FLIT_SIZE else 
+            data_temp when recv_state = R_WAIT_PAYLOAD else 
+            (others => '0');
 
 
 m_wb_o <= (others => '1') when recv_state = R_RELOAD_COPY or recv_state = R_WAIT_CONFIG_STALL or recv_state = R_COPY_RELEASE else (others => '0');

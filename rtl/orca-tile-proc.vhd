@@ -15,7 +15,7 @@ use work.orca_defaults.all;
 entity orca_processing_tile is
 
   generic (
-    R_ADDRESS : regmetadeflit := "00000000" --address
+    R_ADDRESS : regmetadeflit := "0000000000000000" --address
   );
 
   port (

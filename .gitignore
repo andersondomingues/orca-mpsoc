@@ -10,6 +10,7 @@
 *.str
 *.jou
 vivado/**
+.Xil
 
 #Visual Code studio
 .vscode/**

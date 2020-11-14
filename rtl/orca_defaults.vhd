@@ -54,7 +54,7 @@ package orca_defaults is
 ---------------------------------------------------------
 -- NOC BANDWIDTH DEPENDENT CONSTANTS
 ---------------------------------------------------------
-        constant TAM_FLIT : integer range 1 to 64 := 16;
+        constant TAM_FLIT : integer range 1 to 64 := 32;
         constant METADEFLIT : integer range 1 to 32 := (TAM_FLIT/2);
         constant QUARTOFLIT : integer range 1 to 16 := (TAM_FLIT/4);
 

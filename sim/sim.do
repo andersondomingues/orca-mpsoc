@@ -39,7 +39,7 @@ vcom -work work ../rtl/network-interfaces/orca-ni/orca-ni-top.vhd
 #top-level source
 vcom -work work ../rtl/orca-minimal-soc.vhd
 vcom -work work ../rtl/orca-tile-proc.vhd
-vcom -work work ../rtl/orca-top-v2.vhd
+vcom -work work ../rtl/orca-top.vhd
 
 #testbench source
 #vcom -work work ./mpsoc/tb/SC_InputModule.vhd

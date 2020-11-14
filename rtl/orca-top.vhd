@@ -5,25 +5,33 @@ use ieee.std_logic_arith.all;
 use ieee.numeric_std.all;
 use work.orca_defaults.all;
 
-entity orca_top_v2 is
+entity orca_top is
   port (
     clk : in std_logic;
     rst : in std_logic;
     
     -- LOCAL PORT INTERFACE
-    clock_rx_local:  in  std_logic;
-    rx_local:        in  std_logic;
-    data_in_local:   in  std_logic_vector(TAM_FLIT-1 downto 0);
-    credit_o_local:  out std_logic;    
-    clock_tx_local:  out std_logic;
-    tx_local:        out std_logic;
-    data_out_local:  out std_logic_vector(TAM_FLIT-1 downto 0);
-    credit_i_local:  in  std_logic
+    -- AXI-Stream master interface 
+    --clock_rx_local:  in  std_logic;
+    --rx_local:        in  std_logic;
+    --data_in_local:   in  std_logic_vector(TAM_FLIT-1 downto 0);
+    --credit_o_local:  out std_logic;
+    validM_i:        in  std_logic;
+    dataM_i:         in  std_logic_vector(TAM_FLIT-1 downto 0);
+    readyM_o:        out std_logic;
+    -- AXI-Stream slave interface 
+    --clock_tx_local:  out std_logic;
+    --tx_local:        out std_logic;
+    --data_out_local:  out std_logic_vector(TAM_FLIT-1 downto 0);
+    --credit_i_local:  in  std_logic
+    validS_o:        out std_logic;
+    dataS_o:         out std_logic_vector(TAM_FLIT-1 downto 0);
+    readyS_i:        in  std_logic
   );
 
-end orca_top_v2;
+end orca_top;
 
-architecture orca_top_v2 of orca_top_v2 is
+architecture orca_top of orca_top is
 
   -- Interconnection signals 
   type txNport is array (NUMBER_PROCESSORS - 1 downto 0) of std_logic_vector(3 downto 0);
@@ -92,14 +100,22 @@ begin
     credit_i => credit_i_00
     );
 
-  clock_rx_00(LOCAL) <= clock_rx_local;
-  rx_00(LOCAL)       <= rx_local;
-  data_in_00(LOCAL)  <= data_in_local;
-  credit_o_local     <= credit_o_00(LOCAL);    
-  clock_tx_local     <= clock_tx_00(LOCAL);
-  tx_local           <= tx_00(LOCAL);
-  data_out_local     <= data_out_00(LOCAL);
-  credit_i_00(LOCAL) <= credit_i_local;  
+  --clock_rx_00(LOCAL) <= clock_rx_local;
+  clock_rx_00(LOCAL) <= clk;
+  --rx_00(LOCAL)       <= rx_local;
+  rx_00(LOCAL)       <= validM_i;
+  --data_in_00(LOCAL)  <= data_in_local;
+  data_in_00(LOCAL)  <= dataM_i;
+  --credit_o_local     <= credit_o_00(LOCAL);
+  readyM_o           <= credit_o_00(LOCAL);
+  --clock_tx_local     <= clock_tx_00(LOCAL);
+  --tx_local           <= tx_00(LOCAL);
+  validS_o           <= tx_00(LOCAL);
+  --data_out_local     <= data_out_00(LOCAL);
+  dataS_o            <= data_out_00(LOCAL);
+  --credit_i_00(LOCAL) <= credit_i_local;
+  credit_i_00(LOCAL) <= readyS_i;
+
 
   clock_rx_00(NORTH) <= clock_rx(0)(NORTH);
   rx_00(NORTH)       <= rx(0)(NORTH);
@@ -263,4 +279,4 @@ begin
       data_in(i)(SOUTH)       <= data_out(i-NUMBER_PROCESSORS_X)(NORTH);
     end generate;
   end generate proc;
-end orca_top_v2;
+end orca_top;

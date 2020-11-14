@@ -1,4 +1,4 @@
-# An 2x2 MPSoC
+# The ORCA MPSoC
 
 
 ## MPSoC Interface

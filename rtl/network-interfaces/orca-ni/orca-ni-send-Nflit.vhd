@@ -57,7 +57,8 @@ architecture orca_ni_send of orca_ni_send is
   --temporary data
   signal send_copy_addr, send_copy_addr_dly : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal send_copy_size : std_logic_vector((RAM_WIDTH - 1) downto 0);
-  signal r_stall, credit_i_dly : std_logic;
+  signal r_stall: std_logic;
+  --signal credit_i_dly : std_logic;
   signal shift : std_logic_vector(INTEGER(CEIL(LOG2(REAL(RAM_WIDTH/TAM_FLIT))))-1 downto 0);
   signal shift_high : std_logic_vector(INTEGER(CEIL(LOG2(REAL(RAM_WIDTH/TAM_FLIT))))-1 downto 0);
   signal quarter_flit_complement : std_logic_vector(QUARTOFLIT-1 downto 0);
@@ -72,14 +73,14 @@ begin
   half_flit_complement <= (others => '0');
   shift_high <= (others => '1');
 
-process(clk, rst)
-  begin
-    if rst = '1' then
-        credit_i_dly <= '0';
-    elsif rising_edge(clk) then
-        credit_i_dly <= r_credit_i;
-    end if;
-end process;
+--process(clk, rst)
+--  begin
+--    if rst = '1' then
+--        credit_i_dly <= '0';
+--    elsif rising_edge(clk) then
+--        credit_i_dly <= r_credit_i;
+--    end if;
+--end process;
 
 
   -- send proc, state control

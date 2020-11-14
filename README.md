@@ -1,17 +1,28 @@
 # ORCA MPSOC
 
-ORCA MPSOC is a many core platform based on the 32-bit Risc-V architecture. It used HF-RiscV processor cores to provide computing power, distributed over a mesh-topologic network-on-chip based on the Hermes NoC. This repository holds the project for the hardware of ORCA MPSoC platform, including their RTL models and simulation scripts for Vivado and Quest (ModelSim) tools. Related reporsitories are enlisted below.
+ORCA MPSOC is a many core platform based on the 32-bit Risc-V architecture. It used HF-RiscV processor cores to provide computing power, distributed over a mesh-topology network-on-chip based on the Hermes NoC. This repository holds the project for the hardware of ORCA MPSoC platform, including their RTL models and simulation scripts for Vivado and Quest (ModelSim) tools. Related repositories are enlisted below.
 
 - ORCA-SIM (https://github.com/andersondomingues/orca-sim), a simulation tool on top of URSA that emulates the ORCA MPSoC
 - ORCA-SOFTWARE-ASSETS (https://github.com/andersondomingues/orca-software-assets), applications and libraries to support software development
 
 ![Top-level architecture of ORCA platform](https://raw.githubusercontent.com/andersondomingues/orca-mpsoc/master/docs/orca-mpsoc.png)
 
+## Preliminary Synthesis Results
+
+The synthesis results for a single Orca Processing Tile with memory of 16KBytes, Her router of flit-width of 16 bits, and buffer depth of 4 per router port. The reference device is xc7z020clg484-1, from the Zedboard. The clock constraint is set to 16ns (62.5 MHz).
+
+![Area summary](docs/images/area-summary.png)
+
+![Area Hierarchy](docs/images/area-hier.png)
+
+Considering these area results, it would be possible to have up to 8 Orca Processing Tiles in a Zedboard.
+
+
 ## Repository organization
 
 This repository is organized as follows.
 
-- `docs`: Folder containing general information about the platform, tutorials and similar documentaions.
+- `docs`: Folder containing general information about the platform, tutorials and similar documentations.
 - `models`: Folder containing hardware models to use with RTL tools. These models either are described in VHDL language (to use with Mentor's Questa software) or C++ (to use with URSA). However, these models can be adapted to use with other tools with minimal effort.
 - `sim`: Simulation scripts for URSA and Quest tools. Additional tools will be added as the project grows.
   

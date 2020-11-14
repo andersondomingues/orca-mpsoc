@@ -15,7 +15,7 @@ use work.orca_defaults.all;
 entity orca_processing_tile is
 
   generic (
-    R_ADDRESS : regmetadeflit --address
+    R_ADDRESS : regmetadeflit := "00000000" --address
   );
 
   port (
@@ -111,6 +111,7 @@ architecture orca_processing_tile of orca_processing_tile is
   signal dummy_gpioa_in:  std_logic_vector(7 downto 0);
   signal dummy_gpioa_out: std_logic_vector(7 downto 0);
   signal dummy_gpioa_ddr: std_logic_vector(7 downto 0);
+  
 
 begin
 

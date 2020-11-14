@@ -90,9 +90,11 @@ package orca_defaults is
 -- PROCESSOR ELEMENT DEPENDENT CONSTANTS
 ---------------------------------------------------------
         constant RAM_WIDTH : integer := 32;
-        constant RAM_DEPTH : integer := 16384;
+        constant RAM_ADDR_WIDTH : integer := 14;
+        constant RAM_DEPTH : integer := 2 ** RAM_ADDR_WIDTH;
         constant PRELOAD_ADDR : integer := 0;
-        constant BUFFER_DEPTH_NI : integer := 64;
+        constant BUFFER_ADDR_DEPTH_NI : integer := 6;
+        constant BUFFER_DEPTH_NI : integer := 2 ** BUFFER_ADDR_DEPTH_NI;
 
 
 -- IF COMMUNICATION TILE

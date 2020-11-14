@@ -1,3 +1,6 @@
+############################################
+# simulates a single processing tile
+############################################
 if {[file  isdirectory work]} {vdel -all -lib work}
 vlib work
 vmap work work
@@ -25,7 +28,7 @@ vcom -work work ../rtl/routers/hermes/Hermes_switchcontrol.vhd
 vcom -work work ../rtl/routers/hermes/RouterCC.vhd
 
 #memory core sources
-vcom -work work ../rtl/storage/single-port-ram-orca/single_port_ram_8bits_sim_only.vhd
+vcom -work work ../sim/mpsoc/tb/single_port_ram_8bits_sim_only.vhd
 vcom -work work ../rtl/storage/single-port-ram-orca/single_port_ram_32bits.vhd
 
 #network interface sources

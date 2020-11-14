@@ -17,14 +17,7 @@ This repository is organized as follows.
 
 ## Project Documentation
 
-There are two main design in this repository. A single processing tile
-and the MPSoC, i.e. an array of 2x2 processing tiles. Both design 
-connected to the Zynq's ARM processor. Their documentation is available 
-in the following links:
-
- - [Processing Tile](./docs/processing-tile.md)
- - [2x2 MPSoC](./docs/mpsoc-2x2.md)
-
+Refer to [ORCA MPSoC Hardware Documentation](./docs/mpsoc.md).
 
 ## Project Roadmap
 

@@ -54,7 +54,7 @@ The reference device is xc7z020clg484-1, from the Zedboard. The clock constraint
 
 ![Area summary](images/area-summary.png)
 
-![Area Hierarchy](images/area-hier.png)
+![Area Hierarchy](images/design-hier.png)
 
 Considering these area results, it would be possible to have up to 8 Orca Processing Tiles in a Zedboard. the main constraint is the amount of BlockRAM to implement the internal memory of each 
 Processing Tile.

@@ -6,7 +6,11 @@
 
 ## MPSoC Synthesis Results
 
+## How to Simulate
 
-## Programming
+## How to Program the FPGA
 
-Describe here how to run a program between the ARM and the Processing Tile.
+Describe here how to load the FPGA and run a program between the ARM and the Processing Tile.
+
+## How to Design new Applications
+

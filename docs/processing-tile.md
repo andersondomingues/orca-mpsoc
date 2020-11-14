@@ -18,6 +18,11 @@ The synthesis results for a single Orca Processing Tile with memory of 16KBytes,
 
 Considering these area results, it would be possible to have up to 8 Orca Processing Tiles in a Zedboard.
 
-## Programming
+## How to Simulate
 
-Describe here how to run a program between the ARM and the Processing Tile.
+## How to Program the FPGA
+
+Describe here how to load the FPGA and run a program between the ARM and the Processing Tile.
+
+## How to Design new Applications
+

@@ -10,6 +10,7 @@
 *.str
 *.jou
 syn/orca-top/vivado/**
+syn/orca-zed/vivado/**
 vivado/**
 .Xil
 

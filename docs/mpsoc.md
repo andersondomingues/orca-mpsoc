@@ -81,6 +81,13 @@ The synthesis presents these utilization results.
 Considering these area results, it would be possible to have up to **8 Orca Processing Tiles in a Zedboard**. the main constraint is the amount of BlockRAM to implement the internal memory of each 
 Processing Tile.
 
+The area of an ORCA Processing Tile varies according to its configuration and the position 
+of the tile in the MPSoC's Mesh topology. Considering the default configuration, *its area can 
+varies from about 2200 LUTs to 2800 LUTs according to the Tile position*. For example, a tile in 
+the middle of the Mesh topology has a router with all it's five ports, than it has the maximal 
+area. A tile in the corner has three ports, and the minimal router area. A tile in the border of 
+the Mesh topology has four ports, and the intermediate router area.
+
 ## How to Program the FPGA
 
 TODO: Describe here how to load the FPGA and run a program between the ARM and the Processing Tile.

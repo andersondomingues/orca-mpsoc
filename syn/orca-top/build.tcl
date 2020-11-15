@@ -2,6 +2,7 @@
 # build.tcl: re-creating a Vivado project
 #
 #*****************************************************************************************
+package require fileutil
 
 # Check the version of Vivado used
 set version_required "2018.2"
@@ -16,12 +17,13 @@ if {[string first $version_required $vivado_dir] == -1} {
   puts "your version of Vivado."
   return
 }
-set design_name $::env(VIVADO_DESIGN_NAME)
-puts "Using design name: ${design_name}"
+
 if { ![info exists env(VIVADO_DESIGN_NAME)] } {
     puts "ERROR: Please set the environment variable VIVADO_DESIGN_NAME before running the script"
     return
 }
+set design_name $::env(VIVADO_DESIGN_NAME)
+puts "Using design name: ${design_name}"
 
 if { ![info exists env(VIVADO_TOP_NAME)] } {
     puts "WARNING: No top design defined. Using the default top name ${design_name}_wrapper"
@@ -38,10 +40,10 @@ set origin_dir "."
 set orig_proj_dir "[file normalize "$origin_dir/vivado/$design_name"]"
 
 ## Delete log and journal
-file delete -force {*}[glob vivado*.backup.jou]
-file delete -force {*}[glob vivado*.backup.log]
-file delete -force {*}[glob vivado*.backup.str]
-file delete -force .Xil/
+#file delete -force {*}[glob vivado*.backup.jou]
+#file delete -force {*}[glob vivado*.backup.log]
+#file delete -force {*}[glob vivado*.backup.str]
+#file delete -force .Xil/
 
 # Create a fresh project
 file delete -force ${orig_proj_dir}
@@ -98,7 +100,13 @@ set_property "top" "${top_name}" $obj
 
 
 # Insert all the vhdl, sv, and verilog source files from ./hw/hdl into the project
-set hdl_files [glob -nocomplain -directory ../../rtl/ *{*.vhd,*.v,*.sv}*]
+#set hdl_files2 [glob -nocomplain -directory ../../rtl/ *{*.vhd,*.v,*.sv}*]
+#set basepath /home/lsa/repos/xilinx/orca-mpsoc/syn/orca-top
+#set hdl_files [glob [file join ../../rtl/ *{*.vhd,*.v,*.sv}*]] 
+#set hdl_files [fileutil::findByPattern ../../rtl/ *{*.vhd,*.v,*.sv}*]
+# find recursively all files with extensions vhd, v, sv 
+set hdl_files [fileutil::findByPattern ../../rtl/ -glob {*.vhd *.v *.sv}]
+#set hdl_files [fileutil::findByPattern ../../rtl/ *.vhd]
 puts $hdl_files
 
 foreach hdl_file $hdl_files {
@@ -172,7 +180,8 @@ if {[string equal [get_filesets -quiet sim_1] ""]} {
 # Set 'sim_1' fileset object
 # Import testbenches, waveform files, etc if they exist
 set obj [get_filesets sim_1]
-set sim_files [glob -nocomplain -directory $origin_dir/hw/hdl/sim *{*.vhd,*.v,*.sv}*]
+#set sim_files [glob -nocomplain -directory $origin_dir/hw/sim *{*.vhd,*.v,*.sv}*]
+set sim_files [fileutil::findByPattern ../../sim/ -glob {*.vhd *.v *.sv}]
 
 # if there is a testbench, then add few more properties 
 if {[llength $sim_files] > 0} {
@@ -203,7 +212,7 @@ if {[llength $sim_files] > 0} {
 }
 
 # waveform files are simply added to the project. no property is set
-set wcfg_files [glob -nocomplain -directory $origin_dir/hw/hdl/sim "*.wcfg"]
+set wcfg_files [glob -nocomplain -directory $origin_dir/hw/sim "*.wcfg"]
 add_files -quiet -fileset sim_1 $wcfg_files
 
 

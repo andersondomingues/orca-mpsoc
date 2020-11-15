@@ -351,12 +351,12 @@
         <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>../../../../../rtl/storage/single-port-ran-orca/single_port_ram_8bits.vhd</spirit:name>
+        <spirit:name>../../../../../rtl/storage/single-port-ram-orca/single_port_ram_8bits.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>../../../../../rtl/storage/single-port-ran-orca/single_port_ram_32bits.vhd</spirit:name>
+        <spirit:name>../../../../../rtl/storage/single-port-ram-orca/single_port_ram_32bits.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
       </spirit:file>

@@ -9,6 +9,7 @@
 *.log
 *.str
 *.jou
+syn/orca-top/vivado/**
 vivado/**
 .Xil
 

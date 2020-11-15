@@ -40,11 +40,18 @@ set origin_dir "."
 set orig_proj_dir "[file normalize "$origin_dir/vivado/$design_name"]"
 
 ## Delete log and journal
-#file delete -force {*}[glob vivado*.backup.jou]
-#file delete -force {*}[glob vivado*.backup.log]
-#file delete -force {*}[glob vivado*.backup.str]
-#file delete -force .Xil/
+set file_list [glob -nocomplain "vivado.*"]
+if {[llength $file_list] != 0} {
+  file delete -force {*}$file_list
+}
+set file_list [glob -nocomplain "vivado_*"]
+if {[llength $file_list] != 0} {
+  file delete -force {*}$file_list
+}
 
+if {[file exist ".Xil"]} {
+  file delete -force .Xil
+}
 # Create a fresh project
 file delete -force ${orig_proj_dir}
 file mkdir ${orig_proj_dir}

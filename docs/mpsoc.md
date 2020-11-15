@@ -63,8 +63,8 @@ Processing Tile.
 
 Questa must be configured in the $PATH. Then, execute:
 
-$ cd sim
-$ ./run.sh
+    $ cd sim
+    $ ./run.sh
 
 ## How to Program the FPGA
 

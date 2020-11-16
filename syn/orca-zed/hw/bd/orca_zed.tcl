@@ -1,6 +1,6 @@
 
 ################################################################
-# This is a generated script based on design: design_1
+# This is a generated script based on design: orca_zed
 #
 # Though there are limitations about the generated script,
 # the main purpose of this utility is to make learning
@@ -35,87 +35,7 @@ if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
 ################################################################
 
 # To test this script, run the following commands from Vivado Tcl console:
-# source design_1_script.tcl
-
-# If there is no project opened, this script will create a
-# project, but make sure you do not have an existing project
-# <./myproj/project_1.xpr> in the current working folder.
-
-set list_projs [get_projects -quiet]
-if { $list_projs eq "" } {
-   create_project project_1 myproj -part xc7z020clg484-1
-   set_property BOARD_PART em.avnet.com:zed:part0:1.4 [current_project]
-}
-
-
-# CHANGE DESIGN NAME HERE
-variable design_name
-set design_name design_1
-
-# If you do not already have an existing IP Integrator design open,
-# you can create a design using the following command:
-#    create_bd_design $design_name
-
-# Creating design if needed
-set errMsg ""
-set nRet 0
-
-set cur_design [current_bd_design -quiet]
-set list_cells [get_bd_cells -quiet]
-
-if { ${design_name} eq "" } {
-   # USE CASES:
-   #    1) Design_name not set
-
-   set errMsg "Please set the variable <design_name> to a non-empty value."
-   set nRet 1
-
-} elseif { ${cur_design} ne "" && ${list_cells} eq "" } {
-   # USE CASES:
-   #    2): Current design opened AND is empty AND names same.
-   #    3): Current design opened AND is empty AND names diff; design_name NOT in project.
-   #    4): Current design opened AND is empty AND names diff; design_name exists in project.
-
-   if { $cur_design ne $design_name } {
-      common::send_msg_id "BD_TCL-001" "INFO" "Changing value of <design_name> from <$design_name> to <$cur_design> since current design is empty."
-      set design_name [get_property NAME $cur_design]
-   }
-   common::send_msg_id "BD_TCL-002" "INFO" "Constructing design in IPI design <$cur_design>..."
-
-} elseif { ${cur_design} ne "" && $list_cells ne "" && $cur_design eq $design_name } {
-   # USE CASES:
-   #    5) Current design opened AND has components AND same names.
-
-   set errMsg "Design <$design_name> already exists in your project, please set the variable <design_name> to another value."
-   set nRet 1
-} elseif { [get_files -quiet ${design_name}.bd] ne "" } {
-   # USE CASES: 
-   #    6) Current opened design, has components, but diff names, design_name exists in project.
-   #    7) No opened design, design_name exists in project.
-
-   set errMsg "Design <$design_name> already exists in your project, please set the variable <design_name> to another value."
-   set nRet 2
-
-} else {
-   # USE CASES:
-   #    8) No opened design, design_name not in project.
-   #    9) Current opened design, has components, but diff names, design_name not in project.
-
-   common::send_msg_id "BD_TCL-003" "INFO" "Currently there is no design <$design_name> in project, so creating one..."
-
-   create_bd_design $design_name
-
-   common::send_msg_id "BD_TCL-004" "INFO" "Making design <$design_name> as current_bd_design."
-   current_bd_design $design_name
-
-}
-
-common::send_msg_id "BD_TCL-005" "INFO" "Currently the variable <design_name> is equal to \"$design_name\"."
-
-if { $nRet != 0 } {
-   catch {common::send_msg_id "BD_TCL-114" "ERROR" $errMsg}
-   return $nRet
-}
+# source orca_zed_script.tcl
 
 set bCheckIPsPassed 1
 ##################################################################
@@ -1063,7 +983,6 @@ proc create_hier_cell_zynq { parentCell nameHier } {
 proc create_root_design { parentCell } {
 
   variable script_folder
-  variable design_name
 
   if { $parentCell eq "" } {
      set parentCell [get_bd_cells /]
@@ -1133,7 +1052,7 @@ HDL_ATTRIBUTE.DEBUG {true} \
 
   # Create port connections
   connect_bd_net -net zynq_clock [get_bd_pins orca_top_0/clk] [get_bd_pins system_ila_0/clk] [get_bd_pins zynq/clock]
-  connect_bd_net -net zynq_reset_n [get_bd_pins orca_top_0/rst] [get_bd_pins system_ila_0/resetn] [get_bd_pins zynq/reset_n]
+  connect_bd_net -net zynq_reset_n [get_bd_pins orca_top_0/rst_n] [get_bd_pins system_ila_0/resetn] [get_bd_pins zynq/reset_n]
 
   # Create address segments
   create_bd_addr_seg -range 0x20000000 -offset 0x00000000 [get_bd_addr_spaces zynq/axi_dma_0/Data_MM2S] [get_bd_addr_segs zynq/processing_system7_0/S_AXI_HP0/HP0_DDR_LOWOCM] SEG_processing_system7_0_HP0_DDR_LOWOCM
@@ -1144,7 +1063,27 @@ HDL_ATTRIBUTE.DEBUG {true} \
   # Restore current instance
   current_bd_instance $oldCurInst
 
-  save_bd_design
 }
 # End of create_root_design()
 
+
+
+
+proc available_tcl_procs { } {
+   puts "##################################################################"
+   puts "# Available Tcl procedures to recreate hierarchical blocks:"
+   puts "#"
+   puts "#    create_hier_cell_zynq parentCell nameHier"
+   puts "#    create_root_design"
+   puts "#"
+   puts "#"
+   puts "# The following procedures will create hiearchical blocks with addressing "
+   puts "# for IPs within those blocks and their sub-hierarchical blocks. Addressing "
+   puts "# will not be handled outside those blocks:"
+   puts "#"
+   puts "#    create_root_design"
+   puts "#"
+   puts "##################################################################"
+}
+
+available_tcl_procs

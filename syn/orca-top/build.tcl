@@ -114,7 +114,8 @@ set_property "top" "${top_name}" $obj
 # find recursively all files with extensions vhd, v, sv 
 #set hdl_files [fileutil::findByPattern ../../rtl/ -glob {*.vhd *.v *.sv}]
 #set hdl_files [glob -nocomplain -directory $origin_dir/hw/hdl/ *{*.vhd,*.v,*.sv}*]
-set hdl_files [fileutil::findByPattern $origin_dir/hw/hdl/ *.vhd]
+#set hdl_files [fileutil::findByPattern $origin_dir/hw/hdl/ *.vhd]
+set hdl_files [fileutil::findByPattern $origin_dir/hw/hdl/ -glob {*.vhd *.v *.sv}]
 puts $hdl_files
 
 foreach hdl_file $hdl_files {
@@ -189,7 +190,8 @@ if {[string equal [get_filesets -quiet sim_1] ""]} {
 # Import testbenches, waveform files, etc if they exist
 set obj [get_filesets sim_1]
 #set sim_files [glob -nocomplain -directory $origin_dir/hw/sim *{*.vhd,*.v,*.sv}*]
-set sim_files [fileutil::findByPattern $origin_dir/hw/sim -glob {*.vhd *.v *.sv}]
+#set sim_files [fileutil::findByPattern $origin_dir/hw/sim -glob {*.vhd *.v *.sv}]
+set sim_files [fileutil::findByPattern $origin_dir/hw/sim/ -glob {*.vhd *.v *.sv}]
 
 # if there is a testbench, then add few more properties 
 if {[llength $sim_files] > 0} {

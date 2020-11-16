@@ -7,26 +7,29 @@ use work.orca_defaults.all;
 
 entity orca_top is
   port (
-    clk : in std_logic;
-    rst : in std_logic;
+    clk   : in std_logic;
+    rst_n : in std_logic;
     
     -- LOCAL PORT INTERFACE
-    -- AXI-Stream master interface 
+    -- AXI-Stream slave interface 
     --clock_rx_local:  in  std_logic;
     --rx_local:        in  std_logic;
     --data_in_local:   in  std_logic_vector(TAM_FLIT-1 downto 0);
     --credit_o_local:  out std_logic;
-    validM_i:        in  std_logic;
-    dataM_i:         in  std_logic_vector(TAM_FLIT-1 downto 0);
-    readyM_o:        out std_logic;
-    -- AXI-Stream slave interface 
+    validS_i:        in  std_logic;
+    -- the last port is not required for slave interfaces
+    --lastS_i:         in  std_logic;
+    dataS_i:         in  std_logic_vector(TAM_FLIT-1 downto 0);
+    readyS_o:        out std_logic;
+    -- AXI-Stream master interface 
     --clock_tx_local:  out std_logic;
     --tx_local:        out std_logic;
     --data_out_local:  out std_logic_vector(TAM_FLIT-1 downto 0);
     --credit_i_local:  in  std_logic
-    validS_o:        out std_logic;
-    dataS_o:         out std_logic_vector(TAM_FLIT-1 downto 0);
-    readyS_i:        in  std_logic
+    lastM_o:         out std_logic;
+    validM_o:        out std_logic;
+    dataM_o:         out std_logic_vector(TAM_FLIT-1 downto 0);
+    readyM_i:        in  std_logic
   );
 
 end orca_top;
@@ -66,20 +69,24 @@ architecture orca_top of orca_top is
   signal credit_i_00 : regNport;
 
   -- reset synchornizer
-  signal rff1,rst_sync : std_logic;
+  --signal rff1,rst_sync : std_logic;
+  signal rst : std_logic;
 
 begin
 
-  process (clk, rst)
-  begin
-    if (rst = '1') then
-      rff1 <= '1';
-      rst_sync <= '1';
-    elsif (clk'event and clk = '1') then
-      rff1 <= '0';
-      rst_sync <= rff1;
-    end if;
-  end process;
+  -- ARM uses active low reset
+  rst <= not rst_n;
+
+  -- process (clk, rst)
+  -- begin
+  --   if (rst = '1') then
+  --     rff1 <= '1';
+  --     rst_sync <= '1';
+  --   elsif (clk'event and clk = '1') then
+  --     rff1 <= '0';
+  --     rst_sync <= rff1;
+  --   end if;
+  -- end process;
 
   router_binding : entity work.RouterCC
     generic map(
@@ -87,7 +94,8 @@ begin
     )
     port map(
       clock => clk,
-      reset => rst_sync,
+      --reset => rst_sync,
+      reset => rst,
 
     clock_rx => clock_rx_00,
     rx => rx_00,
@@ -103,18 +111,37 @@ begin
   --clock_rx_00(LOCAL) <= clock_rx_local;
   clock_rx_00(LOCAL) <= clk;
   --rx_00(LOCAL)       <= rx_local;
-  rx_00(LOCAL)       <= validM_i;
+  rx_00(LOCAL)       <= validS_i;
   --data_in_00(LOCAL)  <= data_in_local;
-  data_in_00(LOCAL)  <= dataM_i;
+  data_in_00(LOCAL)  <= dataS_i;
   --credit_o_local     <= credit_o_00(LOCAL);
-  readyM_o           <= credit_o_00(LOCAL);
+  readyS_o           <= credit_o_00(LOCAL);
   --clock_tx_local     <= clock_tx_00(LOCAL);
   --tx_local           <= tx_00(LOCAL);
-  validS_o           <= tx_00(LOCAL);
   --data_out_local     <= data_out_00(LOCAL);
-  dataS_o            <= data_out_00(LOCAL);
   --credit_i_00(LOCAL) <= credit_i_local;
-  credit_i_00(LOCAL) <= readyS_i;
+  -- these 3 signals are replaced by the 'last_gen' module to generate the AXI master tlast port
+  --validM_o           <= tx_00(LOCAL);
+  --dataM_o            <= data_out_00(LOCAL);
+  --credit_i_00(LOCAL) <= readyM_i;
+
+  -- these module stays between the AXI Master port an the external orca-top inteface
+  last_Local: Entity work.last_gen
+  port map(
+          clock   => clk,  
+          reset   => rst,
+          -- these go the external side of the local port 
+          validL_o=> validM_o,
+          lastL_o => lastM_o,
+          dataL_o => dataM_o,
+          readyL_i=> readyM_i,
+          -- these go to the internal side of the router 
+          valid_i => tx_00(LOCAL),
+          data_i  => data_out_00(LOCAL),
+          ready_o => credit_i_00(LOCAL)
+  );
+
+
 
 
   clock_rx_00(NORTH) <= clock_rx(0)(NORTH);

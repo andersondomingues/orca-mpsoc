@@ -98,7 +98,7 @@ begin
     )
     port map(
         clk => clk,
-        rst => rst,
+        --rst => rst,
 
         addr_i => b_addr_o((INTEGER(CEIL(LOG2(REAL(BUFFER_DEPTH_NI)))))-1 downto 0),
         data_o => b_data_i,

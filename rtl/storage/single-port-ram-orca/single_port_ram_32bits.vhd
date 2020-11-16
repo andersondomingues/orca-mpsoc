@@ -36,7 +36,7 @@ entity single_port_ram_32bits is
     
     port(
         clk : in std_logic;
-        rst : in std_logic;
+        --rst : in std_logic;
 
         addr_i :  in std_logic_vector(((INTEGER(CEIL(LOG2(REAL(RAM_DEPTH_I))))) - 1) downto 0);
         data_o : out std_logic_vector(31 downto 0);
@@ -60,7 +60,7 @@ begin
     )
     port map (
         clk => clk,
-        rst => rst,
+        --rst => rst,
         addr_i => addr_i,
         data_o => data_o(7 downto 0),
         data_i => data_i(7 downto 0),
@@ -74,7 +74,7 @@ begin
     )
     port map (
         clk => clk,
-        rst => rst,
+        --rst => rst,
         addr_i => addr_i,
         data_o => data_o(15 downto 8),
         data_i => data_i(15 downto 8),
@@ -88,7 +88,7 @@ begin
     )
     port map (
         clk => clk,
-        rst => rst,
+        --rst => rst,
         addr_i => addr_i,
         data_o => data_o(23 downto 16),
         data_i => data_i(23 downto 16),
@@ -102,7 +102,7 @@ begin
     )
     port map (
         clk => clk,
-        rst => rst,
+        --rst => rst,
         addr_i => addr_i,
         data_o => data_o(31 downto 24),
         data_i => data_i(31 downto 24),

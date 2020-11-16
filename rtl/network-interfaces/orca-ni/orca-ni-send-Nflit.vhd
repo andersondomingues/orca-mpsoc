@@ -223,6 +223,8 @@ begin
   -- sending does not requires the main memory to be in write mode
   m_wb_o <= (others => '0');
 
+  -- TODO synthesis says that send_copy_addr_dly is never used. It is true only if this condition is always false.
+  -- If so, there is something fishy in these module.
   m_addr_o <= send_copy_addr_dly when shift = shift_high and r_credit_i = '0' else send_copy_addr;
 
 end orca_ni_send;

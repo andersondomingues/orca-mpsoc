@@ -36,7 +36,7 @@ entity single_port_ram_8bits is
     
     port(
         clk : in std_logic;
-        rst : in std_logic;
+        --rst : in std_logic;
 
         addr_i :  in std_logic_vector(((INTEGER(CEIL(LOG2(REAL(RAM_DEPTH_I))))) - 1) downto 0);
         data_o : out std_logic_vector(7 downto 0);

@@ -142,7 +142,7 @@ begin
 	end process;
 
 
-	process (rst_local, clk, periph_irq)
+	process (rst_local, clk)
 	begin
 		if rst_local = '1' then
 			periph_dly <= '0';
@@ -179,7 +179,9 @@ begin
 	periph_wr <= '1' when p_wb_o /= "0000" else '0';
 	periph <= '1' when p_addr_o(31 downto 28) = x"e" else '0';
 
-
+    -- assign to remove the 'undriven pin' warning in synthesis
+    dummy_gpioa_in <= (others => '0');
+    
   peripherals_binding : entity work.peripherals
     port map(
       clk_i => clk,
@@ -241,7 +243,7 @@ begin
     )
     port map(
         clk => clk,
-        rst => rst_local,
+        --rst => rst_local,
 
         addr_i => shift_m_addr_i((INTEGER(CEIL(LOG2(REAL(RAM_DEPTH)))))-1 downto 0),
         data_o => m_data_o,

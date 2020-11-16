@@ -87,6 +87,10 @@ The synthesis presents these utilization results.
 Considering these area results, it would be possible to have up to **8 Orca Processing Tiles in a Zedboard**. the main constraint is the amount of BlockRAM to implement the internal memory of each 
 Processing Tile.
 
+If we consider another board with more resources, such as [Zynq Mini-ITX](http://zedboard.org/product/mini-itx-board) with the device xc7z100ffg900-2, it would be possible to have **more than 40 Processing Tiles !!!**
+
+![Area for a bigger board](images/area-zynq-7100.png)
+
 The area of an ORCA Processing Tile varies according to its configuration and the position 
 of the tile in the MPSoC's Mesh topology. Considering the default configuration, *its area can 
 varies from about 2200 LUTs to 2800 LUTs according to the Tile position*. For example, a tile in 

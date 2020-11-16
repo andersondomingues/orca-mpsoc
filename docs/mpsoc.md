@@ -113,6 +113,12 @@ The next image shows the total utilization per block. One can see that the Zynq 
 
 For testing ORCA MPSoC in the Zedboard, one has to use this design.
 
+The ORCA Zed design is executed like the previous design. Just execute these commands to 
+start the Vivado:
+
+    $ cd syn/orca-zed/
+    $ ./build.sh
+
 ## How to Program the FPGA
 
 TODO: Describe here how to load the FPGA and run a program between the ARM and the Processing Tile.

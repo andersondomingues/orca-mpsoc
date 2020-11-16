@@ -35,17 +35,19 @@ The *orca-top* module has a AXI Stream interface to connect to the Zynq's ARM su
 
 The AXI-Stream master interface, i.e., for incoming data flow, has the following interfaces:
 
-    -- AXI-Stream master interface 
-    validM_i:        in  std_logic;
-    dataM_i:         in  std_logic_vector(TAM_FLIT-1 downto 0);
-    readyM_o:        out std_logic;
+    lastM_o:         out std_logic;
+    validM_o:        out std_logic;
+    dataM_o:         out std_logic_vector(TAM_FLIT-1 downto 0);
+    readyM_i:        in  std_logic
 
 The AXI-Stream slave interface, i.e., for outgoing data flow, has the following interfaces:
 
-    validS_o:        out std_logic;
-    dataS_o:         out std_logic_vector(TAM_FLIT-1 downto 0);
-    readyS_i:        in  std_logic
+    validS_i:        in  std_logic;
+    dataS_i:         in  std_logic_vector(TAM_FLIT-1 downto 0);
+    readyS_o:        out std_logic;
 
+Note that the master interface has an additional port called *last*. This is part of the AXI-S
+standard but it is required only for the master interface, and not to the slave interface.
 
 ## How to Simulate
 
@@ -55,6 +57,12 @@ Questa must be configured in the $PATH. Then, execute:
     $ ./run.sh
 
 ## How to Execute the Synthesis
+
+There are two Vivado design located in the *syn* folder. The *orca-top design* is responsible 
+to create the orca-top IP block since it includes only the ORCA logic. The *orca-zed design*, 
+on the other hand, includes the orca-top and the glue logic to connect it to the ARM processors.
+Both designs are detailed below.
+### orca-top Design
 
 The Orca Top synthesis is using the default configuration, presented above.
 The reference device is xc7z020clg484-1, from the Zedboard. 
@@ -69,8 +77,6 @@ file syn/orca-top/build.sh.
 
 This script will build an entire Vivado project and perform synthesis.
 By the end, it will report timing, utilization, and power.
-
-## MPSoC Synthesis Results
 
 The synthesis presents these utilization results.
 
@@ -87,6 +93,21 @@ varies from about 2200 LUTs to 2800 LUTs according to the Tile position*. For ex
 the middle of the Mesh topology has a router with all it's five ports, than it has the maximal 
 area. A tile in the corner has three ports, and the minimal router area. A tile in the border of 
 the Mesh topology has four ports, and the intermediate router area.
+
+This design is not meant to be used for testing the ORCA MPSoC in the FPGA.
+
+### orca-zed Design 
+
+The ORCA Zed design includes the orca-top design as an IP, plus all the required glue logic to 
+attach AXI-stream interfaces to the ARM processors. The figure below presents ORCA Zed's block diagram. 
+
+![ORCA Zed diagram](images/zynq-block.png)
+
+The next image shows the total utilization per block. One can see that the Zynq Block (Zynq glue logic) uses about twice the number of LUTs compared to the Orca Top design. 
+
+![ORCA Zed utilization report](images/zynq-hier.png)
+
+For testing ORCA MPSoC in the Zedboard, one has to use this design.
 
 ## How to Program the FPGA
 

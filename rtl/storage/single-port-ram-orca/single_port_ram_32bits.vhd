@@ -110,6 +110,23 @@ begin
         wb_n_i => wb_n_i(3)
     );
 
+
+-- recommended way to describe Byte Write Enable RAMs
+-- source: UG901, Section RAM HDL Coding Guidelines
+-- process(clk) 
+-- begin  
+--     if rising_edge(clk) then   
+--         if cs_n_i = '0' then    
+--             data_o <= RAM(conv_integer(addr_i));    
+--             for i in 0 to 3 loop     
+--                 if wea(i) = '0' then      
+--                     RAM(conv_integer(addr_i))((i + 1) * 7 downto i * 8) := data_i((i + 1) * 7 downto i * 8);     
+--                 end if;    
+--             end loop;   
+--         end if;  
+--     end if; 
+-- end process;
+
 end single_port_ram_32bits;
 
 

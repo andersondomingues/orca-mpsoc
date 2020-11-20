@@ -3,7 +3,9 @@
  * The NoC Addresses are:
  *  - address 0x0000: Zynq
  *  - address 0x0001: RISCV
- * See the vector 'hermes_pkg' for the packet content sent between the ARM and the RISCV
+ * See the vector 'hermes_pkg' for the packet content sent between the ARM and the RISCV.
+ * 
+ * In this case, the ARM starts the ping. Another variation is to expect the RISCV to start it.
  */
 
 #include "xaxidma.h"

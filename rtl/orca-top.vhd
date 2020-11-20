@@ -36,6 +36,30 @@ end orca_top;
 
 architecture orca_top of orca_top is
 
+  ATTRIBUTE X_INTERFACE_INFO : STRING;
+  
+  ATTRIBUTE X_INTERFACE_INFO OF clk: SIGNAL IS "xilinx.com:signal:clock:1.0 M CLK";
+  ATTRIBUTE X_INTERFACE_INFO OF rst_n: SIGNAL IS "xilinx.com:signal:reset:1.0 AXI_RESETN RST";  
+  
+  -- ATTRIBUTE X_INTERFACE_INFO of <port-name>: SIGNAL is "xilinx.com:interface:axis:1.0 <interface_name> <AXIS-port-type>";
+  ATTRIBUTE X_INTERFACE_INFO of dataS_i: SIGNAL is "xilinx.com:interface:axis:1.0 S TDATA";
+  --ATTRIBUTE X_INTERFACE_INFO of <s_tlast>: SIGNAL is "xilinx.com:interface:axis:1.0 S TLAST";
+  ATTRIBUTE X_INTERFACE_INFO of validS_i: SIGNAL is "xilinx.com:interface:axis:1.0 S TVALID";
+  ATTRIBUTE X_INTERFACE_INFO of readyS_o: SIGNAL is "xilinx.com:interface:axis:1.0 S TREADY";
+
+  ATTRIBUTE X_INTERFACE_INFO of dataM_o: SIGNAL is "xilinx.com:interface:axis:1.0 M TDATA";
+  ATTRIBUTE X_INTERFACE_INFO of lastM_o: SIGNAL is "xilinx.com:interface:axis:1.0 M TLAST";
+  ATTRIBUTE X_INTERFACE_INFO of validM_o: SIGNAL is "xilinx.com:interface:axis:1.0 M TVALID";
+  ATTRIBUTE X_INTERFACE_INFO of readyM_i: SIGNAL is "xilinx.com:interface:axis:1.0 M TREADY";
+
+  -- Uncomment the following to set interface specific parameter on the bus interface.
+  --  ATTRIBUTE X_INTERFACE_PARAMETER : STRING;
+  --  ATTRIBUTE X_INTERFACE_PARAMETER of <port_name>: SIGNAL is "CLK_DOMAIN <value>,PHASE <value>,FREQ_HZ <value>,LAYERED_METADATA <value>,HAS_TLAST <value>,HAS_TKEEP <value>,HAS_TSTRB <value>,HAS_TREADY <value>,TUSER_WIDTH <value>,TID_WIDTH <value>,TDEST_WIDTH <value>,TDATA_NUM_BYTES <value>";
+
+  ATTRIBUTE X_INTERFACE_PARAMETER : STRING;
+  ATTRIBUTE X_INTERFACE_PARAMETER OF clk: SIGNAL IS "XIL_INTERFACENAME aclk_CLOCK, FREQ_HZ 50000000, ASSOCIATED_BUSIF M:S";
+  ATTRIBUTE X_INTERFACE_PARAMETER OF rst_n: SIGNAL IS "XIL_INTERFACENAME AXIS_CONTROL_RESET, POLARITY ACTIVE_LOW";
+
   -- Interconnection signals 
   type txNport is array (NUMBER_PROCESSORS - 1 downto 0) of std_logic_vector(3 downto 0);
   signal tx : txNPORT;
@@ -71,6 +95,13 @@ architecture orca_top of orca_top is
   -- reset synchornizer
   --signal rff1,rst_sync : std_logic;
   signal rst : std_logic;
+
+
+--attribute KEEP : string;
+--attribute MARK_DEBUG : string;
+--
+--attribute KEEP of  EA : signal is "TRUE";
+--attribute MARK_DEBUG of EA  : signal is "TRUE";
 
 begin
 

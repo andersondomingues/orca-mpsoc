@@ -119,6 +119,17 @@ start the Vivado:
     $ cd syn/orca-zed/
     $ ./build.sh
 
+### Things to do for synthesis
+
+Place here the whishlist for the ORCA synthesis tests.
+
+#### Ways to load the RISCV apps
+
+ - Pre-load the RISCV memory with its app;
+ - ARM has RISCV's code as a static header and send it through the NoC;
+ - ARM has Ethernet connection, receives the app from the host computer, and sends it to the RISCV;
+
+
 ## How to Program the FPGA
 
 TODO: Describe here how to load the FPGA and run a program between the ARM and the Processing Tile.

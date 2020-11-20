@@ -112,7 +112,16 @@ begin
   begin 
   
     if rst = '1' then
-      recv_state <= R_RELOAD_WAIT;
+      -- ###########################################
+      --  TODO:  BIIIIIG ATENTION NOTICE!
+      --  If the PE is going to receive the app via the NoC
+      --  then, the initial state must be R_RELOAD_WAIT
+      --  else, if the app will be preloaded in the bitstream
+      --  then, the initial state must be R_RELOAD_FLUSH
+      -- ###########################################
+      --recv_state <= R_RELOAD_WAIT;
+      recv_state <= R_RELOAD_FLUSH;
+      
     elsif rising_edge(clk) then
 
       case recv_state is 

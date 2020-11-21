@@ -37,6 +37,72 @@ if { ![info exists env(VIVADO_TOP_NAME)] } {
  puts "Using top name: ${top_name}"
 }
 
+# An issue when there are more than 10 BRAMs is that the labels are recieved in 
+# alphabetical order. For example, it would return:
+#orca_zed_i/orca_top_0/U0/proc[1].orca_tile/proc_tile_mem_binding/ram_reg_0
+#orca_zed_i/orca_top_0/U0/proc[1].orca_tile/proc_tile_mem_binding/ram_reg_1
+#orca_zed_i/orca_top_0/U0/proc[1].orca_tile/proc_tile_mem_binding/ram_reg_10
+#orca_zed_i/orca_top_0/U0/proc[1].orca_tile/proc_tile_mem_binding/ram_reg_11
+#orca_zed_i/orca_top_0/U0/proc[1].orca_tile/proc_tile_mem_binding/ram_reg_12
+#...
+# Instead of:
+#orca_zed_i/orca_top_0/U0/proc[1].orca_tile/proc_tile_mem_binding/ram_reg_0
+#orca_zed_i/orca_top_0/U0/proc[1].orca_tile/proc_tile_mem_binding/ram_reg_1
+#orca_zed_i/orca_top_0/U0/proc[1].orca_tile/proc_tile_mem_binding/ram_reg_2
+#...
+#orca_zed_i/orca_top_0/U0/proc[1].orca_tile/proc_tile_mem_binding/ram_reg_10
+#orca_zed_i/orca_top_0/U0/proc[1].orca_tile/proc_tile_mem_binding/ram_reg_11
+#orca_zed_i/orca_top_0/U0/proc[1].orca_tile/proc_tile_mem_binding/ram_reg_12
+#
+# The order is relevant, otherwise the bits will be inverted into the BRAMs.
+#
+# One solution is to split the list according to the label lengths, 
+# which is equivalent to split the lists by units, tens, hundreds, etc
+# Once they are split, then sort each list, and finally, combine the lists
+# again into a single list.
+# The following procedure does this 'hack' to fix the order of the labels.
+#
+proc Reorder_Labels {labelList} {
+    set sortedList {}
+
+    # get the shortest string in the labelList (units)
+    set shortest 10000
+    foreach label $labelList {
+        if {[string length $label] < $shortest} {
+            set shortest [string length $label]
+        }
+    }
+
+    # lists to separe the labels by lenght
+    set unitsList {}
+    set tensList {}
+    set hundsList {}
+
+    # I dont expect to have more than 999 BRAM in a single RAM block.
+    # So, 3 digits is ok
+    foreach label $labelList {
+        set labelLen [string length $label]
+        if {$labelLen == $shortest} {
+            lappend unitsList $label
+        } elseif {$labelLen == [expr $shortest + 1]} {
+            lappend tensList $label
+        } elseif {$labelLen == [expr $shortest + 2]} {
+            lappend hundsList $label
+        } else {
+            error "ERROR: that's quite a memory !!!!"
+        }
+    }
+
+    # Now that the list is separated into 3 lists, 
+    # it is necessary to sort these lists and combine them into a single list
+    set unitsList [lsort $unitsList]
+    set tensList [lsort $tensList]
+    set hundsList [lsort $hundsList]
+    set sortedList [concat $unitsList $tensList $hundsList]
+
+    return $sortedList
+}
+
 ##########################################
 #
 #    THESE VARIABLES MUST BE CHANGED 
@@ -45,7 +111,9 @@ if { ![info exists env(VIVADO_TOP_NAME)] } {
 ##########################################
 #set design_name orca_zed
 #set top_name orca_zed_wrapper
-set data_width 32
+# it's weird but it's correct. The memory is actually 26 bits wide.
+# the synthesis has seen that the MSB bits were not used, and they were replaced by FFs.
+set data_width 27
 # its depth is 8192
 set data_depth [expr pow(2, 13)]
 # number of independent memory blocks
@@ -66,7 +134,13 @@ set fp [open mem_dump.bmm w+]
 for { set mem_cnt 1}  {$mem_cnt <= $num_mem} {incr mem_cnt} {
     puts "generating the BMM for memory # $mem_cnt"
     # all BRAMs found under this label belong to the same memory block
-    set mem_label "proc\[${mem_cnt}\]"
+    ###################################
+    #
+    #    THIS LABEL MUST BE CHANGED 
+    #   ACCORDING TO THE DESIGN !!!!!
+    #
+    ###################################
+    set mem_label "proc\[${mem_cnt}\].orca_tile/proc_tile_mem_binding"
     set bmmList {}; # make it empty in case you were running it interactively
 
     # this first loop separates only the BRAMs of this memory block
@@ -77,9 +151,17 @@ for { set mem_cnt 1}  {$mem_cnt <= $num_mem} {incr mem_cnt} {
             lappend bram_List $memInst
         }
     }
+    # reorder the list of labels
+    set bram_List [Reorder_Labels $bram_List]
     # this is used to set the data width of each BRAM of this memory block
     set bram_width [expr $data_width / [llength $bram_List]]
-    #puts "BRAM width ${bram_width}"
+    puts "BRAM width ${bram_width} - $data_width - [llength $bram_List]"
+    if {[expr $data_width % [llength $bram_List]] != 0} {
+        error "ERROR in data witdth ${data_width} and number of BRAMs [llength $bram_List]"
+    }
+    if {$bram_width < 1} {
+        error "ERROR in BRAM witdth ${bram_width}. Expecting at least 1 bit."
+    }
     set cnt 0
     foreach memInst $bram_List {
         # this is the property we need
@@ -102,7 +184,6 @@ for { set mem_cnt 1}  {$mem_cnt <= $num_mem} {incr mem_cnt} {
         #DEBUG: puts "Locating Instance: $memInst to $x"
         set cnt [expr $cnt + 1]
     }
-
     # debug message:
     puts "Parsed Locations Number of Intances: [llength $bmmList]"
     #DEBUG: foreach memInst $bmmList { puts "Stored: $memInst" }

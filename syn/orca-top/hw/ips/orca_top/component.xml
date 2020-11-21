@@ -508,6 +508,12 @@
         <spirit:logicalName>work</spirit:logicalName>
       </spirit:file>
       <spirit:file>
+        <spirit:name>../../hdl/storage/single-port-ram-orca/ram_32_ni.vhd</spirit:name>
+        <spirit:fileType>vhdlSource</spirit:fileType>
+        <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
+        <spirit:logicalName>work</spirit:logicalName>
+      </spirit:file>
+      <spirit:file>
         <spirit:name>../../hdl/network-interfaces/orca-ni/orca-ni-recv-Nflit.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>

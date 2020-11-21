@@ -76,8 +76,8 @@ architecture orca_ni_recv of orca_ni_recv is
   signal b_addr_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal b_data_i : std_logic_vector((RAM_WIDTH - 1) downto 0);
   signal b_data_o : std_logic_vector((RAM_WIDTH - 1) downto 0);
-  signal b_cs_n_o   : std_logic_vector(3 downto 0);
-  signal b_wb_n_o   : std_logic_vector(3 downto 0);
+  signal b_cs_n_o   : std_logic;
+  signal b_wb_n_o   : std_logic;
   signal quarter_flit_complement : std_logic_vector(RAM_WIDTH/4 - 1 downto QUARTOFLIT);
   signal m_data_complement : std_logic_vector(RAM_WIDTH - 1 downto TAM_FLIT);
   signal half_mem_complement : std_logic_vector((RAM_WIDTH/2 - 1) downto 0);
@@ -90,9 +90,9 @@ begin
   half_mem_complement <= (others => '0');
   size <= m_data_complement & shift(INTEGER(CEIL(LOG2(REAL(RAM_WIDTH/TAM_FLIT))))-1 downto 0) & r_data_i(TAM_FLIT - 1 downto INTEGER(CEIL(LOG2(REAL(RAM_WIDTH/TAM_FLIT)))));
 
-  b_cs_n_o <= (others => '0');
+  b_cs_n_o <= '0';
   --memory buffer binding
-  ni_recv_buffer_mod: entity work.single_port_ram_32bits
+  ni_recv_buffer_mod: entity work.ram_32_ni
     generic map(
         RAM_DEPTH_I => BUFFER_DEPTH_NI
     )
@@ -306,7 +306,7 @@ begin
 
 r_credit_o <= '0' when recv_copy_size = recv_copy_size'low and shift(INTEGER(CEIL(LOG2(REAL(RAM_WIDTH/TAM_FLIT))))) = '1' else '1';
 
-b_wb_n_o <= (others => '0') when recv_state = R_WAIT_FLIT_ADDR or recv_state = R_WAIT_FLIT_SIZE or recv_state = R_WAIT_PAYLOAD else (others => '1');
+b_wb_n_o <= '0' when recv_state = R_WAIT_FLIT_ADDR or recv_state = R_WAIT_FLIT_SIZE or recv_state = R_WAIT_PAYLOAD else '1';
 b_addr_o <= recv_copy_addr when recv_state = R_WAIT_FLIT_ADDR or recv_state = R_WAIT_FLIT_SIZE or recv_state = R_WAIT_PAYLOAD else copy_size_complement & cpu_copy_size;
 b_data_o <= half_mem_complement & quarter_flit_complement & r_data_i(METADEFLIT-1 downto QUARTOFLIT) & quarter_flit_complement & r_data_i(QUARTOFLIT-1 downto 0) when recv_state = R_WAIT_FLIT_ADDR else 
             m_data_complement & shift(INTEGER(CEIL(LOG2(REAL(RAM_WIDTH/TAM_FLIT))))-1 downto 0) & r_data_i(TAM_FLIT - 1 downto INTEGER(CEIL(LOG2(REAL(RAM_WIDTH/TAM_FLIT))))) when recv_state = R_WAIT_FLIT_SIZE else 

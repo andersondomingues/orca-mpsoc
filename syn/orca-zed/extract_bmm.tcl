@@ -155,7 +155,7 @@ for { set mem_cnt 1}  {$mem_cnt <= $num_mem} {incr mem_cnt} {
     set bram_List [Reorder_Labels $bram_List]
     # this is used to set the data width of each BRAM of this memory block
     set bram_width [expr $data_width / [llength $bram_List]]
-    puts "BRAM width ${bram_width} - $data_width - [llength $bram_List]"
+    #puts "BRAM width ${bram_width} - $data_width - [llength $bram_List]"
     if {[expr $data_width % [llength $bram_List]] != 0} {
         error "ERROR in data witdth ${data_width} and number of BRAMs [llength $bram_List]"
     }
@@ -184,6 +184,7 @@ for { set mem_cnt 1}  {$mem_cnt <= $num_mem} {incr mem_cnt} {
         #DEBUG: puts "Locating Instance: $memInst to $x"
         set cnt [expr $cnt + 1]
     }
+
     # debug message:
     puts "Parsed Locations Number of Intances: [llength $bmmList]"
     #DEBUG: foreach memInst $bmmList { puts "Stored: $memInst" }
@@ -234,7 +235,7 @@ if {![file exists ./vivado/${design_name}/${design_name}.runs/impl_1/${top_name}
 # insert the elf file into the bitstream
 # TODO improve the error recover for executing data2mem
 # example in https://github.com/alishbakanwal/Xilinx_Vivado_Lab_Tools/blob/master/Xilinx_Vivado_Lab_Tools/scripts/updatemem/main.tcl
-exec data2mem -bm ./mem_dump.bmm -bd ./src/orca/0x0.elf -bt ./vivado/${design_name}/${design_name}.runs/impl_1/${top_name}.bit -o b new.bit
+#exec data2mem -bm ./mem_dump.bmm -bd ./src/orca/0x0.elf -bt ./vivado/${design_name}/${design_name}.runs/impl_1/${top_name}.bit -o b new.bit
 #data2mem -bm ./mem_dump.bmm -bd ./src/orca/0x0.elf -bt ./vivado/orca_zed/orca_zed.runs/impl_1/orca_zed_wrapper.bit -o b new.bit
 # cleanup
 unset myInsts

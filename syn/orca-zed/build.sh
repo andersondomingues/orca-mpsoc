@@ -16,7 +16,7 @@ if [ -f $VIVADO ]; then
   $VIVADO -mode batch -source build_bitstream_export_sdk.tcl -notrace
   # If elf file exists, then this is a processor based design.
   # This means that the processor's RAM content must be loaded into the bitstream
-  if [ -f "./src/processor-based/image.elf" ]; then
+  if [ -f "./src/orca/0x0.elf" ]; then
     echo "##############################################"
     echo "######## Loading Elf into the bitstream ######"
     echo "##############################################"

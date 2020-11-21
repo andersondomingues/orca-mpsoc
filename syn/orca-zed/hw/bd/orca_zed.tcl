@@ -1037,14 +1037,14 @@ proc create_root_design { parentCell } {
   create_hier_cell_zynq [current_bd_instance .] zynq
 
   # Create interface connections
-  connect_bd_intf_net -intf_net orca_top_0_m [get_bd_intf_pins orca_top_0/m] [get_bd_intf_pins zynq/S_AXIS_DMA]
+  connect_bd_intf_net -intf_net orca_top_0_m [get_bd_intf_pins orca_top_0/M_AXIS] [get_bd_intf_pins zynq/S_AXIS_DMA]
 connect_bd_intf_net -intf_net [get_bd_intf_nets orca_top_0_m] [get_bd_intf_pins system_ila_0/SLOT_1_AXIS] [get_bd_intf_pins zynq/S_AXIS_DMA]
   set_property -dict [ list \
 HDL_ATTRIBUTE.DEBUG {true} \
  ] [get_bd_intf_nets orca_top_0_m]
   connect_bd_intf_net -intf_net zynq_DDR [get_bd_intf_ports DDR] [get_bd_intf_pins zynq/DDR]
   connect_bd_intf_net -intf_net zynq_FIXED_IO [get_bd_intf_ports FIXED_IO] [get_bd_intf_pins zynq/FIXED_IO]
-  connect_bd_intf_net -intf_net zynq_M_AXIS_DMA [get_bd_intf_pins orca_top_0/s] [get_bd_intf_pins zynq/M_AXIS_DMA]
+  connect_bd_intf_net -intf_net zynq_M_AXIS_DMA [get_bd_intf_pins orca_top_0/S_AXIS] [get_bd_intf_pins zynq/M_AXIS_DMA]
 connect_bd_intf_net -intf_net [get_bd_intf_nets zynq_M_AXIS_DMA] [get_bd_intf_pins system_ila_0/SLOT_0_AXIS] [get_bd_intf_pins zynq/M_AXIS_DMA]
   set_property -dict [ list \
 HDL_ATTRIBUTE.DEBUG {true} \

@@ -19,7 +19,7 @@ entity orca_top is
     validS_i:        in  std_logic;
     -- the last port is not required for slave interfaces
     --lastS_i:         in  std_logic;
-    dataS_i:         in  std_logic_vector(TAM_FLIT-1 downto 0);
+    dataS_i:         in  std_logic_vector(31 downto 0);
     readyS_o:        out std_logic;
     -- AXI-Stream master interface 
     --clock_tx_local:  out std_logic;
@@ -28,7 +28,7 @@ entity orca_top is
     --credit_i_local:  in  std_logic
     lastM_o:         out std_logic;
     validM_o:        out std_logic;
-    dataM_o:         out std_logic_vector(TAM_FLIT-1 downto 0);
+    dataM_o:         out std_logic_vector(31 downto 0);
     readyM_i:        in  std_logic
   );
 
@@ -37,28 +37,27 @@ end orca_top;
 architecture orca_top of orca_top is
 
   ATTRIBUTE X_INTERFACE_INFO : STRING;
-  
-  ATTRIBUTE X_INTERFACE_INFO OF clk: SIGNAL IS "xilinx.com:signal:clock:1.0 M CLK";
-  ATTRIBUTE X_INTERFACE_INFO OF rst_n: SIGNAL IS "xilinx.com:signal:reset:1.0 AXI_RESETN RST";  
-  
-  -- ATTRIBUTE X_INTERFACE_INFO of <port-name>: SIGNAL is "xilinx.com:interface:axis:1.0 <interface_name> <AXIS-port-type>";
-  ATTRIBUTE X_INTERFACE_INFO of dataS_i: SIGNAL is "xilinx.com:interface:axis:1.0 S TDATA";
-  --ATTRIBUTE X_INTERFACE_INFO of <s_tlast>: SIGNAL is "xilinx.com:interface:axis:1.0 S TLAST";
-  ATTRIBUTE X_INTERFACE_INFO of validS_i: SIGNAL is "xilinx.com:interface:axis:1.0 S TVALID";
-  ATTRIBUTE X_INTERFACE_INFO of readyS_o: SIGNAL is "xilinx.com:interface:axis:1.0 S TREADY";
-
-  ATTRIBUTE X_INTERFACE_INFO of dataM_o: SIGNAL is "xilinx.com:interface:axis:1.0 M TDATA";
-  ATTRIBUTE X_INTERFACE_INFO of lastM_o: SIGNAL is "xilinx.com:interface:axis:1.0 M TLAST";
-  ATTRIBUTE X_INTERFACE_INFO of validM_o: SIGNAL is "xilinx.com:interface:axis:1.0 M TVALID";
-  ATTRIBUTE X_INTERFACE_INFO of readyM_i: SIGNAL is "xilinx.com:interface:axis:1.0 M TREADY";
-
-  -- Uncomment the following to set interface specific parameter on the bus interface.
-  --  ATTRIBUTE X_INTERFACE_PARAMETER : STRING;
-  --  ATTRIBUTE X_INTERFACE_PARAMETER of <port_name>: SIGNAL is "CLK_DOMAIN <value>,PHASE <value>,FREQ_HZ <value>,LAYERED_METADATA <value>,HAS_TLAST <value>,HAS_TKEEP <value>,HAS_TSTRB <value>,HAS_TREADY <value>,TUSER_WIDTH <value>,TID_WIDTH <value>,TDEST_WIDTH <value>,TDATA_NUM_BYTES <value>";
-
   ATTRIBUTE X_INTERFACE_PARAMETER : STRING;
-  ATTRIBUTE X_INTERFACE_PARAMETER OF clk: SIGNAL IS "XIL_INTERFACENAME aclk_CLOCK, FREQ_HZ 50000000, ASSOCIATED_BUSIF M:S";
-  ATTRIBUTE X_INTERFACE_PARAMETER OF rst_n: SIGNAL IS "XIL_INTERFACENAME AXIS_CONTROL_RESET, POLARITY ACTIVE_LOW";
+
+  -- reset and clock
+  ATTRIBUTE X_INTERFACE_PARAMETER OF rst_n: SIGNAL IS "XIL_INTERFACENAME rst_n, POLARITY ACTIVE_LOW";
+  ATTRIBUTE X_INTERFACE_INFO OF rst_n: SIGNAL IS "xilinx.com:signal:reset:1.0 rst_n RST";
+  ATTRIBUTE X_INTERFACE_PARAMETER OF clk: SIGNAL IS "XIL_INTERFACENAME clk, ASSOCIATED_BUSIF M_AXIS:S_AXIS, ASSOCIATED_RESET rst_n, FREQ_HZ 50000000, PHASE 0.000, XIL_INTERFACENAME clk";
+  ATTRIBUTE X_INTERFACE_INFO OF clk: SIGNAL IS "xilinx.com:signal:clock:1.0 clk CLK";
+  
+  -- AXIS slave
+  ATTRIBUTE X_INTERFACE_PARAMETER OF dataS_i: SIGNAL IS "XIL_INTERFACENAME S_AXIS, WIZ_DATA_WIDTH 32, TDATA_NUM_BYTES 4, TDEST_WIDTH 0, TID_WIDTH 0, TUSER_WIDTH 1, HAS_TREADY 1, HAS_TSTRB 0, HAS_TKEEP 0, HAS_TLAST 0, FREQ_HZ 50000000, PHASE 0.000";
+  ATTRIBUTE X_INTERFACE_INFO of dataS_i: SIGNAL is "xilinx.com:interface:axis:1.0 S_AXIS TDATA";
+  --ATTRIBUTE X_INTERFACE_INFO of <s_tlast>: SIGNAL is "xilinx.com:interface:axis:1.0 S_AXIS TLAST";
+  ATTRIBUTE X_INTERFACE_INFO of validS_i: SIGNAL is "xilinx.com:interface:axis:1.0 S_AXIS TVALID";
+  ATTRIBUTE X_INTERFACE_INFO of readyS_o: SIGNAL is "xilinx.com:interface:axis:1.0 S_AXIS TREADY";
+
+  -- AXIS master
+  ATTRIBUTE X_INTERFACE_PARAMETER OF dataM_o: SIGNAL IS "XIL_INTERFACENAME M_AXIS, WIZ_DATA_WIDTH 32, TDATA_NUM_BYTES 4, TDEST_WIDTH 0, TID_WIDTH 0, TUSER_WIDTH 1, HAS_TREADY 1, HAS_TSTRB 0, HAS_TKEEP 0, HAS_TLAST 1, FREQ_HZ 50000000, PHASE 0.000";
+  ATTRIBUTE X_INTERFACE_INFO of dataM_o: SIGNAL is "xilinx.com:interface:axis:1.0 M_AXIS TDATA";
+  ATTRIBUTE X_INTERFACE_INFO of lastM_o: SIGNAL is "xilinx.com:interface:axis:1.0 M_AXIS TLAST";
+  ATTRIBUTE X_INTERFACE_INFO of validM_o: SIGNAL is "xilinx.com:interface:axis:1.0 M_AXIS TVALID";
+  ATTRIBUTE X_INTERFACE_INFO of readyM_i: SIGNAL is "xilinx.com:interface:axis:1.0 M_AXIS TREADY";
 
   -- Interconnection signals 
   type txNport is array (NUMBER_PROCESSORS - 1 downto 0) of std_logic_vector(3 downto 0);

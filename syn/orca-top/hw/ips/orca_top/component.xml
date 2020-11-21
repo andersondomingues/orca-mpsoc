@@ -389,12 +389,7 @@
         <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>../../hdl/storage/single-port-ram-orca/single_port_ram_8bits.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>../../hdl/storage/single-port-ram-orca/single_port_ram_32bits.vhd</spirit:name>
+        <spirit:name>../../hdl/storage/single-port-ram-orca/ram_32.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
       </spirit:file>

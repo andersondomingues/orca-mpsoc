@@ -9,8 +9,13 @@
 *.log
 *.str
 *.jou
+*.bmm
+*.bit
+*.rpt
 syn/orca-top/vivado/**
+syn/orca-top/NA/**
 syn/orca-zed/vivado/**
+syn/orca-zed/NA/**
 vivado/**
 .Xil
 

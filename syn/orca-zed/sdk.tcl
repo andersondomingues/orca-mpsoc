@@ -56,7 +56,7 @@ foreach app_dir_name $list_apps {
         # get only the file name
         set file_name [file tail $path_file]
         #puts "$file_name"
-        exec rm ./vivado/${design_name}/${design_name}.sdk/$app_prj_name/src/zynq/$file_name
+        exec rm ./vivado/${design_name}/${design_name}.sdk/$app_prj_name/src/$file_name
         exec ln -s ../../../../../src/zynq/$app_prj_name/$file_name ./vivado/${design_name}/${design_name}.sdk/$app_prj_name/src/
     }
 }

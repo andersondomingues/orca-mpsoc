@@ -109,6 +109,7 @@ set_property "top" "${top_name}" $obj
 # Insert all the vhdl, sv, and verilog source files from ./hw/hdl into the project
 # find recursively all files with extensions vhd, v, sv 
 set hdl_files [fileutil::findByPattern $origin_dir/hw/hdl/ -glob {*.vhd *.v *.sv}]
+#set hdl_files [glob -nocomplain -directory $origin_dir/hw/hdl/ *{*.vhd,*.v,*.sv}*]
 puts $hdl_files
 
 foreach hdl_file $hdl_files {

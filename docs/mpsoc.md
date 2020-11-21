@@ -33,17 +33,17 @@ Follow the presented values for each configuration parameter.
 
 The *orca-top* module has a AXI Stream interface to connect to the Zynq's ARM subsystem.
 
-The AXI-Stream master interface, i.e., for incoming data flow, has the following interfaces:
+The AXI-Stream master interface, i.e., for outgoing data flow, has the following interfaces:
 
     lastM_o:         out std_logic;
     validM_o:        out std_logic;
-    dataM_o:         out std_logic_vector(TAM_FLIT-1 downto 0);
+    dataM_o:         out std_logic_vector(31 downto 0);
     readyM_i:        in  std_logic
 
-The AXI-Stream slave interface, i.e., for outgoing data flow, has the following interfaces:
+The AXI-Stream slave interface, i.e., for incoming data flow, has the following interfaces:
 
     validS_i:        in  std_logic;
-    dataS_i:         in  std_logic_vector(TAM_FLIT-1 downto 0);
+    dataS_i:         in  std_logic_vector(31 downto 0);
     readyS_o:        out std_logic;
 
 Note that the master interface has an additional port called *last*. This is part of the AXI-S

@@ -52,6 +52,7 @@ if {[llength $file_list] != 0} {
 if {[file exist ".Xil"]} {
   file delete -force .Xil
 }
+
 # Create a fresh project
 file delete -force ${orig_proj_dir}
 file mkdir ${orig_proj_dir}
@@ -105,17 +106,10 @@ if {[string equal [get_filesets -quiet sources_1] ""]} {
 set obj [get_filesets sources_1]
 set_property "top" "${top_name}" $obj
 
-
 # Insert all the vhdl, sv, and verilog source files from ./hw/hdl into the project
-#set hdl_files2 [glob -nocomplain -directory ../../rtl/ *{*.vhd,*.v,*.sv}*]
-#set basepath /home/lsa/repos/xilinx/orca-mpsoc/syn/orca-top
-#set hdl_files [glob [file join ../../rtl/ *{*.vhd,*.v,*.sv}*]] 
-#set hdl_files [fileutil::findByPattern ../../rtl/ *{*.vhd,*.v,*.sv}*]
 # find recursively all files with extensions vhd, v, sv 
-#set hdl_files [fileutil::findByPattern ../../rtl/ -glob {*.vhd *.v *.sv}]
-#set hdl_files [glob -nocomplain -directory $origin_dir/hw/hdl/ *{*.vhd,*.v,*.sv}*]
-#set hdl_files [fileutil::findByPattern $origin_dir/hw/hdl/ *.vhd]
 set hdl_files [fileutil::findByPattern $origin_dir/hw/hdl/ -glob {*.vhd *.v *.sv}]
+#set hdl_files [glob -nocomplain -directory $origin_dir/hw/hdl/ *{*.vhd,*.v,*.sv}*]
 puts $hdl_files
 
 foreach hdl_file $hdl_files {
@@ -189,8 +183,7 @@ if {[string equal [get_filesets -quiet sim_1] ""]} {
 # Set 'sim_1' fileset object
 # Import testbenches, waveform files, etc if they exist
 set obj [get_filesets sim_1]
-#set sim_files [glob -nocomplain -directory $origin_dir/hw/sim *{*.vhd,*.v,*.sv}*]
-#set sim_files [fileutil::findByPattern $origin_dir/hw/sim -glob {*.vhd *.v *.sv}]
+# find recursively all files with extensions vhd, v, sv 
 set sim_files [fileutil::findByPattern $origin_dir/hw/sim/ -glob {*.vhd *.v *.sv}]
 
 # if there is a testbench, then add few more properties 

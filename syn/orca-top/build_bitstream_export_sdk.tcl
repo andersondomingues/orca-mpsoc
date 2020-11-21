@@ -44,16 +44,10 @@ if {[llength $app_list] != 0} {
 
 open_run synth_1 -name synth_1
 puts "========================"
-puts "Timing report"
+puts "Generating reports ..."
 puts "========================"
-report_timing_summary
-puts "========================"
-puts "Area report"
-puts "========================"
-report_utilization
-puts "========================"
-puts "Power report"
-puts "========================"
-report_power
+report_timing_summary > timing.rpt
+report_utilization > utilization.rpt
+report_power > power.rpt
 
 close_design -quiet

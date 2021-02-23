@@ -47,7 +47,7 @@ begin
    address_ip <= x"10";
    credit_i <= '1';
    
-	u1_orca: entity work.orca_top_v2
+	u1_orca: entity work.orca_top
 		port map(
 	                clk		=> clock,
 	                rst		=> reset,

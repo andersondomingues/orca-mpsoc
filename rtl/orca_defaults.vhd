@@ -54,7 +54,7 @@ package orca_defaults is
 ---------------------------------------------------------
 -- NOC BANDWIDTH DEPENDENT CONSTANTS
 ---------------------------------------------------------
-        constant TAM_FLIT : integer range 1 to 64 := 16;
+        constant TAM_FLIT : integer range 1 to 64 := 32;
         constant METADEFLIT : integer range 1 to 32 := (TAM_FLIT/2);
         constant QUARTOFLIT : integer range 1 to 16 := (TAM_FLIT/4);
 
@@ -72,9 +72,9 @@ package orca_defaults is
 ---------------------------------------------------------
 -- MPSOC DEPENDENT CONSTANTS
 ---------------------------------------------------------
-        constant NUMBER_PROCESSORS : integer := 4;
+        constant NUMBER_PROCESSORS : integer := 2;
         constant NUMBER_PROCESSORS_X : integer := 2;
-        constant NUMBER_PROCESSORS_Y : integer := 2;
+        constant NUMBER_PROCESSORS_Y : integer := 1;
         constant NROT: integer := NUMBER_PROCESSORS;
 
         constant MIN_X : integer := 0;
@@ -90,9 +90,11 @@ package orca_defaults is
 -- PROCESSOR ELEMENT DEPENDENT CONSTANTS
 ---------------------------------------------------------
         constant RAM_WIDTH : integer := 32;
-        constant RAM_DEPTH : integer := 16384;
+        constant RAM_ADDR_WIDTH : integer := 14;
+        constant RAM_DEPTH : integer := 2 ** RAM_ADDR_WIDTH;
         constant PRELOAD_ADDR : integer := 0;
-        constant BUFFER_DEPTH_NI : integer := 64;
+        constant BUFFER_ADDR_DEPTH_NI : integer := 6;
+        constant BUFFER_DEPTH_NI : integer := 2 ** BUFFER_ADDR_DEPTH_NI;
 
 
 -- IF COMMUNICATION TILE

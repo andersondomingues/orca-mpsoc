@@ -7,28 +7,57 @@ use work.orca_defaults.all;
 
 entity orca_top is
   port (
-    clk : in std_logic;
-    rst : in std_logic;
+    clk   : in std_logic;
+    rst_n : in std_logic;
     
-    -- ARM INTERFACE
-    send_addr_i : in std_logic_vector(31 downto 0);
-    send_data_o : out std_logic_vector(31 downto 0);
-    send_data_i : in std_logic_vector(31 downto 0);
-    send_wb_i : in std_logic_vector(3 downto 0);
-    send : in std_logic;
-    sent : out std_logic;
-
-    recv_addr_i : in std_logic_vector(31 downto 0);
-    recv_data_o : out std_logic_vector(31 downto 0);
-    recv_data_i : in std_logic_vector(31 downto 0);
-    recv_wb_i : in std_logic_vector(3 downto 0);
-    intr : out std_logic;
-    read : in std_logic
+    -- LOCAL PORT INTERFACE
+    -- AXI-Stream slave interface 
+    --clock_rx_local:  in  std_logic;
+    --rx_local:        in  std_logic;
+    --data_in_local:   in  std_logic_vector(TAM_FLIT-1 downto 0);
+    --credit_o_local:  out std_logic;
+    validS_i:        in  std_logic;
+    -- the last port is not required for slave interfaces
+    --lastS_i:         in  std_logic;
+    dataS_i:         in  std_logic_vector(31 downto 0);
+    readyS_o:        out std_logic;
+    -- AXI-Stream master interface 
+    --clock_tx_local:  out std_logic;
+    --tx_local:        out std_logic;
+    --data_out_local:  out std_logic_vector(TAM_FLIT-1 downto 0);
+    --credit_i_local:  in  std_logic
+    lastM_o:         out std_logic;
+    validM_o:        out std_logic;
+    dataM_o:         out std_logic_vector(31 downto 0);
+    readyM_i:        in  std_logic
   );
 
 end orca_top;
 
 architecture orca_top of orca_top is
+
+  ATTRIBUTE X_INTERFACE_INFO : STRING;
+  ATTRIBUTE X_INTERFACE_PARAMETER : STRING;
+
+  -- reset and clock
+  ATTRIBUTE X_INTERFACE_PARAMETER OF rst_n: SIGNAL IS "XIL_INTERFACENAME rst_n, POLARITY ACTIVE_LOW";
+  ATTRIBUTE X_INTERFACE_INFO OF rst_n: SIGNAL IS "xilinx.com:signal:reset:1.0 rst_n RST";
+  ATTRIBUTE X_INTERFACE_PARAMETER OF clk: SIGNAL IS "XIL_INTERFACENAME clk, ASSOCIATED_BUSIF M_AXIS:S_AXIS, ASSOCIATED_RESET rst_n, FREQ_HZ 50000000, PHASE 0.000, XIL_INTERFACENAME clk";
+  ATTRIBUTE X_INTERFACE_INFO OF clk: SIGNAL IS "xilinx.com:signal:clock:1.0 clk CLK";
+  
+  -- AXIS slave
+  ATTRIBUTE X_INTERFACE_PARAMETER OF dataS_i: SIGNAL IS "XIL_INTERFACENAME S_AXIS, WIZ_DATA_WIDTH 32, TDATA_NUM_BYTES 4, TDEST_WIDTH 0, TID_WIDTH 0, TUSER_WIDTH 1, HAS_TREADY 1, HAS_TSTRB 0, HAS_TKEEP 0, HAS_TLAST 0, FREQ_HZ 50000000, PHASE 0.000";
+  ATTRIBUTE X_INTERFACE_INFO of dataS_i: SIGNAL is "xilinx.com:interface:axis:1.0 S_AXIS TDATA";
+  --ATTRIBUTE X_INTERFACE_INFO of <s_tlast>: SIGNAL is "xilinx.com:interface:axis:1.0 S_AXIS TLAST";
+  ATTRIBUTE X_INTERFACE_INFO of validS_i: SIGNAL is "xilinx.com:interface:axis:1.0 S_AXIS TVALID";
+  ATTRIBUTE X_INTERFACE_INFO of readyS_o: SIGNAL is "xilinx.com:interface:axis:1.0 S_AXIS TREADY";
+
+  -- AXIS master
+  ATTRIBUTE X_INTERFACE_PARAMETER OF dataM_o: SIGNAL IS "XIL_INTERFACENAME M_AXIS, WIZ_DATA_WIDTH 32, TDATA_NUM_BYTES 4, TDEST_WIDTH 0, TID_WIDTH 0, TUSER_WIDTH 1, HAS_TREADY 1, HAS_TSTRB 0, HAS_TKEEP 0, HAS_TLAST 1, FREQ_HZ 50000000, PHASE 0.000";
+  ATTRIBUTE X_INTERFACE_INFO of dataM_o: SIGNAL is "xilinx.com:interface:axis:1.0 M_AXIS TDATA";
+  ATTRIBUTE X_INTERFACE_INFO of lastM_o: SIGNAL is "xilinx.com:interface:axis:1.0 M_AXIS TLAST";
+  ATTRIBUTE X_INTERFACE_INFO of validM_o: SIGNAL is "xilinx.com:interface:axis:1.0 M_AXIS TVALID";
+  ATTRIBUTE X_INTERFACE_INFO of readyM_i: SIGNAL is "xilinx.com:interface:axis:1.0 M_AXIS TREADY";
 
   -- Interconnection signals 
   type txNport is array (NUMBER_PROCESSORS - 1 downto 0) of std_logic_vector(3 downto 0);
@@ -47,50 +76,140 @@ architecture orca_top of orca_top is
   signal data_in : data_inNPORT;
   type data_outNport is array (NUMBER_PROCESSORS - 1 downto 0) of arrayNport_regflitLONE;
   signal data_out       : data_outNPORT;
-  signal address_router : std_logic_vector(7 downto 0);
+  signal address_router : regmetadeflit;
   type router_position is array (NUMBER_PROCESSORS - 1 downto 0) of integer range 0 to TR;
   signal position : router_position;
-		
-  type repo_address_t is array (NUMBER_PROCESSORS - 1 downto 0) of std_logic_vector(29 downto 0);
-  signal repo_address_sig 	: repo_address_t;
-  signal repo_data_sig     	: arrayNPe_reg32;
-  signal ack_app_sig        	: regNPe;
-  signal req_app_sig     		: arrayNPe_reg32;
+
+
+  -- Specific to Node 00 (local port)
+  signal clock_rx_00 : regNport;
+  signal rx_00 : regNport;
+  signal data_in_00 : arrayNport_regflit;
+  signal credit_o_00 : regNport;    
+  signal clock_tx_00 : regNport;
+  signal tx_00 : regNport;
+  signal data_out_00 : arrayNport_regflit;
+  signal credit_i_00 : regNport;
+
+  -- reset synchornizer
+  --signal rff1,rst_sync : std_logic;
+  signal rst : std_logic;
+
+
+--attribute KEEP : string;
+--attribute MARK_DEBUG : string;
+--
+--attribute KEEP of  EA : signal is "TRUE";
+--attribute MARK_DEBUG of EA  : signal is "TRUE";
 
 begin
 
-  comm_tile : entity work.orca_communication_tile
-  generic map(
-      R_ADDRESS => x"0000" --address
+  -- ARM uses active low reset
+  rst <= not rst_n;
+
+  -- process (clk, rst)
+  -- begin
+  --   if (rst = '1') then
+  --     rff1 <= '1';
+  --     rst_sync <= '1';
+  --   elsif (clk'event and clk = '1') then
+  --     rff1 <= '0';
+  --     rst_sync <= rff1;
+  --   end if;
+  -- end process;
+
+  router_binding : entity work.RouterCC
+    generic map(
+      address => RouterAddress(0)
     )
+    port map(
+      clock => clk,
+      --reset => rst_sync,
+      reset => rst,
+
+    clock_rx => clock_rx_00,
+    rx => rx_00,
+    data_in => data_in_00,
+    credit_o => credit_o_00,
+
+    clock_tx => clock_tx_00,
+    tx => tx_00,
+    data_out => data_out_00,
+    credit_i => credit_i_00
+    );
+
+  --clock_rx_00(LOCAL) <= clock_rx_local;
+  clock_rx_00(LOCAL) <= clk;
+  --rx_00(LOCAL)       <= rx_local;
+  rx_00(LOCAL)       <= validS_i;
+  --data_in_00(LOCAL)  <= data_in_local;
+  data_in_00(LOCAL)  <= dataS_i;
+  --credit_o_local     <= credit_o_00(LOCAL);
+  readyS_o           <= credit_o_00(LOCAL);
+  --clock_tx_local     <= clock_tx_00(LOCAL);
+  --tx_local           <= tx_00(LOCAL);
+  --data_out_local     <= data_out_00(LOCAL);
+  --credit_i_00(LOCAL) <= credit_i_local;
+  -- these 3 signals are replaced by the 'last_gen' module to generate the AXI master tlast port
+  --validM_o           <= tx_00(LOCAL);
+  --dataM_o            <= data_out_00(LOCAL);
+  --credit_i_00(LOCAL) <= readyM_i;
+
+  -- these module stays between the AXI Master port an the external orca-top inteface
+  last_Local: Entity work.last_gen
   port map(
-    clk => clk,
-    rst => rst,
-
-    send_addr_i => send_addr_i,
-    send_data_o => send_data_o,
-    send_data_i => send_data_i,
-    send_wb_i => send_wb_i,
-    send => send,
-    sent => sent,
-
-    recv_addr_i => recv_addr_i,
-    recv_data_o => recv_data_o,
-    recv_data_i => recv_data_i,
-    recv_wb_i => recv_wb_i,
-    intr => intr,
-    read => read,
-
-    clock_rx => clock_rx(0),
-    rx => rx(0),
-    data_i => data_in(0),
-    credit_o => credit_o(0),
-
-    clock_tx => clock_tx(0),
-    tx => tx(0),
-    data_o => data_out(0),
-    credit_i => credit_i(0)
+          clock   => clk,  
+          reset   => rst,
+          -- these go the external side of the local port 
+          validL_o=> validM_o,
+          lastL_o => lastM_o,
+          dataL_o => dataM_o,
+          readyL_i=> readyM_i,
+          -- these go to the internal side of the router 
+          valid_i => tx_00(LOCAL),
+          data_i  => data_out_00(LOCAL),
+          ready_o => credit_i_00(LOCAL)
   );
+
+
+
+
+  clock_rx_00(NORTH) <= clock_rx(0)(NORTH);
+  rx_00(NORTH)       <= rx(0)(NORTH);
+  data_in_00(NORTH)  <= data_in(0)(NORTH);
+  credit_o(0)(NORTH) <= credit_o_00(NORTH);    
+  clock_tx(0)(NORTH) <= clock_tx_00(NORTH);
+  tx(0)(NORTH)       <= tx_00(NORTH);
+  data_out(0)(NORTH) <= data_out_00(NORTH);
+  credit_i_00(NORTH) <= credit_i(0)(NORTH);  
+
+  clock_rx_00(SOUTH) <= clock_rx(0)(SOUTH);
+  rx_00(SOUTH)       <= rx(0)(SOUTH);
+  data_in_00(SOUTH)  <= data_in(0)(SOUTH);
+  credit_o(0)(SOUTH) <= credit_o_00(SOUTH);    
+  clock_tx(0)(SOUTH) <= clock_tx_00(SOUTH);
+  tx(0)(SOUTH)       <= tx_00(SOUTH);
+  data_out(0)(SOUTH) <= data_out_00(SOUTH);
+  credit_i_00(SOUTH) <= credit_i(0)(SOUTH);  
+
+  clock_rx_00(EAST) <= clock_rx(0)(EAST);
+  rx_00(EAST)       <= rx(0)(EAST);
+  data_in_00(EAST)  <= data_in(0)(EAST);
+  credit_o(0)(EAST) <= credit_o_00(EAST);    
+  clock_tx(0)(EAST) <= clock_tx_00(EAST);
+  tx(0)(EAST)       <= tx_00(EAST);
+  data_out(0)(EAST) <= data_out_00(EAST);
+  credit_i_00(EAST) <= credit_i(0)(EAST);  
+
+  clock_rx_00(WEST) <= clock_rx(0)(WEST);
+  rx_00(WEST)       <= rx(0)(WEST);
+  data_in_00(WEST)  <= data_in(0)(WEST);
+  credit_o(0)(WEST) <= credit_o_00(WEST);    
+  clock_tx(0)(WEST) <= clock_tx_00(WEST);
+  tx(0)(WEST)       <= tx_00(WEST);
+  data_out(0)(WEST) <= data_out_00(WEST);
+  credit_i_00(WEST) <= credit_i(0)(WEST);  
+
 
     north_grounding_00: if RouterPosition(0) = TL or RouterPosition(0) = TC or RouterPosition(0) = TR or NUMBER_PROCESSORS_Y = 1 generate
       rx(0)(NORTH)            <= '0';
@@ -120,6 +239,7 @@ begin
       data_in(0)(EAST)        <= data_out(0+1)(WEST);
     end generate;
 
+
   rx(0)(SOUTH)       <= '0';
   clock_rx(0)(SOUTH) <= '0';
   credit_i(0)(SOUTH) <= '0';
@@ -132,7 +252,6 @@ begin
   proc: for i in 1 to NUMBER_PROCESSORS-1 generate
     orca_tile: entity work.orca_processing_tile
     generic map (
-   
       R_ADDRESS => RouterAddress(i)
     )
     port map(

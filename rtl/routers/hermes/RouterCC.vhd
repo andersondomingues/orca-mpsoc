@@ -31,24 +31,24 @@
 --                      -----------------------------------------------
 --                                              SOUTH
 --
---  As chaves realizam a transfer�ncia de mensagens entre n�cleos. 
---  A chave possui uma l�gica de controle de chaveamento e 5 portas bidirecionais:
---  East, West, North, South e Local. Cada porta possui uma fila para o armazenamento 
---  tempor�rio de flits. A porta Local estabelece a comunica��o entre a chave e seu 
---  n�cleo. As demais portas ligam a chave �s chaves vizinhas.
---  Os endere�os das chaves s�o compostos pelas coordenadas XY da rede de interconex�o, 
---  onde X � a posi��o horizontal e Y a posi��o vertical. A atribui��o de endere�os �s 
---  chaves � necess�ria para a execu��o do algoritmo de chaveamento.
---  Os m�dulos principais que comp�em a chave s�o: fila, �rbitro e l�gica de 
---  chaveamento implementada pelo controle_mux. Cada uma das filas da chave (E, W, N, 
---  S e L), ao receber um novo pacote requisita chaveamento ao �rbitro. O �rbitro 
---  seleciona a requisi��o de maior prioridade, quando existem requisi��es simult�neas, 
---  e encaminha o pedido de chaveamento � l�gica de chaveamento. A l�gica de 
---  chaveamento verifica se � poss�vel atender � solicita��o. Sendo poss�vel, a conex�o
---  � estabelecida e o �rbitro � informado. Por sua vez, o �rbitro informa a fila que 
---  come�a a enviar os flits armazenados. Quando todos os flits do pacote foram 
---  enviados, a conex�o � conclu�da pela sinaliza��o, por parte da fila, atrav�s do 
---  sinal sender.
+--  As chaves realizam a transferência de mensagens entre núcleos. 
+-- A chave possui uma lógica de controle de chaveamento e 5 portas bidirecionais:
+-- East, West, North, South e Local. Cada porta possui uma fila para o armazenamento 
+-- temporário de flits. A porta Local estabelece a comunicação entre a chave e seu 
+-- núcleo. As demais portas ligam as chaves vizinhas.
+-- Os endereços das chaves são compostos pelas coordenadas XY da rede de interconexão, 
+-- onde X é a posição horizontal e Y a posição vertical. A atribuição de endereços às 
+-- chaves necessárias para a execução do algoritmo de chaveamento.
+-- Os módulos principais que compõem a chave são: fila, árbitro e lógica de 
+-- chaveamento implementada pelo controle_mux. Cada uma das filas da chave (E, W, N, 
+-- S e L), ao receber um novo pacote requisita chaveamento ao árbitro. O árbitro 
+-- seleciona a requisição de maior prioridade, quando existem requisições simultâneas, 
+-- e encaminha o pedido de chaveamento à lógica de chaveamento. A lógica de 
+-- chaveamento verifica se é possível atender à solicitação. Sendo possível, a conexão
+-- é estabelecida e o árbitro informado. Por sua vez, o árbitro informa a fila que 
+-- começa a enviar os flits armazenados. Quando todos os flits do pacote foram 
+-- enviados, a conexão é concluída pela sinalização, por parte da fila, através do 
+-- sinal sender.
 ---------------------------------------------------------------------------------------
 library IEEE;
 use IEEE.std_logic_1164.all;
@@ -57,7 +57,7 @@ use work.orca_defaults.all;
 --use work.HemPS_PKG.all;
 
 entity RouterCC is
-generic( address: regmetadeflit );
+generic( address: regmetadeflit := x"0101");
 port(
         clock:     in  std_logic;
         reset:     in  std_logic;
@@ -173,7 +173,7 @@ begin
                 data_av => data_av,
                 data_in => data,
                 data_ack => data_ack,
-                sender => sender,
+                --sender => sender,
                 free => free,
                 tab_in => mux_in,
                 tab_out => mux_out,

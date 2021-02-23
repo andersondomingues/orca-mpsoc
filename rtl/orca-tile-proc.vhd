@@ -15,7 +15,7 @@ use work.orca_defaults.all;
 entity orca_processing_tile is
 
   generic (
-    R_ADDRESS : regmetadeflit --address
+    R_ADDRESS : regmetadeflit := "0000000000000000" --address
   );
 
   port (
@@ -111,6 +111,37 @@ architecture orca_processing_tile of orca_processing_tile is
   signal dummy_gpioa_in:  std_logic_vector(7 downto 0);
   signal dummy_gpioa_out: std_logic_vector(7 downto 0);
   signal dummy_gpioa_ddr: std_logic_vector(7 downto 0);
+  
+  -- FPGA debug signals and definitions
+  -- these signals are used only to easy the FPGA debug
+  signal r_debug_rx: std_logic;
+  signal r_debug_data_i: std_logic_vector((RAM_WIDTH - 1) downto 0);
+  signal r_debug_credit_o: std_logic;
+  
+  signal r_debug_tx: std_logic;
+  signal r_debug_data_o: std_logic_vector((RAM_WIDTH - 1) downto 0);
+  signal r_debug_credit_i: std_logic;
+
+--#################################################
+--Uncomment these lines to enable FPGA debuging.
+--It monitors the router-ni interface of every PE
+--#################################################
+--attribute KEEP : string;
+--attribute MARK_DEBUG : string;
+--
+--attribute KEEP of  r_debug_rx : signal is "TRUE";
+--attribute MARK_DEBUG of r_debug_rx  : signal is "TRUE";
+--attribute KEEP of  r_debug_data_i : signal is "TRUE";
+--attribute MARK_DEBUG of r_debug_data_i  : signal is "TRUE";
+--attribute KEEP of  r_debug_credit_o : signal is "TRUE";
+--attribute MARK_DEBUG of r_debug_credit_o  : signal is "TRUE";
+--
+--attribute KEEP of  r_debug_tx : signal is "TRUE";
+--attribute MARK_DEBUG of r_debug_tx  : signal is "TRUE";
+--attribute KEEP of  r_debug_data_o : signal is "TRUE";
+--attribute MARK_DEBUG of r_debug_data_o  : signal is "TRUE";
+--attribute KEEP of  r_debug_credit_i : signal is "TRUE";
+--attribute MARK_DEBUG of r_debug_credit_i  : signal is "TRUE";
 
 begin
 
@@ -141,7 +172,7 @@ begin
 	end process;
 
 
-	process (rst_local, clk, periph_irq)
+	process (rst_local, clk)
 	begin
 		if rst_local = '1' then
 			periph_dly <= '0';
@@ -178,7 +209,9 @@ begin
 	periph_wr <= '1' when p_wb_o /= "0000" else '0';
 	periph <= '1' when p_addr_o(31 downto 28) = x"e" else '0';
 
-
+    -- assign to remove the 'undriven pin' warning in synthesis
+    dummy_gpioa_in <= (others => '0');
+    
   peripherals_binding : entity work.peripherals
     port map(
       clk_i => clk,
@@ -240,7 +273,7 @@ begin
     )
     port map(
         clk => clk,
-        rst => rst_local,
+        --rst => rst_local,
 
         addr_i => shift_m_addr_i((INTEGER(CEIL(LOG2(REAL(RAM_DEPTH)))))-1 downto 0),
         data_o => m_data_o,
@@ -266,14 +299,14 @@ begin
       m_data_i => n_m_data_o,
 
       r_clock_tx => r_clock_rx(LOCAL), -- router i/f
-      r_tx => r_rx(LOCAL),
-      r_data_o => r_data_i(LOCAL),
-      r_credit_i => r_credit_o(LOCAL),
+      r_tx => r_debug_rx,
+      r_data_o => r_debug_data_i,
+      r_credit_i => r_debug_credit_o,
       
       r_clock_rx => r_clock_tx(LOCAL),
-      r_rx  => r_tx(LOCAL),
-      r_data_i => r_data_o(LOCAL),
-      r_credit_o => r_credit_i(LOCAL),
+      r_rx  => r_debug_tx,
+      r_data_i => r_debug_data_o,
+      r_credit_o => r_debug_credit_i,
 
       recv_reload => recv_reload, -- dma programming
       send_start => send_start, 
@@ -285,6 +318,15 @@ begin
       prog_size => prog_size
     );
     
+    -- these 6 signal are only used for FPGA debug
+    r_rx(LOCAL) <= r_debug_rx;
+    r_data_i(LOCAL) <= r_debug_data_i;
+    r_debug_credit_o <= r_credit_o(LOCAL);
+    
+    r_debug_tx <= r_tx(LOCAL);
+    r_debug_data_o <= r_data_o(LOCAL);
+    r_credit_i(LOCAL) <= r_debug_credit_i;
+
     -- memory mux (m_data_o done via port mapping)
     m_addr_i <= n_addr_o when stall = '1' else p_addr_o;
     m_data_i <= n_data_o(7 downto 0) & n_data_o(15 downto 8) & n_data_o(23 downto 16) & n_data_o(31 downto 24) when stall = '1' else p_data_o;

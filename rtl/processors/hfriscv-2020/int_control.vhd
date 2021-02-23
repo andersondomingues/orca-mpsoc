@@ -118,6 +118,7 @@ begin
 	begin
 		if reset = '1' then
 			pulse_state <= irq_idle;
+			-- TODO synthesis says that this register was removed. investigate it
 			pulse_next_state <= irq_idle;
 			irq <= '0';
 		elsif clock'event and clock = '1' then

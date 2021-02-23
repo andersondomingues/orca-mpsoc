@@ -16,7 +16,7 @@
 --              DATA_AV ->|              |
 --              DATA_IN ->|              |
 --             DATA_ACK <-|              |-> TX
---               SENDER ->|              |-> DATA_OUT
+--                        |              |-> DATA_OUT
 --                 FREE ->|              |<- CREDIT_I
 --               TAB_IN ->|              |
 --              TAB_OUT ->|              |
@@ -34,7 +34,7 @@ port(
         data_av:     in  regNport;
         data_in:     in  arrayNport_regflit;
         data_ack:    out regNport;
-        sender:      in  regNport;
+        --sender:      in  regNport;
         free:        in  regNport;
         tab_in:      in  arrayNport_reg3;
         tab_out:     in  arrayNport_reg3;
